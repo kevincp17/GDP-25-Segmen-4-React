@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-// import { jwt_decode } from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 import './index.css'
 import { Navigate, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function Login() {
   const navigate = useNavigate();
@@ -40,11 +40,11 @@ function Login() {
       var token = response.data.token
       var decoded = jwtDecode(token);
 
-      localStorage.setItem('email', decoded.sub);
-      localStorage.setItem('role', decoded.role);
-      localStorage.setItem('user_id', decoded.user_id);
-      localStorage.setItem('authenticated', true);
-      
+      Cookies.set('email', decoded.sub, {expires:1});
+      Cookies.set('role', decoded.role, {expires:1});
+      Cookies.set('user_id', decoded.user_id, {expires:1});
+      Cookies.set('authenticated', true, {expires:1});
+
       if (decoded.role === 'applicant') {
         navigate("/home")
       } else {
