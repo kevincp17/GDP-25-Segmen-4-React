@@ -1,0 +1,433 @@
+#careers-div{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(#EEF2F8, white);
+}
+
+#careers-div1{
+    padding-top: 200px;
+    height: 195px;
+    width: 1300px;
+    background-image: url("../image/laptop4.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    filter: blur(1px);
+    z-index: 0;
+}
+
+#inside-div{
+    width: 400px;
+    margin-top: -260px;
+    margin-left: 160px;
+    z-index: 1;
+}
+
+#inside-div > p:first-child{
+    font-size: 15px;
+    font-weight: 600;
+    color:#93C953;
+}
+
+#inside-div > p:nth-child(2){
+    margin-top: -15px;
+    font-size: 35px;
+    font-weight: 600;
+    color:white;
+}
+
+#inside-div > p:last-child{
+    margin-top: -10px;
+    font-size: 15px;
+    font-weight: normal;
+    color:white;
+}
+
+#careers-div1 > p{
+    z-index: 2;
+}
+
+#careers-div2{
+    justify-items: center;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 38px;
+    padding: 80px 20px 80px 20px;
+    background-image: url("../image/job-bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#careers-div2 > div{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px #E4E5E6 solid;
+    border-radius: 10px;
+    background-color: #F9F9FA;
+    width: 300px;
+    height: 275px;
+}
+
+#careers-div2 > div > p{
+    margin-top: -5px;
+}
+
+#careers-div2 > div > img{
+    height: 120px;
+    margin: -20px -20px 10px -20px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+#job-date{
+    color:#93C953;
+    font-weight: 600;
+    flex-basis: 10%;
+    font-size: 14px;
+    margin-bottom: 0px;
+}
+
+#job-title{
+    color:black;
+    font-weight: 600;
+    font-size: 23px;
+    flex-basis: 20%;
+    margin-top: -25px;
+    margin-bottom: 0px;
+}
+
+#job-type{
+    color:#B4B5B6;
+    font-weight: 600;
+    flex-basis: 20%;
+    /* margin-top: -20px; */
+}
+
+#careers-div2 > div:hover{
+    background-color: white;
+    box-shadow: 0px 0px 10px -3px rgb(0 0 0 / 0.1), 
+    0px 0px 10px -3px rgb(0 0 0 / 0.1),
+    0px 0px 10px -3px rgb(0 0 0 / 0.1), 
+    0px 0px 10px -3px rgb(0 0 0 / 0.1);
+    transition: 0.5s ease-in-out;
+}
+
+#careers-div2 > div:not(:hover){
+    background-color: #F9F9FA;
+    transition: 0.5s ease-in-out;
+}
+
+#careers-div2 > div:hover >p:last-child{
+    color: #999999;
+    transition: 0.5s ease-in-out;
+}
+
+#careers-div2 > div:not(:hover) >p:last-child{
+    color: #B7B7B7;
+    transition: 0.5s ease-in-out;
+}
+
+#cd2-btndiv{
+    display: flex;
+    flex-basis: 20%;
+    align-items: flex-end;
+    padding-top: 5px;
+}
+
+#cd2-btndiv > button{
+    background-color: transparent;
+    color:transparent;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    width:130px;
+    height: 35px;
+    border: 1px transparent solid;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-top: 0px;
+}
+
+#careers-div2 > div:hover > #cd2-btndiv > button{
+    background-color: #0D5A9A;
+    color:white;
+    transition: 0.3s ease-in-out;
+}
+
+#careers-div2 > div:not(:hover) > #cd2-btndiv > button{
+    background-color: transparent;
+    color:transparent;
+    transition: 0.3s ease-in-out;
+}
+
+#careers-div2 > div:hover > #cd2-btndiv > button:hover{
+    background-color: #3D7BAE;
+    transition: 0.3s ease-in-out;
+}
+
+#careers-div2 > div:hover > #cd2-btndiv > button:not(:hover){
+    background-color: #0D5A9A;
+    transition: 0.3s ease-in-out;
+}
+
+.popover{
+    right: 500px;
+    border: 1px solid #EEEEEE;
+    border-top: 2px solid #93C953;
+    width: 170px;
+}
+
+.popover-header{
+    background: linear-gradient(#EEF2F8, white);
+}
+
+.popover-body{
+    display: flex;
+    flex-direction: column;
+    background-color: #F9F9FA;
+    border-radius: 5px;
+    border: 1px solid #EEEEEE;
+    height: 75px;
+    padding: 0px -10px;
+}
+
+.popover-body > a{
+    color: #4C5466;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    font-size: 16px;
+    width: 165px;
+    height: 50px;
+    margin: -15px 0px -10px -15px;
+    background-color: white;
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+.popover-body > hr{
+    color: gray;
+    margin: 10px -16px 15px -16px;
+}
+
+.popover-body > a:last-child{
+    color: #aa222f;
+    margin-top: -15px;
+}
+
+.popover-body > a:hover{
+    background-color: #F9F9FA;
+    color: #1F2940;
+    transition: 0.3s ease-in-out;
+}
+
+.popover-body > a:not(:hover){
+    background-color: white;
+    color: #4C5466;
+    transition: 0.3s ease-in-out;
+}
+
+.popover-body > a:last-child:hover{
+    background-color: #F9F9FA;
+    color: #D62F40;
+    transition: 0.3s ease-in-out;
+}
+
+.popover-body > a:last-child:not(:hover){
+    background-color: white;
+    color: #aa222f;
+    transition: 0.3s ease-in-out;
+}
+
+.modal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    background-color: white;
+    border: 1px solid #EEEEEE;
+    border-top: 3px solid #93C953;
+    border-radius: 10px;
+    outline: transparent;
+    padding: 10px 20px;
+}
+
+.modal-header{
+    display: flex;
+    margin-bottom: 50px;
+    border-bottom: 1px solid #DEE2E6;
+    margin-top: -10px;
+    height: 100px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 0px 20px;
+}
+
+.modal-header > div{
+    flex-basis: 90%;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+}
+
+.modal-header > div > p{
+    font-size: 28px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    color: #333333;
+}
+
+.modal-header > div > p:last-child{
+    margin-top: -20px;
+    font-style: italic;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    color: #666666;
+}
+
+.modal-header > button{
+    flex-basis: 10%;
+}
+
+.modal-content{
+    width: 700px;
+    right: 20%;
+    border: 1px solid #EEEEEE;
+    border-top: 3px solid #93C953;
+}
+
+.modal-body{
+    height:400px;
+    overflow: auto;
+    border-bottom: 1px solid #DEE2E6;
+    margin: -50px -20px 0px -20px;
+    padding: 0px 20px;
+}
+
+.modal-body > p{
+    color: #666666;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-body > div >p{
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-footer{
+    height:40px;
+    display: flex;
+    justify-content: end;
+    padding-top: 15px;
+}
+
+.modal-footer > button{
+    margin-right: 10px;
+}
+
+.btn-close{
+    color: #7F7F7F;
+    border: none;
+    background-color: transparent;
+    font-size: 50px;
+}
+
+#apply-btn{
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 100px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+}
+
+#apply-btn:hover{
+    border: #999999 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#apply-btn:not(:hover) {
+    border: #CCCCCC 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#close-btn{
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 100px;
+    background-color: white;
+    color: #D62F40;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+}
+
+#close-btn:hover{
+    border: #999999 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#close-btn:not(:hover) {
+    border: #CCCCCC 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#search-div{
+    display: flex;
+    align-items: center;
+    padding-top: 100px;
+    background-color: white;
+    padding-bottom: 15px;
+    padding-left: 160px;
+    height: 15px;
+}
+
+#search-div > select,input{
+    margin-bottom: 50px;
+    margin-right: 15px;
+    font-size: 17px;
+}
+
+#search-div > select{
+    height: 45px;
+    width: 221px;
+    padding-left: 15px;
+    border: 1px #D6D6D6 solid;
+    border-radius: 5px;
+}
+
+#search-input{
+    height: 45px;
+    width: 562px;
+    padding-left: 15px;
+    border: 1px #D6D6D6 solid;
+    border-radius: 5px;
+    z-index: 0;
+}
+
+#search-div > .search-icon{
+    position: absolute;
+    left: 72.5%;
+    margin-top: -50px;
+    font-size: 28px;
+    background-color: white;
+    background: linear-gradient(#1FEFD7, #37C2EE);
+    -webkit-text-fill-color: transparent; 
+    -webkit-background-clip: text; 
+    z-index: 1;
+}
+
+#select-input:focus{
+    outline: transparent;
+}
+
+#search-input:focus{
+    border: 1px #D6D6D6 solid;
+    outline: transparent;
+}
+
+
