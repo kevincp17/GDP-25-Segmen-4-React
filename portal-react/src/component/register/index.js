@@ -21,7 +21,7 @@ function Register() {
         phone: '',
         address: '',
         role: {
-            id: 3
+            role_id: 3
         }
     })
 
@@ -45,14 +45,24 @@ function Register() {
         }
     }
 
-    let handleSubmit = () => {
+    let handleSubmit = (e) => {
+        e.preventDefault()
+        // let object = {
+        //     name: data.name,
+        //     email: data.email,
+        //     password: data.password,
+        //     phone: data.phone, 
+        //     address: data.address,
+        //     role: data.role
+        // }
+
         let object = {
-            name: data.name,
             email: data.email,
-            password: data.password,
-            phone: data.phone,
-            address: data.address,
-            role: data.role
+            password:data.password,
+            role: data.role,
+            name:data.name,
+            phone:data.phone,
+            address:data.address
         }
 
         const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -62,9 +72,12 @@ function Register() {
             console.log("password match")
             if (regex.test(data.password)) {
                 setShowValidationMessage(false)
-                console.log("Password memenuhi kriteria.");
+                // console.log("Password memenuhi kriteria.");
+                console.log(object);
+                let obj = JSON.stringify(object)
+                console.log(obj)
                 axios({
-                    url: "http://localhost:8089/account/save",
+                    url: "http://localhost:8088/api/save",
                     method: "POST",
                     data: JSON.stringify(object),
                     headers: {
@@ -159,11 +172,11 @@ function Register() {
                         <div>
                             <input name="address" value={data.address} onChange={handleChange} type="text" placeholder="Address" />
                         </div>
-                        <div>
+                        <div id="button-container">
                             <button onClick={handleSubmit} type="submit" id="button">Register</button>
                         </div>
+                            <p id="text">Have already an account? <a href="../login"><u>Login here</u></a></p>
                     </form>
-
                 </div>
             </div>
         </>
