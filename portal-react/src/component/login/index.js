@@ -3,12 +3,15 @@ import { useState } from "react";
 // import { jwt_decode } from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 import './index.css'
+import { Navigate, useNavigate } from "react-router-dom";
 
-function Login(){
-    const [ data, setData ] = useState({
+function Login() {
+  const navigate = useNavigate();
+
+  const [data, setData] = useState({
     email: '',
     password: ''
-    })
+  })
 
   let handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +21,8 @@ function Login(){
     }));
   }
 
-  let handleSubmit = () => {
+  let handleSubmit = (e) => {
+    e.preventDefault()
     let object = {
       email: data.email,
       password: data.password
@@ -26,43 +30,52 @@ function Login(){
 
     axios({
       url: "http://localhost:8088/api/authenticate",
-      method : "POST",
+      method: "POST",
       data: JSON.stringify(object),
       headers: {
         'Content-Type': "application/json"
       }
     }).then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       var token = response.data.token
       var decoded = jwtDecode(token);
 
-      localStorage.setItem('Email', decoded.sub);
-      localStorage.setItem('Role', decoded.role[0].authority);
+      localStorage.setItem('email', decoded.sub);
+      localStorage.setItem('role', decoded.role);
+      localStorage.setItem('user_id', decoded.user_id);
+      localStorage.setItem('authenticated', true);
+      
+      if (decoded.role === 'applicant') {
+        navigate("/home")
+      } else {
+        navigate("/")
+      }
     }).catch((error) => {
       console.log(error)
+      alert("Please check your email and password")
     })
   }
-    return (
-        <div id="login-container">
-            <div id="login-card">
-                <form id="login-form">
-                <div>
-                    <h1>Login</h1>
-                </div>
-                <div>
-                    <input name='email' type='text' value={data.email} onChange={handleChange} placeholder="Email"/>
-                </div>
-                <div>
-                    <input name='password' type='password' value={data.password} onChange={handleChange} placeholder="Password"/>
-                </div>
-                <div>
-                    <button onClick={handleSubmit} id="button">Login</button>
-                </div>
-                <p>Don't have an account? <a href="../register"><u>Register here</u></a></p>
-                </form>
-            </div>
-        </div>
-    )
+  return (
+    <div id="login-container">
+      <div id="login-card">
+        <form id="login-form">
+          <div>
+            <h1>Login</h1>
+          </div>
+          <div>
+            <input name='email' type='text' value={data.email} onChange={handleChange} placeholder="Email" />
+          </div>
+          <div>
+            <input name='password' type='password' value={data.password} onChange={handleChange} placeholder="Password" />
+          </div>
+          <div>
+            <button onClick={handleSubmit} id="button">Login</button>
+          </div>
+          <p>Don't have an account? <a href="../register"><u>Register here</u></a></p>
+        </form>
+      </div>
+    </div>
+  )
 }
 
 export default Login;

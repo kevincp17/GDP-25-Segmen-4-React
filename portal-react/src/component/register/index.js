@@ -47,14 +47,6 @@ function Register() {
 
     let handleSubmit = (e) => {
         e.preventDefault()
-        // let object = {
-        //     name: data.name,
-        //     email: data.email,
-        //     password: data.password,
-        //     phone: data.phone, 
-        //     address: data.address,
-        //     role: data.role
-        // }
 
         let object = {
             email: data.email,
@@ -175,7 +167,7 @@ function Register() {
                         <div id="button-container">
                             <button onClick={handleSubmit} type="submit" id="button">Register</button>
                         </div>
-                            <p id="text">Have already an account? <a href="../login"><u>Login here</u></a></p>
+                            <p id="text">Already have an account? <a href="/"><u>Login here</u></a></p>
                     </form>
                 </div>
             </div>
