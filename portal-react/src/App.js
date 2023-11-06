@@ -4,6 +4,8 @@ import Register from './component/register';
 import Login from './component/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './component/home';
+import Auth from './auth/applicantAuth';
+import ApplicantAuth from './auth/applicantAuth';
 
 function App() {
   return (
@@ -11,7 +13,7 @@ function App() {
       <Routes>
           <Route index element={<Login />}/>
           <Route path='/register' element={<Register />}/>
-          <Route path='/home' element={<Home />}/>
+          <Route path='/home' element={<ApplicantAuth><Home/></ApplicantAuth>}/>
       </Routes>
     </BrowserRouter>
   );
