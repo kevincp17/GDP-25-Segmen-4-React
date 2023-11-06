@@ -4,8 +4,10 @@ import Register from './component/register';
 import Login from './component/login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './component/home';
-import Auth from './auth/applicantAuth';
 import ApplicantAuth from './auth/applicantAuth';
+import InternalAuth from './auth/internalAuth';
+import JobApplication from './component/jobApplication';
+import TaAuth from './auth/taAuth';
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           <Route index element={<Login />}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/home' element={<ApplicantAuth><Home/></ApplicantAuth>}/>
+          <Route path='/job-application' element={<InternalAuth><JobApplication/></InternalAuth>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -47,7 +47,12 @@ function Login() {
 
       if (decoded.role === 'applicant') {
         navigate("/home")
-      } else {
+      } else if (decoded.role === 'ta'){
+        navigate("/job-application")
+      } else if (decoded.role === 'trainer') {
+        navigate("/job-application")
+      }
+      else {
         navigate("/")
       }
     }).catch((error) => {
