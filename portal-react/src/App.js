@@ -7,9 +7,11 @@ import CareerPage from "./view/CareerPage";
 import InterviewPage from "./view/InterviewPage";
 import ProfilePage from "./view/ProfilePage";
 import Headers from "./layout/Header";
+import ApplyPage from "./view/ApplyPage";
 
 function App() {
   return (
+    <>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />}>
@@ -17,9 +19,11 @@ function App() {
           <Route path="/careers" element={<CareerPage />} />
           <Route path="/interviews" element={<InterviewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/apply" element={<ApplyPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 
