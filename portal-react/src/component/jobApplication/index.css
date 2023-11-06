@@ -1,0 +1,12 @@
+.container {
+    /* background-color: red; */
+}
+
+.table {
+    width: 100%;
+    /* flex-direction: column; */
+}
+
+.table-content {
+    text-align: center;
+}

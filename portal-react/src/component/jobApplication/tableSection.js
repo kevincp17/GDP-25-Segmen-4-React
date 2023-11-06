@@ -5,12 +5,12 @@ import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineFile, AiOutlineLink } from "react-icons/ai";
 
 function TableSection() {
-    const [isExpand, setExpand] = useState(false)
+    // const [isExpand, setExpand] = useState(false)
 
-    useEffect(() => { }, [isExpand])
+    // useEffect(() => { }, [isExpand])
     return (
         <>
-            <tbody>
+            {/* <tbody>
                 <tr>
                     <td className="button-td">
                         <button onClick={() => setExpand(!isExpand)}>
@@ -20,7 +20,6 @@ function TableSection() {
                             }
                         </button>
                     </td>
-                    <td></td>
                     <td>1</td>
                     <td>GDP</td>
                     <td>Bambang</td>
@@ -28,7 +27,7 @@ function TableSection() {
                     <td><AiOutlineFile /> <AiOutlineLink /> <AiOutlineCheck /> <AiOutlineClose /></td>
                 </tr>
                 {isExpand && <TableRow />}
-            </tbody>
+            </tbody> */}
         </>
     )
 }
