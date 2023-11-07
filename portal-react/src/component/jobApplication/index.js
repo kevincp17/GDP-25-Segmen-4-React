@@ -5,24 +5,50 @@ import { useEffect, useState } from "react";
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import TableSection from "./tableSection";
 import TableRow from "./tableRow";
+import axios from "axios";
 
 function JobApplication() {
     const [isExpand, setExpand] = useState(false)
+    const [data, setData] = useState([{}])
+
+    useEffect(() => {
+        axios({
+            url: "http://localhost:8088/api/application",
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json"
+            }
+        }).then((response) => {
+            setData(response.data.results)
+            console.log(response.data.results)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }, [])
 
     useEffect(() => { }, [isExpand])
     return (
         <>
             <div className="container">
                 <table className="table">
-                    <thead>
+                    <tbody>
+                        {data.map(x => {
+                            return (
+                                <>
+                                    <tr key={data.id}>
+                                        <td>{data.career.title}</td>
+                                        <td>{data.applicant}</td>
+                                        <td>{starwar.mass}</td>
+                                    </tr>
+                                </>
+                            )
+                        })}
                         <th></th>
                         <th>No</th>
                         <th>Job Position</th>
                         <th>Name</th>
                         <th>Status</th>
                         <th>Action</th>
-                    </thead>
-                    <tbody>
                         <tr className="table-content">
                             <td className="button-td">
                                 <button onClick={() => setExpand(!isExpand)}>
@@ -39,7 +65,7 @@ function JobApplication() {
                             <td><AiOutlineFile /> <AiOutlineLink /> <AiOutlineCheck /> <AiOutlineClose /></td>
                         </tr>
                         <tr>
-                        {isExpand && <TableRow />}
+                            {isExpand && <TableRow />}
                         </tr>
                     </tbody>
                 </table>
