@@ -414,11 +414,14 @@
     left: 72.5%;
     margin-top: -50px;
     font-size: 28px;
-    background-color: white;
-    background: linear-gradient(#1FEFD7, #37C2EE);
+    background: linear-gradient(to bottom,#1FEFD7, #37C2EE);
     -webkit-text-fill-color: transparent; 
     -webkit-background-clip: text; 
     z-index: 1;
+}
+
+#select-input{
+    margin-top: 0px;
 }
 
 #select-input:focus{
@@ -430,4 +433,76 @@
     outline: transparent;
 }
 
+#add-job-btn{
+    width: 15%;
+    height: 50px;
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    margin-top: -50px;
+}
+
+#add-job-btn:hover{
+    border: #999999 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#add-job-btn:not(:hover) {
+    border: #CCCCCC 2px solid;
+    transition: 0.3s ease-in-out;
+}
+
+#modal-title-form-add{
+    margin-top: 35px;
+    font-size: 30px;
+    font-weight: 600;
+    font-style: normal;
+    color: black;
+}
+
+#modal-body-add-job{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#modal-body-add-job > div{
+    width: 100%;
+}
+
+#modal-body-add-job > div >input,select,textarea{
+    width: 90%;
+    height: 50px;
+    margin: 30px 30px;
+    border: 1px #D6D6D6 solid;
+    border-radius: 5px;
+    outline: transparent;
+}
+
+#modal-body-add-job > div >select{
+    font-size: 15px;
+    padding-left: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+ }
+
+#modal-body-add-job > div >input{
+   padding-left: 20px;
+}
+
+#file-input{
+    padding-top: 20px;
+}
+
+#modal-body-add-job > div >textarea{
+    padding: 10px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+ }
+
+#modal-body-add-job > div >input::placeholder,textarea::placeholder{
+    color: #757575;
+}
 

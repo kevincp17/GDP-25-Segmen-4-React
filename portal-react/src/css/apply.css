@@ -1,0 +1,31 @@
+#apply-div{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(#EEF2F8, white);
+    align-items: center;
+}
+
+#apply-title{
+    margin-top: 100px;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#apply-table{
+    margin-top: 30px;
+    width: 70%;
+    margin-bottom: 250px;
+    border: 1px black solid;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#apply-table > thead > tr >th{
+    border-bottom: 1px black solid;
+    margin-bottom: 10px;
+}
+
+#apply-table > tbody > tr >td{
+    border-bottom: 1px black solid;
+    margin-bottom: 10px;
+}

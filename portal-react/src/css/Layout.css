@@ -148,6 +148,10 @@ body{
     color: #4C5666;
 }
 
+#apply-list-btn{
+    color: #4C5666;
+}
+
 #popover-body > a:last-child{
     color: #AA222F;
 }
@@ -204,6 +208,8 @@ body{
     font-size: 16px;
     font-weight: 600;
     margin-left: -5px;
+    display: flex;
+    align-items: center;
 }
 
 #footer-up1 > button > i{
@@ -266,6 +272,7 @@ body{
 
 #footer-up3 > a{
     color: #C4D6E6;
+    text-decoration: none;
 }
 
 #footer-up3 > a:hover{
@@ -348,7 +355,7 @@ body{
 #footer-down > button{
     background-color: transparent;
     border: none;
-    width:100px;
+    width:110px;
     height: 30px;
     color: #DFEFCC;
     font-size: 16px;
@@ -373,12 +380,14 @@ body{
 
 #footer-down-btn > button:hover{
     color: white;
+    border: 2px solid white;
     transition: 0.3s ease-in-out;
 
 }
 
 #footer-down-btn > button:not(:hover){
     color: #DFEFCC;
+    border: 2px solid #DFEFCC;
     transition: 0.3s ease-in-out;
 }
 

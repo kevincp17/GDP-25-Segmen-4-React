@@ -50,6 +50,7 @@
     height: 50px;
     width: 50px;
     color: white;
+    border: 1px solid #666666;
 }
 
 #profile-div1-edit > button:hover{
@@ -75,6 +76,11 @@
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     color: #666666;
+}
+
+#profile-div1-info > p{
+    display: flex;
+    align-items: center;
 }
 
 #profile-div2{
@@ -217,7 +223,7 @@
     align-items: center;
     background-color: white;
     border: 1px #E4E5E6 solid;
-    width: 200px;
+    width: 220px;
     height: 70px;
     padding-left: 20px;
     border-radius: 10px;
@@ -229,8 +235,37 @@
 #nav-skill-content > img{
     margin-right: 10px;
     height: 50px;
-    width: 50px;
+    width: 20%;
+    /* border-radius: 100%; */
+}
+
+#nav-skill-content >div{
+    width: 40%;
+    margin: 0px 10px;
+}
+
+#nav-skill-content > button{
+    width: 20%;
+    height: 40px;
+    margin: 5px;
+    background-color: #aa222f;
     border-radius: 100%;
+    color: white;
+    border: 1px solid #aa222f;
+}
+
+#nav-skill-content> button:hover{
+    background-color: #d93f4f;
+    color: white;
+    border: 1px solid #d93f4f;
+    transition: 0.3s ease-in-out;
+}
+
+#nav-skill-content> button:not(:hover){
+    background-color: #aa222f;
+    color: white;
+    border: 1px solid #aa222f;
+    transition: 0.3s ease-in-out;
 }
 
 #nav-exp{
@@ -359,4 +394,17 @@
     column-gap: 10%;
     row-gap: 30%;
     justify-content: center;
+}
+
+#btn-add-skill,#btn-add-exp,#btn-add-edu,#btn-add-cert{
+    margin-left: 175px;
+    margin-bottom: 30px;
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 160px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
 }
