@@ -13,8 +13,37 @@ function JobApplication() {
     const [data, setData] = useState([])
     const url = useSelector((state) => state.application.url)
 
-    useEffect(() => {
-        axios({
+    const handleAccept = async (id) => {
+        const findApplication = data.find(application => application.apply_id === id);
+
+        if (!findApplication) {
+            return null;
+        }
+
+        const object = {
+            apply_id: id,
+            status: {
+                status_id: 5
+            }
+        }
+
+        await axios({
+            url: "http://localhost:8088/api/application/" + id,
+            method: "POST",
+            data: JSON.stringify(object),
+            headers: {
+                'Content-Type': "application/json"
+            }
+        }).then((response) => {
+            console.log(response)
+            show()
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
+    const show = async () => {
+        await axios({
             url: url,
             method: "GET",
             headers: {
@@ -25,9 +54,15 @@ function JobApplication() {
         }).catch((error) => {
             console.log(error)
         })
-    }, [url])
+    }
 
-    useEffect(() => { }, [isExpand])
+    useEffect(() => {
+        show()
+    }, [isExpand])
+
+    useEffect(() => {
+    },[data])
+
     return (
         <>
             <div className="container">
@@ -55,8 +90,9 @@ function JobApplication() {
                                     <td>{application.apply_id}</td>
                                     <td>{application.career.title}</td>
                                     <td>{application.applicant.cv.name}</td>
-                                    <td>{application.status}</td>
-                                    <td><AiOutlineFile /> <AiOutlineLink /> <AiOutlineCheck /> <AiOutlineClose /></td>
+                                    <td>{application.status.name}</td>
+                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id)} /></button> <AiOutlineClose /></td>
+
                                 </tr>
                             </>
                         )
@@ -69,5 +105,4 @@ function JobApplication() {
         </>
     )
 }
-
 export default JobApplication;
