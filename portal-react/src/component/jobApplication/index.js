@@ -76,6 +76,16 @@ function JobApplication() {
         })
     }
 
+    const handleSetInterview = (id) => {
+        if(id === 2){
+            console.log("interview hr")
+        } else if(id === 3){
+            console.log("interview user")
+        } else {
+            console.log("belum bisa set interview")
+        }
+    }
+
     const show = async () => {
         await axios({
             url: url,
@@ -125,7 +135,7 @@ function JobApplication() {
                                     <td>{application.career.title}</td>
                                     <td>{application.applicant.cv.name}</td>
                                     <td>{application.status.name}</td>
-                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id, application.status.status_id)} /></button> <button onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></button></td>
+                                    <td ><AiOutlineFile /> <button onClick={() => handleSetInterview(application.status.status_id)}><AiOutlineLink /></button> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id, application.status.status_id)} /></button> <button onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></button></td>
 
                                 </tr>
                             </>
