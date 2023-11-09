@@ -15,18 +15,41 @@ function JobApplication() {
 
     const handleAccept = async (id) => {
         const findApplication = data.find(application => application.apply_id === id);
-
         if (!findApplication) {
             return null;
         }
-
         const object = {
             apply_id: id,
             status: {
                 status_id: 5
             }
         }
-
+        await axios({
+            url: "http://localhost:8088/api/application/" + id,
+            method: "POST",
+            data: JSON.stringify(object),
+            headers: {
+                'Content-Type': "application/json"
+            }
+        }).then((response) => {
+            console.log(response)
+            show()
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+    
+    const handleReject = async (id) => {
+        const findApplication = data.find(application => application.apply_id === id);
+        if (!findApplication) {
+            return null;
+        }
+        const object = {
+            apply_id: id,
+            status: {
+                status_id: 6
+            }
+        }
         await axios({
             url: "http://localhost:8088/api/application/" + id,
             method: "POST",
@@ -61,7 +84,7 @@ function JobApplication() {
     }, [isExpand])
 
     useEffect(() => {
-    },[data])
+    }, [data])
 
     return (
         <>
@@ -91,7 +114,7 @@ function JobApplication() {
                                     <td>{application.career.title}</td>
                                     <td>{application.applicant.cv.name}</td>
                                     <td>{application.status.name}</td>
-                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id)} /></button> <AiOutlineClose /></td>
+                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id)} /></button> <button onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></button></td>
 
                                 </tr>
                             </>
