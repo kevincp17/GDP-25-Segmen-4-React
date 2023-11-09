@@ -8,7 +8,7 @@ import '../css/interviews.css'
 
 
 export default function InterviewPage() {
-    const [interview, setInterview] = useState([{}]);
+    const [interview, setInterview] = useState([]);
     const url = useSelector((state) => state.interview.url)
     const dispatch = useDispatch();
 
@@ -20,6 +20,9 @@ export default function InterviewPage() {
             .then((response) => {
                 console.log(response.data);
                 setInterview(response.data.results);
+
+                // const obj = response.data.results[0]
+                // console.log(obj)
             })
             .catch((error) => {
                 console.log(error);

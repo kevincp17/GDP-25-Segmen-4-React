@@ -77,8 +77,6 @@ export default function Headers() {
             <div id="popover-body">
               <a href="profile">View Profile</a>
               <hr/>
-              <a href="apply">View Apply Job</a>
-              <hr/>
               <a id="logout-btn" href="interviews">Logout</a>
             </div>
           </div>

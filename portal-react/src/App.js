@@ -19,7 +19,6 @@ function App() {
           <Route path="/careers" element={<CareerPage />} />
           <Route path="/interviews" element={<InterviewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/apply" element={<ApplyPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
