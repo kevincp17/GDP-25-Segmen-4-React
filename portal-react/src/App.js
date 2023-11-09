@@ -10,8 +10,10 @@ import Headers from "./layout/Header";
 import ApplyJobPage from "./view/ApplyJobPage";
 import Login from "./component/login";
 import Register from "./component/register";
+
 function App() {
   return (
+    <>
     <BrowserRouter>
       <Routes>
         <Route index element={<Login />}/>
@@ -25,6 +27,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 
