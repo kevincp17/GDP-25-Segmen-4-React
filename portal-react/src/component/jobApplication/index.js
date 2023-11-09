@@ -13,15 +13,25 @@ function JobApplication() {
     const [data, setData] = useState([])
     const url = useSelector((state) => state.application.url)
 
-    const handleAccept = async (id) => {
+    const handleAccept = async (id, statusId) => {
         const findApplication = data.find(application => application.apply_id === id);
         if (!findApplication) {
             return null;
         }
+    
+    const finalStatus = () => {
+        if(statusId < 5){
+            statusId+=1;
+        }
+        return statusId
+    }
+    const finalStatusId = finalStatus()
+    console.log(finalStatusId)
+
         const object = {
             apply_id: id,
             status: {
-                status_id: 5
+                status_id: finalStatusId
             }
         }
         await axios({
@@ -44,6 +54,7 @@ function JobApplication() {
         if (!findApplication) {
             return null;
         }
+
         const object = {
             apply_id: id,
             status: {
@@ -114,7 +125,7 @@ function JobApplication() {
                                     <td>{application.career.title}</td>
                                     <td>{application.applicant.cv.name}</td>
                                     <td>{application.status.name}</td>
-                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id)} /></button> <button onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></button></td>
+                                    <td ><AiOutlineFile /> <AiOutlineLink /> <button><AiOutlineCheck onClick={() => handleAccept(application.apply_id, application.status.status_id)} /></button> <button onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></button></td>
 
                                 </tr>
                             </>
