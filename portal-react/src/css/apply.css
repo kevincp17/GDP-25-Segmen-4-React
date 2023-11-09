@@ -29,3 +29,30 @@
     border-bottom: 1px black solid;
     margin-bottom: 10px;
 }
+
+#data-tb-apply{
+    width: 80%;
+    border: 1px solid #EDEDEE;
+    margin-bottom:200px;
+    border-radius: 10px;
+}
+
+.rdt_Table{
+    border-radius: 10px;
+}
+
+#input-filter{
+    display: flex;
+    justify-content: flex-start;
+    padding-right: 50%;
+    width: 30%;
+}
+
+#input-filter > input{
+    outline: transparent;
+}
+
+.apply-search-icon{
+    position: absolute;
+    margin: 17px 5px 5px 260px;
+}

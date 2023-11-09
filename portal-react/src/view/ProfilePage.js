@@ -10,10 +10,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { viewUserProfile } from "../features/viewProfileData";
 import { Backdrop, Modal, Fade, Popover } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PersonIcon from '@mui/icons-material/Person';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import HomeIcon from '@mui/icons-material/Home';
-import EmailIcon from '@mui/icons-material/Email';
+import PersonIcon from "@mui/icons-material/Person";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import HomeIcon from "@mui/icons-material/Home";
+import EmailIcon from "@mui/icons-material/Email";
 
 export default function ProfilePage() {
   const [userDataProfile, setUserDataProfile] = useState({
@@ -38,6 +38,7 @@ export default function ProfilePage() {
   });
 
   const [expInput, setExpInput] = useState({
+    exp_id: null,
     company_name: null,
     job_title: null,
     job_desc: null,
@@ -49,6 +50,7 @@ export default function ProfilePage() {
   const [degreeSelect, setDegreeSelect] = useState([]);
   const [instituteSelect, setInstituteSelect] = useState([]);
   const [eduInput, setEduInput] = useState({
+    edu_id: null,
     start_date: null,
     end_date: null,
     gpa: null,
@@ -74,16 +76,167 @@ export default function ProfilePage() {
   const handleCloseAddSkill = () => setOpenAddSkill(false);
 
   const [openAddExperience, setOpenAddExperience] = useState(false);
-  const handleOpenAddExperience = () => setOpenAddExperience(true);
-  const handleCloseAddExperience = () => setOpenAddExperience(false);
+  const handleOpenAddExperience = (exp) => {
+    console.log(exp);
+    if (exp) {
+      let monthStartFormat;
+      let monthEndFormat;
+
+      let dateStart = new Date(exp.start_date);
+      var dayStart = dateStart.getDate();
+      var monthStart = dateStart.getMonth() + 1;
+      var yearStart = dateStart.getFullYear();
+
+      if (monthStart > 9) {
+        monthStartFormat = monthStart;
+      } else if (monthStart < 10) {
+        monthStartFormat = "0" + monthStart;
+      }
+
+      if (dayStart < 10) {
+        dayStart = "0" + dayStart;
+      }
+
+      let dateEnd = new Date(exp.end_date);
+      var dayEnd = dateEnd.getDate();
+      var monthEnd = dateEnd.getMonth() + 1;
+      var yearEnd = dateEnd.getFullYear();
+
+      if (monthEnd >= 10) {
+        monthEndFormat = monthEnd;
+      } else if (monthEnd < 10) {
+        monthEndFormat = "0" + monthEnd;
+      }
+
+      if (dayEnd < 10) {
+        dayEnd = "0" + dayEnd;
+      }
+      console.log(yearEnd + "-" + monthEndFormat + "-" + dayEnd);
+      setExpInput({
+        exp_id: exp.exp_id,
+        company_name: exp.company_name,
+        job_title: exp.job_title,
+        job_desc: exp.job_desc,
+        start_date: yearStart + "-" + monthStartFormat + "-" + dayStart,
+        end_date: yearEnd + "-" + monthEndFormat + "-" + dayEnd,
+      });
+    }
+    setOpenAddExperience(true);
+  };
+  const handleCloseAddExperience = () => {
+    setExpInput({
+      exp_id: null,
+      company_name: null,
+      job_title: null,
+      job_desc: null,
+      start_date: null,
+      end_date: null,
+    });
+    setOpenAddExperience(false);
+  };
 
   const [openAddEducation, setOpenAddEducation] = useState(false);
-  const handleOpenAddEducation = () => setOpenAddEducation(true);
-  const handleCloseAddEducation = () => setOpenAddEducation(false);
+  const handleOpenAddEducation = (edu) => {
+    console.log(edu);
+    if (edu) {
+      let monthStartFormat;
+      let monthEndFormat;
+
+      let dateStart = new Date(edu.education.start_date);
+      var dayStart = dateStart.getDate();
+      var monthStart = dateStart.getMonth() + 1;
+      var yearStart = dateStart.getFullYear();
+
+      if (monthStart > 9) {
+        monthStartFormat = monthStart;
+      } else if (monthStart < 10) {
+        monthStartFormat = "0" + monthStart;
+      }
+
+      if (dayStart < 10) {
+        dayStart = "0" + dayStart;
+      }
+
+      let dateEnd = new Date(edu.education.end_date);
+      var dayEnd = dateEnd.getDate();
+      var monthEnd = dateEnd.getMonth() + 1;
+      var yearEnd = dateEnd.getFullYear();
+
+      if (monthEnd >= 10) {
+        monthEndFormat = monthEnd;
+      } else if (monthEnd < 10) {
+        monthEndFormat = "0" + monthEnd;
+      }
+
+      if (dayEnd < 10) {
+        dayEnd = "0" + dayEnd;
+      }
+      setEduInput({
+        edu_id: edu.education.edu_id,
+        start_date: yearStart + "-" + monthStartFormat + "-" + dayStart,
+        end_date: yearEnd + "-" + monthEndFormat + "-" + dayEnd,
+        gpa: edu.education.gpa,
+        institute_name: edu.education.institute.institute_id,
+        degree_name: edu.education.degree.degree_id,
+        major_name: edu.education.major.major_id,
+      });
+    }
+    setOpenAddEducation(true);
+  };
+  const handleCloseAddEducation = () => {
+    setEduInput({
+      edu_id: null,
+      start_date: null,
+      end_date: null,
+      gpa: null,
+      institute_name: null,
+      degree_name: null,
+      major_name: null,
+    });
+    setOpenAddEducation(false);
+  };
 
   const [openAddCertification, setOpenAddCertification] = useState(false);
-  const handleOpenAddCertification = () => setOpenAddCertification(true);
-  const handleCloseAddCertification = () => setOpenAddCertification(false);
+  const handleOpenAddCertification = (cert) => {
+    console.log(cert);
+    if (cert) {
+      let issuedMonthFormat;
+
+      let dateIssued = new Date(cert.issued_date);
+      var dayIssued = dateIssued.getDate();
+      var monthIssued = dateIssued.getMonth() + 1;
+      var yearIssued = dateIssued.getFullYear();
+
+      if (monthIssued > 9) {
+        issuedMonthFormat = monthIssued;
+      } else if (monthIssued < 10) {
+        issuedMonthFormat = "0" + monthIssued;
+      }
+
+      if (dayIssued < 10) {
+        dayIssued = "0" + dayIssued;
+      }
+
+      setCertInput({
+        certification_id: cert.certification_id,
+        certification_name: cert.certification_name,
+        certification_number: cert.certification_number,
+        organizer_name: cert.organizer_name,
+        issued_date: yearIssued + "-" + issuedMonthFormat + "-" + dayIssued,
+      });
+    }
+    setOpenAddCertification(true);
+  };
+  const handleCloseAddCertification = () => {
+    setCertInput({
+      certification_id: null,
+      certification_name: null,
+      certification_number: null,
+      organizer_name: null,
+      issued_date: null,
+    });
+    setOpenAddCertification(false);
+  };
 
   const [userName, setUserName] = useState();
   const [phone, setPhone] = useState();
@@ -272,6 +425,7 @@ export default function ProfilePage() {
   const handleAddExp = () => {
     console.log(expInput);
     let expData = {
+      exp_id: expInput.exp_id,
       company_name: expInput.company_name,
       job_title: expInput.job_title,
       job_desc: expInput.job_desc,
@@ -518,18 +672,292 @@ export default function ProfilePage() {
       });
   };
 
+  const handleDeleteSkill = (skill_user) => {
+    console.log(skill_user);
+    let cvInfoSkill = {
+      cv_info_id: skill_user.cv_info_id,
+      skill: {
+        skill_id: skill_user.skill.skill_id,
+      },
+      cv: {
+        cv_id: skill_user.cv.cv_id,
+      },
+    };
+    console.log(cvInfoSkill);
+    axios
+      .delete(
+        "http://localhost:8088/api/cvinfo/" +
+          skill_user.cv.cv_id +
+          "/skill/" +
+          skill_user.skill.skill_id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(cvInfoSkill),
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setRefresh(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDeleteExperience = (exp_user) => {
+    console.log(exp_user);
+    let cvInfoExp = {
+      cv_info_id: exp_user.cv_info_id,
+      experience: {
+        exp_id: exp_user.experience.exp_id,
+      },
+      cv: {
+        cv_id: exp_user.cv.cv_id,
+      },
+    };
+    console.log(cvInfoExp);
+    axios
+      .delete(
+        "http://localhost:8088/api/cvinfo/" +
+          exp_user.cv.cv_id +
+          "/experience/" +
+          exp_user.experience.exp_id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(cvInfoExp),
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setRefresh(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDeleteEducation = (user_edu) => {
+    console.log(user_edu);
+    let cvInfoEdu = {
+      cv_info_id: user_edu.cv_info_id,
+      education: {
+        edu_id: user_edu.education.edu_id,
+      },
+      cv: {
+        cv_id: user_edu.cv.cv_id,
+      },
+    };
+    console.log(cvInfoEdu);
+    axios
+      .delete(
+        "http://localhost:8088/api/cvinfo/" +
+          user_edu.cv.cv_id +
+          "/education/" +
+          user_edu.education.edu_id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(cvInfoEdu),
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setRefresh(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDeleteCertification = (user_cert) => {
+    console.log(user_cert);
+    let cvInfoCert = {
+      cv_info_id: user_cert.cv_info_id,
+      certification: {
+        certification_id: user_cert.certification.certification_id,
+      },
+      cv: {
+        cv_id: user_cert.cv.cv_id,
+      },
+    };
+    console.log(cvInfoCert);
+    axios
+      .delete(
+        "http://localhost:8088/api/cvinfo/" +
+          user_cert.cv.cv_id +
+          "/certification/" +
+          user_cert.certification.certification_id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify(cvInfoCert),
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setRefresh(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleEditExp = () => {
+    console.log(expInput);
+    let expData = {
+      exp_id: expInput.exp_id,
+      company_name: expInput.company_name,
+      job_title: expInput.job_title,
+      job_desc: expInput.job_desc,
+      start_date: expInput.start_date,
+      end_date: expInput.end_date,
+    };
+    console.log(expData);
+    axios
+      .post(
+        "http://localhost:8088/api/experience/" + expInput.exp_id,
+        JSON.stringify(expData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setExpInput({
+          exp_id: null,
+          company_name: null,
+          job_title: null,
+          job_desc: null,
+          start_date: null,
+          end_date: null,
+        });
+        setRefresh(true);
+        setOpenAddExperience(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setOpenAddExperience(false);
+      });
+  };
+
+  const handleEditEdu = () => {
+    console.log(eduInput);
+    let eduData = {
+      edu_id: eduInput.edu_id,
+      start_date: eduInput.start_date,
+      end_date: eduInput.end_date,
+      gpa: eduInput.gpa,
+      institute: {
+        institute_id: eduInput.institute_name,
+      },
+      degree: {
+        degree_id: eduInput.degree_name,
+      },
+      major: {
+        major_id: eduInput.major_name,
+      },
+    };
+    console.log(eduData);
+    axios
+      .post(
+        "http://localhost:8088/api/education/" + eduInput.edu_id,
+        JSON.stringify(eduData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setEduInput({
+          edu_id: null,
+          start_date: null,
+          end_date: null,
+          gpa: null,
+          institute_name: null,
+          degree_name: null,
+          major_name: null,
+        });
+        setRefresh(true);
+        setOpenAddEducation(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setOpenAddEducation(false);
+      });
+  };
+
+  const handleEditCert = () => {
+    console.log(certInput);
+    let certData = {
+      certification_id: certInput.certification_id,
+      certification_name: certInput.certification_name,
+      certification_number: certInput.certification_number,
+      organizer_name: certInput.organizer_name,
+      issued_date: certInput.issued_date,
+    };
+    console.log(certData);
+    axios
+      .post(
+        "http://localhost:8088/api/certification/" + certInput.certification_id,
+        JSON.stringify(certData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setCertInput({
+          certification_id: null,
+          certification_name: null,
+          certification_number: null,
+          organizer_name: null,
+          issued_date: null,
+        });
+        setRefresh(true);
+        setOpenAddCertification(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setOpenAddCertification(false);
+      });
+  };
+
   return (
     <div id="profile-div">
       <div id="profile-div1">
         <button>
-          <img src="image/profile.png" />
+          <img src="/image/profile.png" />
         </button>
 
         <div id="profile-div1-info">
-          <p><PersonIcon style={{marginRight:'5px'}}/>{userName}</p>
-          <p><LocalPhoneIcon style={{marginRight:'5px'}}/>{phone}</p>
-          <p><HomeIcon style={{marginRight:'5px'}}/>{address}</p>
-          <p><EmailIcon style={{marginRight:'5px'}}/>{email}</p>
+          <p>
+            <PersonIcon style={{ marginRight: "5px" }} />
+            {userName}
+          </p>
+          <p>
+            <LocalPhoneIcon style={{ marginRight: "5px" }} />
+            {phone}
+          </p>
+          <p>
+            <HomeIcon style={{ marginRight: "5px" }} />
+            {address}
+          </p>
+          <p>
+            <EmailIcon style={{ marginRight: "5px" }} />
+            {email}
+          </p>
         </div>
 
         <div id="profile-div1-edit">
@@ -599,7 +1027,7 @@ export default function ProfilePage() {
                     />
                   </div>
 
-                  <div>
+                  <div hidden>
                     <input
                       id="file-input"
                       type="file"
@@ -768,8 +1196,10 @@ export default function ProfilePage() {
                     <div>
                       <p>{s.skill.name}</p>
                     </div>
-                    
-                    <button><CloseIcon style={{width:'20px'}}/></button>
+
+                    <button onClick={() => handleDeleteSkill(s)}>
+                      <CloseIcon style={{ width: "20px" }} />
+                    </button>
                   </div>
                 );
               })}
@@ -866,7 +1296,11 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" id="apply-btn" onClick={handleAddExp}>
+                    <button
+                      type="button"
+                      id="apply-btn"
+                      onClick={expInput.exp_id ? handleEditExp : handleAddExp}
+                    >
                       SUBMIT
                     </button>
                     <button
@@ -909,22 +1343,36 @@ export default function ProfilePage() {
                 var yearEnd = dateEnd.getFullYear();
                 return (
                   <div id="nav-exp-content">
-                    <p>{e.experience.job_title.toUpperCase()}</p>
-                    <p>{e.experience.company_name}</p>
-                    <p>
-                      {dayStart +
-                        " " +
-                        months[monthStart] +
-                        " " +
-                        yearStart +
-                        " - " +
-                        dayEnd +
-                        " " +
-                        months[monthEnd] +
-                        " " +
-                        yearEnd}
-                    </p>
-                    <p>{e.experience.job_desc}</p>
+                    <div>
+                      <p>{e.experience.job_title.toUpperCase()}</p>
+                      <p>{e.experience.company_name}</p>
+                      <p>
+                        {dayStart +
+                          " " +
+                          months[monthStart] +
+                          " " +
+                          yearStart +
+                          " - " +
+                          dayEnd +
+                          " " +
+                          months[monthEnd] +
+                          " " +
+                          yearEnd}
+                      </p>
+                      <p>{e.experience.job_desc}</p>
+                    </div>
+
+                    <div>
+                      <button
+                        onClick={() => handleOpenAddExperience(e.experience)}
+                      >
+                        <EditIcon style={{ width: "20px" }} />
+                      </button>
+
+                      <button onClick={() => handleDeleteExperience(e)}>
+                        <CloseIcon style={{ width: "20px" }} />
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -973,10 +1421,18 @@ export default function ProfilePage() {
                   <div class="modal-body" id="modal-body-add-job">
                     <div>
                       <select name="institute_name" onChange={handleEduInput}>
-                        <option selected>Select Institute</option>
+                        <option>Select Institute</option>
                         {instituteSelect.map((institute) => {
                           return (
-                            <option value={institute.institute_id}>
+                            <option
+                              value={institute.institute_id}
+                              selected={
+                                eduInput.institute_name ===
+                                institute.institute_id
+                                  ? true
+                                  : false
+                              }
+                            >
                               {institute.name}
                             </option>
                           );
@@ -986,10 +1442,17 @@ export default function ProfilePage() {
 
                     <div>
                       <select name="degree_name" onChange={handleEduInput}>
-                        <option selected>Select Degree</option>
+                        <option>Select Degree</option>
                         {degreeSelect.map((degree) => {
                           return (
-                            <option value={degree.degree_id}>
+                            <option
+                              value={degree.degree_id}
+                              selected={
+                                eduInput.degree_name === degree.degree_id
+                                  ? true
+                                  : false
+                              }
+                            >
                               {degree.name}
                             </option>
                           );
@@ -999,10 +1462,19 @@ export default function ProfilePage() {
 
                     <div>
                       <select name="major_name" onChange={handleEduInput}>
-                        <option selected>Select Major</option>
+                        <option>Select Major</option>
                         {majorSelect.map((major) => {
                           return (
-                            <option value={major.major_id}>{major.name}</option>
+                            <option
+                              value={major.major_id}
+                              selected={
+                                eduInput.major_name === major.major_id
+                                  ? true
+                                  : false
+                              }
+                            >
+                              {major.name}
+                            </option>
                           );
                         })}
                       </select>
@@ -1038,7 +1510,11 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" id="apply-btn" onClick={handleAddEdu}>
+                    <button
+                      type="button"
+                      id="apply-btn"
+                      onClick={eduInput.edu_id ? handleEditEdu : handleAddEdu}
+                    >
                       SUBMIT
                     </button>
                     <button
@@ -1080,26 +1556,38 @@ export default function ProfilePage() {
                 var yearEnd = dateEnd.getFullYear();
                 return (
                   <div id="nav-edu-content">
-                    <p>
-                      {ed.education.degree.name.toUpperCase() +
-                        " " +
-                        ed.education.major.name.toUpperCase()}
-                    </p>
-                    <p>{ed.education.institute.name}</p>
-                    <p>
-                      {dayStart +
-                        " " +
-                        months[monthStart] +
-                        " " +
-                        yearStart +
-                        " - " +
-                        dayEnd +
-                        " " +
-                        months[monthEnd] +
-                        " " +
-                        yearEnd}
-                    </p>
-                    <p>GPA {ed.education.gpa}</p>
+                    <div>
+                      <p>
+                        {ed.education.degree.name.toUpperCase() +
+                          " " +
+                          ed.education.major.name.toUpperCase()}
+                      </p>
+                      <p>{ed.education.institute.name}</p>
+                      <p>
+                        {dayStart +
+                          " " +
+                          months[monthStart] +
+                          " " +
+                          yearStart +
+                          " - " +
+                          dayEnd +
+                          " " +
+                          months[monthEnd] +
+                          " " +
+                          yearEnd}
+                      </p>
+                      <p>GPA {ed.education.gpa}</p>
+                    </div>
+
+                    <div>
+                      <button onClick={() => handleOpenAddEducation(ed)}>
+                        <EditIcon style={{ width: "20px" }} />
+                      </button>
+
+                      <button onClick={() => handleDeleteEducation(ed)}>
+                        <CloseIcon style={{ width: "20px" }} />
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -1190,7 +1678,11 @@ export default function ProfilePage() {
                     <button
                       type="button"
                       id="apply-btn"
-                      onClick={handleAddCert}
+                      onClick={
+                        certInput.certification_id
+                          ? handleEditCert
+                          : handleAddCert
+                      }
                     >
                       SUBMIT
                     </button>
@@ -1229,13 +1721,31 @@ export default function ProfilePage() {
 
                 return (
                   <div id="nav-cert-content">
-                    <p>{c.certification.certification_name.toUpperCase()}</p>
-                    <p>{c.certification.certification_name}</p>
-                    <p>
-                      Issued{" "}
-                      {dayStart + " " + months[monthStart] + " " + yearStart}
-                    </p>
-                    <p>Credential ID {c.certification.certification_number}</p>
+                    <div>
+                      <p>{c.certification.certification_name.toUpperCase()}</p>
+                      <p>{c.certification.certification_name}</p>
+                      <p>
+                        Issued{" "}
+                        {dayStart + " " + months[monthStart] + " " + yearStart}
+                      </p>
+                      <p>
+                        Credential ID {c.certification.certification_number}
+                      </p>
+                    </div>
+
+                    <div>
+                      <button
+                        onClick={() =>
+                          handleOpenAddCertification(c.certification)
+                        }
+                      >
+                        <EditIcon style={{ width: "20px" }} />
+                      </button>
+
+                      <button onClick={() => handleDeleteCertification(c)}>
+                        <CloseIcon style={{ width: "20px" }} />
+                      </button>
+                    </div>
                   </div>
                 );
               })}

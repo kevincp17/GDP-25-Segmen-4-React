@@ -27,7 +27,7 @@ export default function CareerPage() {
     requirement: null,
     type: null,
     start_post_date: date,
-    picture: null,
+    picture: "gdp.jpg",
   });
 
   console.log(dataJob);
@@ -104,13 +104,13 @@ export default function CareerPage() {
     }));
   };
 
-  let handleChangeFile = (e) => {
-    console.log(e.target.files[0].name);
-    setDataJob((prevState) => ({
-      ...prevState,
-      picture: e.target.files[0],
-    }));
-  };
+  // let handleChangeFile = (e) => {
+  //   console.log(e.target.files[0].name);
+  //   setDataJob((prevState) => ({
+  //     ...prevState,
+  //     picture: e.target.files[0],
+  //   }));
+  // };
 
   const handleSubmit = (e) => {
     // console.log(dataJob.picture);
@@ -354,7 +354,7 @@ export default function CareerPage() {
                   />
                 </div>
 
-                <div>
+                {/* <div hidden>
                   <input
                     id="file-input"
                     type="file"
@@ -362,8 +362,8 @@ export default function CareerPage() {
                     onChange={handleChangeFile}
                     placeholder="Masukkan penempatan lowongan"
                   />
-                  {/* <img style={{paddingLeft:'30px'}} src={URL.createObjectURL(dataJob.picture)} width={"200px"} height={"200px"}/> */}
-                </div>
+                 
+                </div> */}
               </div>
               <div class="modal-footer">
                 <button type="button" id="apply-btn" onClick={handleSubmit}>

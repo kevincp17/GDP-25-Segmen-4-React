@@ -485,6 +485,8 @@
 #modal-body-add-job > div >select{
     font-size: 15px;
     padding-left: 20px;
+    margin-left: 30px;
+    width: 640px;
     font-family: Arial, Helvetica, sans-serif;
  }
 
