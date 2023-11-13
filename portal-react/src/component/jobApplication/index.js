@@ -165,7 +165,7 @@ function JobApplication() {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
-            setData(response.data.results)
+            setData(response.data.result)
         }).catch((error) => {
             console.log(error)
         })
