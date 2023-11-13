@@ -8,7 +8,7 @@ function TrainerAuth({children}) {
 
     useEffect(() => {}, [role])
 
-    if (role != "trainer") {
+    if (role != "Trainer") {
         return <Navigate replace to="/" />;
     } else {
         return children;

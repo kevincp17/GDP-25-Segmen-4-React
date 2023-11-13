@@ -8,7 +8,7 @@ function TaAuth({children}) {
 
     useEffect(() => {}, [role])
 
-    if (role != "ta") {
+    if (role != "TA") {
         return <Navigate replace to="/" />;
     } else {
         return children;

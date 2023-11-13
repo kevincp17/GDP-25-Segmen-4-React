@@ -2,6 +2,7 @@ import { React } from "react";
 import { useState } from "react";
 import axios from "axios";
 import './index.css'
+import { useNavigate } from "react-router-dom";
 
 function Register() {
     const [passRequirement, setPassRequirement] = useState(false);
@@ -12,6 +13,8 @@ function Register() {
     const upper = /(?=.*[A-Z])/;
     const symbol = /(?=.*[@$!%*?&])/;
     const number = /(?=.*\d)/
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState({
         name: '',
@@ -77,6 +80,7 @@ function Register() {
                     }
                 }).then((response) => {
                     console.log(response)
+                    navigate("/")
                 }).catch((error) => {
                     console.log(error)
                 })

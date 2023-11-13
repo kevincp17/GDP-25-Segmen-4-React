@@ -8,7 +8,7 @@ function InternalAuth({children}) {
 
     useEffect(() => {}, [role])
 
-    if (role === 'applicant') {
+    if (role === 'Applicant') {
         return <Navigate replace to="/" />;
     } else {
         return children;

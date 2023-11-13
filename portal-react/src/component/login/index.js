@@ -44,17 +44,8 @@ function Login() {
       Cookies.set('role', decoded.role, {expires:1});
       Cookies.set('user_id', decoded.user_id, {expires:1});
       // Cookies.set('authenticated', true, {expires:1});
+        navigate("/main/home")
 
-      if (decoded.role === 'applicant') {
-        navigate("/home")
-      } else if (decoded.role === 'ta'){
-        navigate("/job-application")
-      } else if (decoded.role === 'trainer') {
-        navigate("/job-application")
-      }
-      else {
-        navigate("/")
-      }
     }).catch((error) => {
       console.log(error)
       alert("Please check your email and password")
