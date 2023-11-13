@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useCollapse } from "react-collapsed";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/profile.css";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -14,8 +16,36 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import HomeIcon from "@mui/icons-material/Home";
 import EmailIcon from "@mui/icons-material/Email";
+import ReactPDF from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import MyDocument from "../app/handleCV";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+import Autocomplete from "@mui/material/Autocomplete";
+import swal from "sweetalert";
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
+  const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
+
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: "row",
+      backgroundColor: "#E4E4E4",
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1,
+    },
+  });
+
+  const [instituteID, setInstituteID] = useState(null);
+  console.log(instituteID);
+
   const [userDataProfile, setUserDataProfile] = useState({
     cv_id: localStorage.getItem("userId"),
     name: null,
@@ -36,6 +66,7 @@ export default function ProfilePage() {
       cv_id: null,
     },
   });
+  console.log(skillSelect);
 
   const [expInput, setExpInput] = useState({
     exp_id: null,
@@ -58,6 +89,8 @@ export default function ProfilePage() {
     degree_name: null,
     major_name: null,
   });
+
+  console.log(instituteSelect);
 
   const [certInput, setCertInput] = useState({
     certification_id: null,
@@ -193,6 +226,7 @@ export default function ProfilePage() {
       degree_name: null,
       major_name: null,
     });
+    setInstituteID(null);
     setOpenAddEducation(false);
   };
 
@@ -393,25 +427,53 @@ export default function ProfilePage() {
       },
     };
     console.log(skillData);
-    axios
-      .post(
-        url + localStorage.getItem("userId") + "/skill",
-        JSON.stringify(skillData),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        setRefresh(true);
-        setOpenAddSkill(false);
+    console.log(skillList);
+    // var hasMatch = skillList.some(function (val) {
+    //   console.log(val.skill.skill_id);
+    //   return (val.skill.skill_id !== skillData.skill.skill_id);
+    // }).length > 0;
+
+    let skillExist = skillList.some(
+      (sl) => sl.skill.skill_id == skillData.skill.skill_id
+    );
+    console.log(skillExist);
+
+    if (!skillExist) {
+      axios
+        .post(
+          url + localStorage.getItem("userId") + "/skill",
+          JSON.stringify(skillData),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setRefresh(true);
+          setOpenAddSkill(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setOpenAddSkill(false);
+        });
+    } else {
+      swal({
+        title: `This skill already registered in your skill batch. Pick other skill.`,
+        // buttons: {
+        //   apply: {
+        //     text: `APPLY`,
+        //     value: "apply",
+        //   },
+        //   cancelApply: {
+        //     text: `CANCEL`,
+        //     value: "cancel-apply",
+        //   },
+        // },
+        icon: "info",
       })
-      .catch((error) => {
-        console.log(error);
-        setOpenAddSkill(false);
-      });
+    }
   };
 
   let handleExpInput = (e) => {
@@ -496,72 +558,168 @@ export default function ProfilePage() {
 
   const handleAddEdu = () => {
     console.log(eduInput);
-    let eduData = {
-      start_date: eduInput.start_date,
-      end_date: eduInput.end_date,
-      gpa: eduInput.gpa,
-      institute: {
-        institute_id: eduInput.institute_name,
-      },
-      degree: {
-        degree_id: eduInput.degree_name,
-      },
-      major: {
-        major_id: eduInput.major_name,
-      },
-    };
+    let instituteExist = instituteSelect.some(
+      (i) => i.institute_id == instituteID
+    );
 
-    // console.log(expData);
-    axios
-      .post("http://localhost:8088/api/education", JSON.stringify(eduData), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        let cvEduData = {
-          education: {
-            edu_id: response.data.result.edu_id,
-          },
-          cv: {
-            cv_id: localStorage.getItem("userId"),
-          },
-        };
+    if (!instituteExist) {
+      let newInstitute = {
+        name: eduInput.institute_name,
+      };
 
-        axios
-          .post(
-            url + localStorage.getItem("userId") + "/education",
-            JSON.stringify(cvEduData),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          )
-          .then((response) => {
-            console.log(response);
-            setEduInput({
-              start_date: null,
-              end_date: null,
-              gpa: null,
-              institute_name: null,
-              degree_name: null,
-              major_name: null,
+      axios
+        .post(
+          "http://localhost:8088/api/institute",
+          JSON.stringify(newInstitute),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+
+          let eduData = {
+            start_date: eduInput.start_date,
+            end_date: eduInput.end_date,
+            gpa: eduInput.gpa,
+            institute: {
+              institute_id: response.data.result.institute_id,
+            },
+            degree: {
+              degree_id: eduInput.degree_name,
+            },
+            major: {
+              major_id: eduInput.major_name,
+            },
+          };
+
+          axios
+            .post(
+              "http://localhost:8088/api/education",
+              JSON.stringify(eduData),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response);
+              let cvEduData = {
+                education: {
+                  edu_id: response.data.result.edu_id,
+                },
+                cv: {
+                  cv_id: localStorage.getItem("userId"),
+                },
+              };
+
+              axios
+                .post(
+                  url + localStorage.getItem("userId") + "/education",
+                  JSON.stringify(cvEduData),
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                .then((response) => {
+                  console.log(response);
+                  setEduInput({
+                    start_date: null,
+                    end_date: null,
+                    gpa: null,
+                    institute_name: null,
+                    degree_name: null,
+                    major_name: null,
+                  });
+                  setInstituteID(null)
+                  setRefresh(true);
+                  setOpenAddEducation(false);
+                })
+                .catch((error) => {
+                  console.log(error);
+                  setOpenAddEducation(false);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+              setOpenAddEducation(false);
             });
+        })
+        .catch((error) => {
+          console.log(error);
+          setOpenAddEducation(false);
+        });
+    } else {
+      let eduData = {
+        start_date: eduInput.start_date,
+        end_date: eduInput.end_date,
+        gpa: eduInput.gpa,
+        institute: {
+          institute_id: instituteID,
+        },
+        degree: {
+          degree_id: eduInput.degree_name,
+        },
+        major: {
+          major_id: eduInput.major_name,
+        },
+      };
+      axios
+        .post("http://localhost:8088/api/education", JSON.stringify(eduData), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          let cvEduData = {
+            education: {
+              edu_id: response.data.result.edu_id,
+            },
+            cv: {
+              cv_id: localStorage.getItem("userId"),
+            },
+          };
 
-            setRefresh(true);
-            setOpenAddEducation(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setOpenAddEducation(false);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        setOpenAddEducation(false);
-      });
+          axios
+            .post(
+              url + localStorage.getItem("userId") + "/education",
+              JSON.stringify(cvEduData),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response);
+              setEduInput({
+                start_date: null,
+                end_date: null,
+                gpa: null,
+                institute_name: null,
+                degree_name: null,
+                major_name: null,
+              });
+              setInstituteID(null)
+              setRefresh(true);
+              setOpenAddEducation(false);
+            })
+            .catch((error) => {
+              console.log(error);
+              setOpenAddEducation(false);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          setOpenAddEducation(false);
+        });
+    }
   };
 
   let handleCertInput = (e) => {
@@ -934,6 +1092,25 @@ export default function ProfilePage() {
       });
   };
 
+  const MyDocument = () => (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Section #1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Section #2</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  const handleMakeCV = () => {
+    navigate("/cv");
+  };
+
+  //autocomplete
+
   return (
     <div id="profile-div">
       <div id="profile-div1">
@@ -966,6 +1143,10 @@ export default function ProfilePage() {
               <EditIcon />
             </button>
           ) : null}
+
+          <button onClick={() => handleMakeCV()}>
+            <PictureAsPdfIcon />
+          </button>
 
           <Modal
             aria-labelledby="transition-modal-title"
@@ -1001,7 +1182,9 @@ export default function ProfilePage() {
                 </div>
                 <div class="modal-body" id="modal-body-add-job">
                   <div>
+                    <label for="name">User Name</label>
                     <input
+                      id="name"
                       name="name"
                       value={userDataProfile.name}
                       onChange={handleProfileChange}
@@ -1010,7 +1193,9 @@ export default function ProfilePage() {
                   </div>
 
                   <div>
+                    <label for="phone">Phone Number</label>
                     <input
+                      id="phone"
                       name="phone"
                       value={userDataProfile.phone}
                       onChange={handleProfileChange}
@@ -1019,7 +1204,9 @@ export default function ProfilePage() {
                   </div>
 
                   <div>
+                    <label for="address">Adress</label>
                     <input
+                      id="address"
                       name="address"
                       value={userDataProfile.address}
                       onChange={handleProfileChange}
@@ -1156,15 +1343,45 @@ export default function ProfilePage() {
                       <CloseIcon />
                     </button>
                   </div>
-                  <div class="modal-body" id="modal-body-add-job">
+                  <div
+                    class="modal-body"
+                    id="modal-body-add-job"
+                    style={{ height: "180px" }}
+                  >
                     <div>
-                      <select name="skill_id" onChange={handleSkillInput}>
+                      <label for="skill_id">Skill</label>
+                      <select
+                        id="skill_id"
+                        name="skill_id"
+                        onChange={handleSkillInput}
+                      >
                         <option selected>Select Skill</option>
-                        {skillSelect.map((skill) => {
-                          return (
-                            <option value={skill.skill_id}>{skill.name}</option>
-                          );
-                        })}
+                        <optgroup label="Soft Skills">
+                          {skillSelect.map((skillSoft) => {
+                            return (
+                              <>
+                                {skillSoft.skill_type === "Soft Skills" ? (
+                                  <option value={skillSoft.skill_id}>
+                                    {skillSoft.name}
+                                  </option>
+                                ) : null}
+                              </>
+                            );
+                          })}
+                        </optgroup>
+                        <optgroup label="Hard Skills">
+                          {skillSelect.map((skillSoft) => {
+                            return (
+                              <>
+                                {skillSoft.skill_type === "Hard Skills" ? (
+                                  <option value={skillSoft.skill_id}>
+                                    {skillSoft.name}
+                                  </option>
+                                ) : null}
+                              </>
+                            );
+                          })}
+                        </optgroup>
                       </select>
                     </div>
                   </div>
@@ -1249,7 +1466,9 @@ export default function ProfilePage() {
                   </div>
                   <div class="modal-body" id="modal-body-add-job">
                     <div>
+                      <label for="company_name">Company Name</label>
                       <input
+                        id="company_name"
                         name="company_name"
                         value={expInput.company_name}
                         onChange={handleExpInput}
@@ -1258,7 +1477,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="job_title">Job Title</label>
                       <input
+                        id="job_title"
                         name="job_title"
                         value={expInput.job_title}
                         onChange={handleExpInput}
@@ -1267,7 +1488,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="job_desc">Job Description</label>
                       <textarea
+                        id="job_desc"
                         name="job_desc"
                         value={expInput.job_desc}
                         onChange={handleExpInput}
@@ -1276,7 +1499,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="start_date">Start Date</label>
                       <input
+                        id="start_date"
                         type="date"
                         name="start_date"
                         value={expInput.start_date}
@@ -1286,7 +1511,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="end_date">End Date</label>
                       <input
+                        id="end_date"
                         type="date"
                         name="end_date"
                         value={expInput.end_date}
@@ -1343,7 +1570,7 @@ export default function ProfilePage() {
                 var yearEnd = dateEnd.getFullYear();
                 return (
                   <div id="nav-exp-content">
-                    <div>
+                    <div {...getToggleProps()}>
                       <p>{e.experience.job_title.toUpperCase()}</p>
                       <p>{e.experience.company_name}</p>
                       <p>
@@ -1359,7 +1586,16 @@ export default function ProfilePage() {
                           " " +
                           yearEnd}
                       </p>
-                      <p>{e.experience.job_desc}</p>
+                      {isExpanded ? (
+                        <p>
+                          Hide Description <ExpandLessIcon />
+                        </p>
+                      ) : (
+                        <p>
+                          Show Description <ExpandMoreIcon />
+                        </p>
+                      )}
+                      <p {...getCollapseProps()}>{e.experience.job_desc}</p>
                     </div>
 
                     <div>
@@ -1420,7 +1656,38 @@ export default function ProfilePage() {
                   </div>
                   <div class="modal-body" id="modal-body-add-job">
                     <div>
-                      <select name="institute_name" onChange={handleEduInput}>
+                      <label for="institute_name">Institute Name</label>
+
+                      <Autocomplete
+                        freeSolo
+                        id="free-solo-2-demo"
+                        disableClearable
+                        onChange={(event, newValue) => {
+                          setInstituteID(newValue.institute_id);
+                        }}
+                        options={instituteSelect}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Institute Name"
+                            name="institute_name"
+                            value={eduInput.institute_name}
+                            onChange={handleEduInput}
+                            style = {{width: 640,marginLeft:30}}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
+                      />
+
+                      {/* <select
+                        id="institute_name"
+                        name="institute_name"
+                        onChange={handleEduInput}
+                      >
                         <option>Select Institute</option>
                         {instituteSelect.map((institute) => {
                           return (
@@ -1437,11 +1704,16 @@ export default function ProfilePage() {
                             </option>
                           );
                         })}
-                      </select>
+                      </select> */}
                     </div>
 
                     <div>
-                      <select name="degree_name" onChange={handleEduInput}>
+                      <label for="degree_name">Degree Name</label>
+                      <select
+                        id="degree_name"
+                        name="degree_name"
+                        onChange={handleEduInput}
+                      >
                         <option>Select Degree</option>
                         {degreeSelect.map((degree) => {
                           return (
@@ -1461,7 +1733,12 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
-                      <select name="major_name" onChange={handleEduInput}>
+                      <label for="major_name">Major Name</label>
+                      <select
+                        id="major_name"
+                        name="major_name"
+                        onChange={handleEduInput}
+                      >
                         <option>Select Major</option>
                         {majorSelect.map((major) => {
                           return (
@@ -1481,7 +1758,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="gpa">GPA</label>
                       <input
+                        id="gpa"
                         name="gpa"
                         value={eduInput.gpa}
                         onChange={handleEduInput}
@@ -1490,7 +1769,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="start_date">Start Date</label>
                       <input
+                        id="start_date"
                         type="date"
                         name="start_date"
                         value={eduInput.start_date}
@@ -1500,7 +1781,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="end_date">End Date</label>
                       <input
+                        id="end_date"
                         type="date"
                         name="end_date"
                         value={eduInput.end_date}
@@ -1638,7 +1921,9 @@ export default function ProfilePage() {
                   </div>
                   <div class="modal-body" id="modal-body-add-job">
                     <div>
+                      <label for="certification_name">Certification Name</label>
                       <input
+                        id="certification_name"
                         name="certification_name"
                         value={certInput.certification_name}
                         onChange={handleCertInput}
@@ -1647,7 +1932,11 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="certification_number">
+                        Certification Number
+                      </label>
                       <input
+                        id="certification_number"
                         name="certification_number"
                         value={certInput.certification_number}
                         onChange={handleCertInput}
@@ -1656,7 +1945,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="organizer_name">Organizer Name</label>
                       <input
+                        id="organizer_name"
                         name="organizer_name"
                         value={certInput.organizer_name}
                         onChange={handleCertInput}
@@ -1665,7 +1956,9 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
+                      <label for="issued_date">Issued Date</label>
                       <input
+                        id="issued_date"
                         type="date"
                         name="issued_date"
                         value={certInput.issued_date}
@@ -1723,7 +2016,7 @@ export default function ProfilePage() {
                   <div id="nav-cert-content">
                     <div>
                       <p>{c.certification.certification_name.toUpperCase()}</p>
-                      <p>{c.certification.certification_name}</p>
+                      <p>{c.certification.organizer_name}</p>
                       <p>
                         Issued{" "}
                         {dayStart + " " + months[monthStart] + " " + yearStart}
