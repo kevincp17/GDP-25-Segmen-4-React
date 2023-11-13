@@ -51,16 +51,16 @@ function Login() {
         navigate("/main/home")
       }
 
-    //   if (decoded.role === 'applicant') {
-    //     navigate("/home")
-    //   } else if (decoded.role === 'ta'){
-    //     navigate("/job-application")
-    //   } else if (decoded.role === 'trainer') {
-    //     navigate("/job-application")
-    //   }
-    //   else {
-    //     navigate("/")
-    //   }
+      // if (decoded.role === 'applicant') {
+      //   navigate("/home")
+      // } else if (decoded.role === 'ta'){
+      //   navigate("/job-application")
+      // } else if (decoded.role === 'trainer') {
+      //   navigate("/job-application")
+      // }
+      // else {
+      //   navigate("/")
+      // }
     }).catch((error) => {
       console.log(error)
       alert("Please check your email and password")
