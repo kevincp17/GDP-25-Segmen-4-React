@@ -21,9 +21,6 @@ function JobApplication() {
     const url = useSelector((state) => state.application.url)
     const [showToast, setShowToast] = useState(false);
     let dataApplyRow = []
-    const [hideAccept, setHideAccept] = useState(false)
-    const [hideReject, setHideReject] = useState(true)
-    const [hideInterview, setHideInterview] = useState(true)
 
     const navigate = useNavigate();
 
@@ -55,15 +52,18 @@ function JobApplication() {
         }
     }
     data.map(apply => {
+        // const buttonInterview = apply.status.status_id = 2 ? true : false;
+        const buttonStatus = apply.status.status_id >= 5 ? true : false;
+        const buttonInterview = apply.status.name === 'HR Interview' || apply.status.name === 'User Interview' ? false : true;
         dataApplyRow.push({
             job_name: apply.career.title,
             applicant_name: apply.applicant.cv.name,
             status: apply.status.name,
             action: <>
                 <Button ariant="primary" onClick={() => handleMakeCV(apply.applicant.user_id)}><AiOutlineFile /></Button>{' '}
-                <Button variant="secondary" onClick={() => handleSetInterview(apply.status.status_id, apply.career.job_id, apply.career.title, apply.applicant.cv.cv_id, apply.applicant.cv.name)}><AiOutlineLink /></Button>{' '}
-                <Button variant="success" hidden={hideAccept}><AiOutlineCheck onClick={() => handleAccept(apply.apply_id, apply.status.status_id)} /></Button>{' '}
-                <Button variant="danger" onClick={() => handleReject(apply.apply_id)}><AiOutlineClose /></Button></>
+                <Button variant="secondary" hidden={buttonInterview} onClick={() => handleSetInterview(apply.status.status_id, apply.career.job_id, apply.career.title, apply.applicant.cv.cv_id, apply.applicant.cv.name)}><AiOutlineLink /></Button>{' '}
+                <Button variant="success" hidden={buttonStatus} onClick={() => handleAccept(apply.apply_id, apply.status.status_id)}><AiOutlineCheck /></Button>{' '}
+                <Button variant="danger" hidden={buttonStatus} onClick={() => handleReject(apply.apply_id)}><AiOutlineClose /></Button></>
         })
     })
 
@@ -147,7 +147,7 @@ function JobApplication() {
             console.log("interview user")
             navigate("/main/set-interviewtrainer")
         } else {
-            console.log("belum bisa set interview")
+            alert("This feature can only be done when the application status is at the interview stage")
         }
     }
 
