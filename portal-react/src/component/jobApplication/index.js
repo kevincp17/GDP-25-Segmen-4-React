@@ -1,16 +1,11 @@
-import { GrCheckmark, GrDocumentText, GrFormCheckmark } from "react-icons/gr";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineFile, AiOutlineLink } from "react-icons/ai";
 import './index.css';
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { MdExpandMore, MdExpandLess } from "react-icons/md";
-import TableSection from "./tableSection";
-import TableRow from "./tableRow";
+import { useSelector } from 'react-redux';
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Toast from 'react-bootstrap/Toast';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DataTable from "react-data-table-component";
@@ -52,7 +47,6 @@ function JobApplication() {
         }
     }
     data.map(apply => {
-        // const buttonInterview = apply.status.status_id = 2 ? true : false;
         const buttonStatus = apply.status.status_id >= 5 ? true : false;
         const buttonInterview = apply.status.name === 'HR Interview' || apply.status.name === 'User Interview' ? false : true;
         dataApplyRow.push({
@@ -80,7 +74,6 @@ function JobApplication() {
             return statusId
         }
         const finalStatusId = finalStatus()
-        console.log(finalStatusId)
 
         const object = {
             apply_id: id,
@@ -96,7 +89,6 @@ function JobApplication() {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
-            console.log(response)
             setShowToast(true)
             show()
         }).catch((error) => {
@@ -117,14 +109,13 @@ function JobApplication() {
             }
         }
         await axios({
-            url: "http://localhost:8088/api/application/" + id,
+            url: "http://localhost:8088/api/apply/" + id,
             method: "POST",
             data: JSON.stringify(object),
             headers: {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
-            console.log(response)
             setShowToast(true)
             show()
         }).catch((error) => {
@@ -138,22 +129,15 @@ function JobApplication() {
         localStorage.setItem("applicantId", applicantId)
         localStorage.setItem("applicantName", applicantName)
 
-        console.log(applicantId)
-
         if (id === 2) {
-            console.log("interview hr")
             navigate("/main/set-interviewta")
-        } else if (id === 3) {
-            console.log("interview user")
+        } if (id === 3) {
             navigate("/main/set-interviewtrainer")
-        } else {
-            alert("This feature can only be done when the application status is at the interview stage")
         }
     }
 
     const handleMakeCV = (id) => {
         localStorage.setItem("userId", id)
-        console.log(id)
         navigate("/cv");
       };
 
@@ -183,10 +167,6 @@ function JobApplication() {
         <>
             <div id="apply-div">
                 <p id="apply-title">Apply Job List</p>
-                {/* <div id="input-filter">
-                    <input type="text" onChange={handleFilter} placeholder="Search job appliance" />
-                    <SearchIcon className="apply-search-icon" />
-                </div> */}
                 <div id="data-tb-apply">
                     <DataTable
                         className="rdt_Table"
