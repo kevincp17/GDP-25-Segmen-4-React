@@ -1,26 +1,5 @@
-.container {
-    background-color: red;
-    height: 700px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-}
-
-.table {
-    width: 100%;
-    /* flex-direction: column; */
-    text-align: left;
-}
-
-.table-content {
-    /* text-align: center; */
-}
-
 .toast {
     align-items: left;
     justify-content: left;
     display: flex;
-    /* text-align: left; */
 }

@@ -15,7 +15,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import HomeIcon from "@mui/icons-material/Home";
 import EmailIcon from "@mui/icons-material/Email";
-// Create styles
 
 export default function MyDocument() {
   const [skillList, setSkillList] = useState([]);
@@ -50,7 +49,7 @@ export default function MyDocument() {
       padding: 10,
     },
     viewer: {
-      width: window.innerWidth, //the pdf viewer will take up all of the width and height
+      width: window.innerWidth,
       height: window.innerHeight,
     },
   });
@@ -64,16 +63,11 @@ export default function MyDocument() {
         response.data.result.map(sf=>{
           if(sf.skill.skill_type === "Soft Skills"){
             softSkills.push(sf.skill.name)
-            // setSoftSkills([...softSkills,{name:sf.skill.name}])
           }               
-          // else if(sf.skill.skill_type === "Hard Skills"){
-          //   hardSkills.push(sf.skill.name)
-          //   // setHardSkills([...hardSkills,{name:sf.skill.name}])
-          // }
         })
       })
       .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+        console.error("Error:", error);
       });
 
     axios
@@ -83,7 +77,7 @@ export default function MyDocument() {
         setExperienceList(response.data.result);
       })
       .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+        console.error("Error:", error);
       });
 
     axios
@@ -93,7 +87,7 @@ export default function MyDocument() {
         setEducationList(response.data.result);
       })
       .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+        console.error("Error:", error);
       });
 
     axios
@@ -103,7 +97,7 @@ export default function MyDocument() {
         setCertificationList(response.data.result);
       })
       .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+        console.error("Error:", error);
       });
 
     axios
@@ -116,15 +110,13 @@ export default function MyDocument() {
         setEmail(response.data.result.user.email);
       })
       .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+        console.error("Error:", error);
       });
   }, []);
 
   return (
     <PDFViewer style={styles.viewer}>
-      {/* Start of the document*/}
       <Document>
-        {/*render a single page*/}
         <Page size="A4" style={{ padding: "60px 80px 0px 80px" }} wrap={false}>
           <View style={{ marginBottom: "30px" }}>
             <View
@@ -206,8 +198,6 @@ export default function MyDocument() {
                 borderRadius: "5px",
                 height: "30px",
                 backgroundColor: "#062D49",
-                //
-                // fontWeight: "800",
                 color: "white",
               }}
             >

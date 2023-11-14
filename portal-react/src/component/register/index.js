@@ -67,7 +67,6 @@ function Register() {
             console.log("password match")
             if (regex.test(data.password)) {
                 setShowValidationMessage(false)
-                // console.log("Password memenuhi kriteria.");
                 console.log(object);
                 let obj = JSON.stringify(object)
                 console.log(obj)

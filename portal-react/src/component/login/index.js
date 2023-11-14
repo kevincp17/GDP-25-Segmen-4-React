@@ -36,14 +36,12 @@ function Login() {
         'Content-Type': "application/json"
       }
     }).then((response) => {
-      // console.log(response.data)
       var token = response.data.token
       var decoded = jwtDecode(token);
 
       Cookies.set('email', decoded.sub, {expires:1});
       Cookies.set('role', decoded.role, {expires:1});
       Cookies.set('user_id', decoded.user_id, {expires:1});
-      // Cookies.set('authenticated', true, {expires:1});
         navigate("/main/home")
 
     }).catch((error) => {

@@ -1,16 +1,11 @@
-import { GrCheckmark, GrDocumentText, GrFormCheckmark } from "react-icons/gr";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineFile, AiOutlineLink } from "react-icons/ai";
 import './index.css';
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { MdExpandMore, MdExpandLess } from "react-icons/md";
-import TableSection from "./tableSection";
-import TableRow from "./tableRow";
+import { useSelector } from 'react-redux';
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Toast from 'react-bootstrap/Toast';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DataTable from "react-data-table-component";
@@ -79,7 +74,6 @@ function JobApplication() {
             return statusId
         }
         const finalStatusId = finalStatus()
-        console.log(finalStatusId)
 
         const object = {
             apply_id: id,
@@ -95,7 +89,6 @@ function JobApplication() {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
-            console.log(response)
             setShowToast(true)
             show()
         }).catch((error) => {
@@ -123,7 +116,6 @@ function JobApplication() {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
-            console.log(response)
             setShowToast(true)
             show()
         }).catch((error) => {
@@ -137,22 +129,15 @@ function JobApplication() {
         localStorage.setItem("applicantId", applicantId)
         localStorage.setItem("applicantName", applicantName)
 
-        console.log(applicantId)
-
         if (id === 2) {
-            console.log("interview hr")
             navigate("/main/set-interviewta")
-        } else if (id === 3) {
-            console.log("interview user")
+        } if (id === 3) {
             navigate("/main/set-interviewtrainer")
-        } else {
-            alert("This feature can only be done when the application status is at the interview stage")
         }
     }
 
     const handleMakeCV = (id) => {
         localStorage.setItem("userId", id)
-        console.log(id)
         navigate("/cv");
       };
 
@@ -182,10 +167,6 @@ function JobApplication() {
         <>
             <div id="apply-div">
                 <p id="apply-title">Apply Job List</p>
-                {/* <div id="input-filter">
-                    <input type="text" onChange={handleFilter} placeholder="Search job appliance" />
-                    <SearchIcon className="apply-search-icon" />
-                </div> */}
                 <div id="data-tb-apply">
                     <DataTable
                         className="rdt_Table"
@@ -199,51 +180,6 @@ function JobApplication() {
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide style={{ position: 'fixed', bottom: 0, left: 0, backgroundColor: '#ccffcc' }}>
                     <Toast.Body>Application status updated successfully</Toast.Body>
                 </Toast>
-            {/* <div className="container">
-                <table className="table">
-                    <tr>
-                        <th>No</th>
-                        <th>Job Position</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    {data.map((application) => {
-                        return (
-                            <>
-                                <tr key={application.apply_id} className="table-content"> */}
-            {/* <td className="button-td">
-                                        <button onClick={() => setExpand(!isExpand)}>
-                                            {isExpand ?
-                                                <MdExpandLess /> :
-                                                <MdExpandMore />
-                                            }
-                                        </button>
-                                    </td> */}
-            {/* <td>{application.apply_id}</td>
-                                    <td>{application.career.title}</td>
-                                    <td>{application.applicant.cv.name}</td>
-                                    <td>{application.status.name}</td>
-                                    <td ><button hidden><AiOutlineFile /></button> 
-                                    <Button variant="primary" onClick={() => handleSetInterview(application.status.status_id, application.career.job_id, application.career.title, application.applicant.cv.cv_id, application.applicant.cv.name)}><AiOutlineLink /></Button> {' '}
-                                    <Button variant="success"><AiOutlineCheck onClick={() => handleAccept(application.apply_id, application.status.status_id)} /></Button> {' '}
-                                    <Button variant="danger" onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></Button>
-                                    </td>
-
-                                </tr>
-                            </>
-                        )
-                    })} */}
-            {/* <tr>
-                        {isExpand && <TableRow />}
-                    </tr> */}
-            {/* </table>
-                <div>
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-                    <Toast.Body>Status updated successfully</Toast.Body>
-                </Toast>
-                </div>
-            </div> */}
         </>
     )
 }
