@@ -43,7 +43,7 @@ export default function Headers() {
     Cookies.remove("role");
     Cookies.remove("email");
     localStorage.clear();
-    localStorage.setItem("role","Guest")
+    localStorage.setItem("role", "Guest");
     navigate("/");
   };
 
@@ -86,25 +86,36 @@ export default function Headers() {
             <div id="popover">
               <p id="popover-header">Career Menu</p>
 
-              <div id="popover-body" style={localStorage.getItem("role")!=="Applicant" ? {height:"30px"} : null}>
-                <a style={localStorage.getItem("role")!=="Applicant" ? {color:"#4C5666"} : null} href="/careers">View Careers</a>
-                {
-                  localStorage.getItem("role")==="Guest"
-                  ?
-                  null
-                  :
-                  <>
-                  <hr />
-                <a
-                  id="apply-list-btn"
-                  style={{ color: "#4C5666" }}
-                  href="/apply_job"
-                >
-                  Apply List
-                </a>
-                  </>
-
+              <div
+                id="popover-body"
+                style={
+                  localStorage.getItem("role") === "Guest" 
+                    ? { height: "30px" }
+                    : null
                 }
+              >
+                <a
+                  style={
+                    localStorage.getItem("role") !== "Applicant"
+                      ? { color: "#4C5666" }
+                      : null
+                  }
+                  href="/careers"
+                >
+                  View Careers
+                </a>
+                {localStorage.getItem("role") === "Guest" ? null : (
+                  <>
+                    <hr />
+                    <a
+                      id="apply-list-btn"
+                      style={{ color: "#4C5666" }}
+                      href="/apply_job"
+                    >
+                      Apply List
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </Popover>
@@ -152,7 +163,14 @@ export default function Headers() {
               <div id="popover">
                 <p id="popover-header">User Menu</p>
 
-                <div id="popover-body" style={localStorage.getItem("role")!=="Applicant" ? {height:"30px"} : null}>
+                <div
+                  id="popover-body"
+                  style={
+                    localStorage.getItem("role") !== "Applicant"
+                      ? { height: "30px" }
+                      : null
+                  }
+                >
                   {localStorage.getItem("role") === "Applicant" ? (
                     <>
                       <a href="/profile">View Profile</a>

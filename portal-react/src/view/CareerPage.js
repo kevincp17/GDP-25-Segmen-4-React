@@ -220,7 +220,7 @@ export default function CareerPage() {
             .then((response) => {
               console.log(response);
               setOpen(false);
-              navigate("/main/apply_job");
+              navigate("/apply_job");
             })
             .catch((error) => {
               console.log(error);

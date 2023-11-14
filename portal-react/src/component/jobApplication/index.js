@@ -7,6 +7,16 @@ import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import TableSection from "./tableSection";
 import TableRow from "./tableRow";
 import axios from "axios";
+<<<<<<< Updated upstream
+=======
+import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Toast from 'react-bootstrap/Toast';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import DataTable from "react-data-table-component";
+>>>>>>> Stashed changes
 
 function JobApplication() {
     const [isExpand, setExpand] = useState(false)

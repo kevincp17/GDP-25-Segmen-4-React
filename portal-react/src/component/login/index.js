@@ -39,12 +39,18 @@ function Login() {
       // console.log(response.data)
       var token = response.data.token
       var decoded = jwtDecode(token);
+      console.log(decoded);
 
       Cookies.set('email', decoded.sub, {expires:1});
       Cookies.set('role', decoded.role, {expires:1});
       Cookies.set('user_id', decoded.user_id, {expires:1});
       // Cookies.set('authenticated', true, {expires:1});
+<<<<<<< Updated upstream
 
+=======
+        // navigate("/main/home")
+      console.log(Cookies.get("role"));
+>>>>>>> Stashed changes
       if (decoded.role) {
         localStorage.setItem("userId", Cookies.get("user_id"));
         localStorage.setItem("role", Cookies.get("role"));

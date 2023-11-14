@@ -77,6 +77,10 @@ function Register() {
                     }
                 }).then((response) => {
                     console.log(response)
+<<<<<<< Updated upstream
+=======
+                    navigate("/login")
+>>>>>>> Stashed changes
                 }).catch((error) => {
                     console.log(error)
                 })
