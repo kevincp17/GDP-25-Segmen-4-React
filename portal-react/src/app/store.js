@@ -8,11 +8,11 @@ import viewInterviewData from "../features/viewInterviewData";
 
 export const store=configureStore({
     reducer:{
-        application: viewApplication,
         viewCareersData:viewCareersData,
         viewProfileData:viewProfileData,
+        application: viewApplication,
+        interview:viewInterviewData,
         viewSkills:viewSkills,
-        viewEduProp:viewEduProp,
-        interview:viewInterviewData
+        viewEduProp:viewEduProp
     }
 })

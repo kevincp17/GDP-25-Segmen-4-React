@@ -72,7 +72,7 @@ export default function ApplyJobPage() {
     let newData=dataApplyRow.filter(row=>{
       // console.log((row.job_name.toLowerCase()));
       // return row.job_name.title.toLowerCase().includes(e.target.value.toLowerCase()
-      return row.job_name.toLowerCase().includes(e.target.value.toLowerCase()) || row.apply_date.toLowerCase().includes(e.target.value.toLowerCase()) || row.status.toLowerCase().includes(e.target.value.toLowerCase())
+      return row.job_name.toLowerCase().includes(e.target.value.toLowerCase())
     })
     console.log(newData);
     dataApplyRow=newData

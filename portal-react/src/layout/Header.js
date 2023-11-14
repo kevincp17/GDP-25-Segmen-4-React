@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import weblogo from "../image/weblogo-amartek.png";
 import profile from "../image/profile.png";
 import "../css/Layout.css";
@@ -13,11 +13,12 @@ import { viewUserProfile } from "../features/viewProfileData";
 import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Headers() {
+  console.log(localStorage.getItem("role"));
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorCareer, setAnchorCareer] = useState(null);
-  localStorage.setItem("userId", Cookies.get("user_id"));
-  localStorage.setItem("role", Cookies.get("role"));
+  // localStorage.setItem("userId", Cookies.get("user_id"));
+  // localStorage.setItem("role", Cookies.get("role"));
   const url = useSelector((state) => state.viewProfileData.profileUrl);
 
   const handleClick = (event) => {
@@ -41,9 +42,10 @@ export default function Headers() {
     Cookies.remove("user_id");
     Cookies.remove("role");
     Cookies.remove("email");
-    localStorage.clear()
-    navigate("/")
-};
+    localStorage.clear();
+    localStorage.setItem("role","Guest")
+    navigate("/");
+  };
 
   const openPopover = Boolean(anchorEl);
   const idPopover = openPopover ? "simple-popover" : undefined;
@@ -53,12 +55,12 @@ export default function Headers() {
   return (
     <div>
       <div id="header-div">
-        <a href="/main/home">
+        <a href="/">
           <img src={weblogo} />
         </a>
 
         <div id="nav-menu">
-          <Link to="/main/home">
+          <Link to="">
             <button>HOME</button>
           </Link>
 
@@ -84,17 +86,30 @@ export default function Headers() {
             <div id="popover">
               <p id="popover-header">Career Menu</p>
 
-              <div id="popover-body">
-                <a href="/main/careers">View Careers</a>
-                <hr />
-                <a id="apply-list-btn" style={{color:"#4C5666"}} href="/main/apply_job">
+              <div id="popover-body" style={localStorage.getItem("role")!=="Applicant" ? {height:"30px"} : null}>
+                <a style={localStorage.getItem("role")!=="Applicant" ? {color:"#4C5666"} : null} href="/careers">View Careers</a>
+                {
+                  localStorage.getItem("role")==="Guest"
+                  ?
+                  null
+                  :
+                  <>
+                  <hr />
+                <a
+                  id="apply-list-btn"
+                  style={{ color: "#4C5666" }}
+                  href="/apply_job"
+                >
                   Apply List
                 </a>
+                  </>
+
+                }
               </div>
             </div>
           </Popover>
 
-          <Link to="/main/interviews">
+          <Link to="/interviews">
             <button>INTERVIEWS</button>
           </Link>
         </div>
@@ -111,45 +126,53 @@ export default function Headers() {
           </button>
         </div>
 
-        <button
-          id="profile-btn"
-          aria-describedby={idPopover}
-          onClick={handleClick}
-        >
-          <img src={profile} />
-        </button>
-        <Popover
-          id={idPopover}
-          open={openPopover}
-          anchorEl={anchorEl}
-          onClose={handleClosePopover}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <div id="popover">
-            <p id="popover-header">User Menu</p>
+        {localStorage.getItem("role") === "Guest" ? (
+          <a href="/login">
+            <button id="to-login">LOGIN</button>
+          </a>
+        ) : (
+          <>
+            <button
+              id="profile-btn"
+              aria-describedby={idPopover}
+              onClick={handleClick}
+            >
+              <img src={profile} />
+            </button>
+            <Popover
+              id={idPopover}
+              open={openPopover}
+              anchorEl={anchorEl}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <div id="popover">
+                <p id="popover-header">User Menu</p>
 
-            <div id="popover-body">
-              {localStorage.getItem("role") === "Applicant" ? (
-                <>
-                  <a href="/main/profile">View Profile</a>
-                  <hr />
-                  <a id="logout-btn" onClick={logout}>
-                    Logout
-                  </a>
-                </>
-              ) : (
-                <>
-                  <a id="logout-btn" onClick={logout}>
-                    Logout
-                  </a>
-                </>
-              )}
-            </div>
-          </div>
-        </Popover>
+                <div id="popover-body" style={localStorage.getItem("role")!=="Applicant" ? {height:"30px"} : null}>
+                  {localStorage.getItem("role") === "Applicant" ? (
+                    <>
+                      <a href="/profile">View Profile</a>
+                      <hr />
+                      <a id="logout-btn" onClick={logout}>
+                        Logout
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <a id="logout-btn" onClick={logout}>
+                        Logout
+                      </a>
+                    </>
+                  )}
+                </div>
+              </div>
+            </Popover>
+          </>
+        )}
       </div>
     </div>
   );

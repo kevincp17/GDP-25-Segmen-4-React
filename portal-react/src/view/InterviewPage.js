@@ -7,7 +7,6 @@ import { viewInterviews } from "../features/viewInterviewData";
 import '../css/interviews.css'
 import DataTable from "react-data-table-component";
 
-
 export default function InterviewPage() {
     let dataApplyRow = []
     const [interviewList, setInterview] = useState([]);
@@ -79,49 +78,4 @@ export default function InterviewPage() {
                 console.log(error);
             });
     }, [url])
-
-
-    return (
-        <div id="apply-div">
-            <p id="apply-title">Interview List</p>
-            <div id="data-tb-apply">
-                <DataTable
-                    className="rdt_Table"
-                    columns={columns}
-                    data={dataApplyRow}
-                    customStyles={customStyle}
-                    pagination
-                    fixedHeader />
-            </div>
-        </div>
-        // <div className="interview-container">
-        //     <Table striped>
-        //         <thead>
-        //             <tr>
-        //                 <th>#</th>
-        //                 <th>Title Job</th>
-        //                 <th>Interview Name</th>
-        //                 <th>Date</th>
-        //                 <th>Link</th>
-        //             </tr>
-        //         </thead>
-
-        //         {interview.map((data, i) => {
-        //             return (
-        //                 <>
-        //                     <tbody>
-        //                         <tr key={data.interview_user_id}>
-        //                             <td>{i + 1}</td>
-        //                             <td>{data.interview?.career.title}</td>
-        //                             <td>{data.link}</td>
-        //                             <td>{data.interview_date}</td>
-        //                             <td>{data.link}</td>
-        //                         </tr>
-        //                     </tbody>
-        //                 </>
-        //             )
-        //         })}
-        //     </Table>
-        // </div>
-    )
 }

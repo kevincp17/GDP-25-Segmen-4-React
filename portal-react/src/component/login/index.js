@@ -47,7 +47,9 @@ function Login() {
         navigate("/main/home")
 
       if (decoded.role) {
-        navigate("/main/home")
+        localStorage.setItem("userId", Cookies.get("user_id"));
+        localStorage.setItem("role", Cookies.get("role"));
+        navigate("/")
       }
 
       // if (decoded.role === 'applicant') {
