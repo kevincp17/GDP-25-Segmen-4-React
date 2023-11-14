@@ -25,6 +25,9 @@ export default function SetInterviewTAPage() {
         },
         applicant: {
             user_id: localStorage.getItem("applicantId"),
+            cv: {
+                cv_id: localStorage.getItem("applicantId")
+            }
         },
     })
 
@@ -57,7 +60,7 @@ export default function SetInterviewTAPage() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(() => {
-                navigate("/job_apply")
+                navigate("/apply_job")
             }).catch((error) => {
                 console.log(error);
             });

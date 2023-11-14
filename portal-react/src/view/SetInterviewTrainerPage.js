@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function SetInterviewTrainerPage() {
-    const [trainer, setTrainer] = useState([{}]);
+    const [trainer, setTrainer] = useState([]);
     const navigate = useNavigate();
     const [data, setData] = useState({
         interview_date: "",
@@ -21,10 +21,16 @@ export default function SetInterviewTrainerPage() {
             }
         },
         trainer: {
-            user_id: ""
+            user_id: 8,
+            cv: {
+                cv_id: 8
+            }
         },
         applicant: {
             user_id: localStorage.getItem("applicantId"),
+            cv: {
+                cv_id: localStorage.getItem("applicantId")
+            }
         },
     })
 
@@ -42,10 +48,36 @@ export default function SetInterviewTrainerPage() {
     let handleSubmit = (e) => {
         e.preventDefault()
         console.log(JSON.stringify(data))
+
+        let object = {
+            interview_date: data.interview_date,
+            link: data.link,
+            status: {
+                status_id: 3
+            },
+            interview: {
+                interview_name: "Interview Trainer",
+                career: {
+                    job_id: localStorage.getItem("careerId"),
+                }
+            },
+            trainer: {
+                user_id: data.trainer.user_id,
+                cv: {
+                    cv_id: data.trainer.cv.cv_id
+                }
+            },
+            applicant: {
+                user_id: localStorage.getItem("applicantId"),
+                cv: {
+                    cv_id: localStorage.getItem("applicantId")
+                }
+            },
+        }
         axios({
             url: "http://localhost:8088/api/interviews",
             method: "POST",
-            data: JSON.stringify(data),
+            data: JSON.stringify(object),
             headers: {
                 'Content-Type': "application/json"
             }
@@ -56,7 +88,7 @@ export default function SetInterviewTrainerPage() {
             showConfirmButton: false,
             timer: 2000
         }).then(() => {
-            navigate("/job_apply")
+            navigate("/apply_job")
         }).catch((error) => {
             console.log(error);
         });

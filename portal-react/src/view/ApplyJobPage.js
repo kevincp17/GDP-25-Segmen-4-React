@@ -84,7 +84,7 @@ export default function ApplyJobPage() {
     dataApplyRowTA.push({
       job_name: apply.career.title,
       applicant_name: apply.applicant.cv.name,
-      status: apply.status.name,
+      status: apply.status?.name,
       action: <>
         <Button ariant="primary" onClick={() => handleMakeCV(apply.applicant.user_id)}><AiOutlineFile /></Button>{' '}
         <Button variant="secondary" hidden={buttonInterview} onClick={() => handleSetInterview(apply.status.status_id, apply.career.job_id, apply.career.title, apply.applicant.cv.cv_id, apply.applicant.cv.name)}><AiOutlineLink /></Button>{' '}
