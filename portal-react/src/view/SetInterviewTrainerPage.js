@@ -21,9 +21,9 @@ export default function SetInterviewTrainerPage() {
             }
         },
         trainer: {
-            user_id: 8,
+            user_id: "",
             cv: {
-                cv_id: 8
+                cv_id: ""
             }
         },
         applicant: {
@@ -64,7 +64,7 @@ export default function SetInterviewTrainerPage() {
             trainer: {
                 user_id: data.trainer.user_id,
                 cv: {
-                    cv_id: data.trainer.cv.cv_id
+                    cv_id: data.trainer.user_id
                 }
             },
             applicant: {
