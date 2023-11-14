@@ -88,7 +88,7 @@ function JobApplication() {
             }
         }
         await axios({
-            url: "http://localhost:8088/api/application/" + id,
+            url: "http://localhost:8088/api/apply/" + id,
             method: "POST",
             data: JSON.stringify(object),
             headers: {
@@ -116,7 +116,7 @@ function JobApplication() {
             }
         }
         await axios({
-            url: "http://localhost:8088/api/application/" + id,
+            url: "http://localhost:8088/api/apply/" + id,
             method: "POST",
             data: JSON.stringify(object),
             headers: {
