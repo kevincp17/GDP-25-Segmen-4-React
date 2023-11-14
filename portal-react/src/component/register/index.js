@@ -2,6 +2,7 @@ import { React } from "react";
 import { useState } from "react";
 import axios from "axios";
 import './index.css'
+import { useNavigate } from "react-router-dom";
 
 function Register() {
     const [passRequirement, setPassRequirement] = useState(false);
@@ -12,6 +13,8 @@ function Register() {
     const upper = /(?=.*[A-Z])/;
     const symbol = /(?=.*[@$!%*?&])/;
     const number = /(?=.*\d)/
+
+    const navigate = useNavigate();
 
     const [data, setData] = useState({
         name: '',
@@ -64,7 +67,6 @@ function Register() {
             console.log("password match")
             if (regex.test(data.password)) {
                 setShowValidationMessage(false)
-                // console.log("Password memenuhi kriteria.");
                 console.log(object);
                 let obj = JSON.stringify(object)
                 console.log(obj)
@@ -77,10 +79,11 @@ function Register() {
                     }
                 }).then((response) => {
                     console.log(response)
-<<<<<<< Updated upstream
-=======
+
                     navigate("/login")
->>>>>>> Stashed changes
+
+                    navigate("/")
+
                 }).catch((error) => {
                     console.log(error)
                 })

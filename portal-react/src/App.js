@@ -3,7 +3,6 @@ import "./App.css";
 import Register from "./component/register";
 import Login from "./component/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./component/home";
 import ApplicantAuth from "./auth/applicantAuth";
 import InternalAuth from "./auth/internalAuth";
 import JobApplication from "./component/jobApplication";
@@ -18,17 +17,14 @@ import Headers from "./layout/Header";
 import ApplyJobPage from "./view/ApplyJobPage";
 import MyDocument from "./app/handleCV";
 import ControllableStates from "./app/autocomplete";
+import SetInterviewTAPage from "./view/SetInterviewTAPage";
+import SetInterviewTrainerPage from "./view/SetInterviewTrainerPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route index element={<Login />}/>
-          <Route path='/register' element={<Register />}/>
-          <Route path='/home' element={<ApplicantAuth><Home/></ApplicantAuth>}/>
-          <Route path='/job-application' element={<InternalAuth><JobApplication/></InternalAuth>}/> */}
-
-        <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainPage />}>
           <Route path="/" element={<HomePage />} />
@@ -36,6 +32,9 @@ function App() {
           <Route path="/interviews" element={<InterviewPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/apply_job" element={<ApplyJobPage />} />
+          <Route path="/job-application" element={<JobApplication />} />
+          <Route path="/setinterview-ta" element={<SetInterviewTAPage />} />
+          <Route path="/setinterview-trainer" element={<SetInterviewTrainerPage />} />
         </Route>
         <Route path="/cv" element={<MyDocument />} />
         <Route path="/autocomplete" element={<ControllableStates />} />

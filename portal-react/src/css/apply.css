@@ -56,3 +56,9 @@
     position: absolute;
     margin: 17px 5px 5px 260px;
 }
+
+.toast {
+    align-items: left;
+    justify-content: left;
+    display: flex;
+}

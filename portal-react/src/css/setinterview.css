@@ -1,5 +1,5 @@
 #setinterview-container {
-    height: 651px;
+    height: 751px;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -32,6 +32,16 @@
 }
 
 input[type=text], select {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=datetime-local], select {
     width: 80%;
     padding: 12px 20px;
     margin: 8px 0;

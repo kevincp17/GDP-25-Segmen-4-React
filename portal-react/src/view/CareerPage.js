@@ -250,7 +250,9 @@ export default function CareerPage() {
   const handleApply = (career) => {
     console.log(career);
     let dataApply = {
-      status: "Waiting",
+      status: {
+        status_id: 1
+      },
       date: date,
       career: {
         job_id: career.job_id,
