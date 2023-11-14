@@ -3,12 +3,13 @@ import '../css/setinterview.css'
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function SetInterviewTAPage() {
     const [ta, setTa] = useState([{}]);
     const navigate = useNavigate();
     const [data, setData] = useState({
-        interview_date:"",
+        interview_date: "",
         link: "",
         status: {
             status_id: 2
@@ -48,12 +49,19 @@ export default function SetInterviewTAPage() {
             headers: {
                 'Content-Type': "application/json"
             }
-        }).then((response) => {
-            console.log(response.data)
-            navigate("/main/job-application")
-        }).catch((error) => {
-            console.log(error)
-        })
+        });
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Your Data has been saved",
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                navigate("/main/job-application")
+            }).catch((error) => {
+                console.log(error);
+            });
+    
     }
 
     const getUser = () => {
@@ -87,13 +95,13 @@ export default function SetInterviewTAPage() {
                         <h1>Set Interview TA</h1>
                     </div>
                     <div>
-                        <input name='interview' type='text' value={data.interview.interview_name} onChange={handleChange} disabled/>
+                        <input name='interview' type='text' value={data.interview.interview_name} onChange={handleChange} disabled />
                     </div>
                     <div>
-                        <input name='career' type='text' value={careerName} onChange={handleChange} disabled/>
+                        <input name='career' type='text' value={careerName} onChange={handleChange} disabled />
                     </div>
                     <div>
-                        <input name='applicant' value={applicantName} type='text' onChange={handleChange} disabled/>
+                        <input name='applicant' value={applicantName} type='text' onChange={handleChange} disabled />
                     </div>
                     <div>
                         <select name="ta" value={data.ta.user_id} onChange={handleChange}>
@@ -114,7 +122,7 @@ export default function SetInterviewTAPage() {
                         <input name='link' type='text' value={data.link} onChange={handleChange} placeholder="Link" />
                     </div>
                     <div>
-                        <input name='status' type='text' value={data.status.status_id} onChange={handleChange} hidden/>
+                        <input name='status' type='text' value={data.status.status_id} onChange={handleChange} hidden />
                     </div>
                     <div id="button-container">
                         <button onClick={handleSubmit} type="submit" id="button">submit</button>
