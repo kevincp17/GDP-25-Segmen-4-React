@@ -17,6 +17,8 @@ import Headers from "./layout/Header";
 import ApplyJobPage from "./view/ApplyJobPage";
 import MyDocument from "./app/handleCV";
 import ControllableStates from "./app/autocomplete";
+import SetInterviewTAPage from "./view/SetInterviewTAPage";
+import SetInterviewTrainerPage from "./view/SetInterviewTrainerPage";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/apply_job" element={<ApplyJobPage />} />
           <Route path="/job-application" element={<JobApplication />} />
+          <Route path="/setinterview-ta" element={<SetInterviewTAPage />} />
+          <Route path="/setinterview-trainer" element={<SetInterviewTrainerPage />} />
         </Route>
         <Route path="/cv" element={<MyDocument />} />
         <Route path="/autocomplete" element={<ControllableStates />} />

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 
-export default function SetInterviewTAPage() {
+export default function SetInterviewTrainerPage() {
     const [trainer, setTrainer] = useState([{}]);
     const navigate = useNavigate();
     const [data, setData] = useState({
