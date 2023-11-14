@@ -1,5 +1,10 @@
 .container {
     /* background-color: red; */
+    height: 651px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 
 .table {
@@ -10,4 +15,11 @@
 
 .table-content {
     /* text-align: center; */
+}
+
+.toast {
+    align-items: left;
+    justify-content: left;
+    display: flex;
+    /* text-align: left; */
 }

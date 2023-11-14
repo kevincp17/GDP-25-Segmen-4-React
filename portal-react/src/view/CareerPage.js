@@ -167,7 +167,9 @@ export default function CareerPage() {
 
   const handleApply = () => {
     let dataApply = {
-      status: "Waiting",
+      status: {
+        status_id: 1
+      },
       date: date,
       career: {
         job_id: modalJobId,

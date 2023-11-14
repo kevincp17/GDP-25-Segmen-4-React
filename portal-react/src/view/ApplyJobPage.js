@@ -16,7 +16,7 @@ export default function ApplyJobPage() {
   let dataApplyRow=[]
   const [applyList, setApplyList] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [records,setRecords]=useState([])
+  const [records,setRecords]=useState([]);
 
   const columns=[
     {
@@ -64,7 +64,7 @@ export default function ApplyJobPage() {
     dataApplyRow.push({
       job_name:apply.career.title,
       apply_date:dayApply+" "+months[monthApply]+" "+yearApply,
-      status:"Screening CV"
+      status:apply.status?.name
     })
   })
 

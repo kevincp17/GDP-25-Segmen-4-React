@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-    url:"http://localhost:8088/api/application"
+    url:"http://localhost:8088/api/apply"
 }
 
 export const viewData = createSlice({
@@ -9,7 +9,7 @@ export const viewData = createSlice({
     initialState,
     reducers:{
         viewApplication:(state)=>{
-            state.url="http://localhost:8088/api/application"
+            state.url="http://localhost:8088/api/apply"
         }
     }
 })
