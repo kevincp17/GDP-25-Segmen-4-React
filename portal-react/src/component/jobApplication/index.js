@@ -52,7 +52,6 @@ function JobApplication() {
         }
     }
     data.map(apply => {
-        // const buttonInterview = apply.status.status_id = 2 ? true : false;
         const buttonStatus = apply.status.status_id >= 5 ? true : false;
         const buttonInterview = apply.status.name === 'HR Interview' || apply.status.name === 'User Interview' ? false : true;
         dataApplyRow.push({
