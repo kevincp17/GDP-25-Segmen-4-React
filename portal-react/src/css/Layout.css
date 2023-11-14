@@ -148,6 +148,10 @@ body{
     color: #4C5666;
 }
 
+#career-pop{
+    color: #4C5666;
+}
+
 #apply-list-btn{
     color: #4C5666;
 }
@@ -171,6 +175,17 @@ body{
     width: 1300px;
     height:255px;
     margin: 0px -8px;
+}
+
+#to-login{
+    height: 30px;
+    width: 80px;
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
 }
 
 #footerup{

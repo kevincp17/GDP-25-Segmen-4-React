@@ -36,14 +36,33 @@ function Login() {
         'Content-Type': "application/json"
       }
     }).then((response) => {
+      // console.log(response.data)
       var token = response.data.token
       var decoded = jwtDecode(token);
 
       Cookies.set('email', decoded.sub, {expires:1});
       Cookies.set('role', decoded.role, {expires:1});
       Cookies.set('user_id', decoded.user_id, {expires:1});
-        navigate("/main/home")
+      console.log(decoded)
+      // Cookies.set('authenticated', true, {expires:1});
+        // navigate("/main/home")
+      console.log(Cookies.get("role"));
+      if (decoded.role) {
+        localStorage.setItem("userId", Cookies.get("user_id"));
+        localStorage.setItem("role", Cookies.get("role"));
+        navigate("/")
+      }
 
+      // if (decoded.role === 'applicant') {
+      //   navigate("/home")
+      // } else if (decoded.role === 'ta'){
+      //   navigate("/job-application")
+      // } else if (decoded.role === 'trainer') {
+      //   navigate("/job-application")
+      // }
+      // else {
+      //   navigate("/")
+      // }
     }).catch((error) => {
       console.log(error)
       alert("Please check your email and password")

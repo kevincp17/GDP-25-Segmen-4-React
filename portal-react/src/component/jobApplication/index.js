@@ -46,6 +46,7 @@ function JobApplication() {
             },
         }
     }
+
     data.map(apply => {
         const buttonStatus = apply.status.status_id >= 5 ? true : false;
         const buttonInterview = apply.status.name === 'HR Interview' || apply.status.name === 'User Interview' ? false : true;

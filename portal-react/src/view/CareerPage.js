@@ -8,6 +8,9 @@ import { viewCareers, createCareer } from "../features/viewCareersData";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Navigate, useNavigate } from "react-router-dom";
+// import Swal from "sweetalert2";
+import swal from "sweetalert";
+// import 'sweetalert2/src/sweetalert2.scss'
 
 export default function CareerPage() {
   const navigate = useNavigate();
@@ -81,7 +84,7 @@ export default function CareerPage() {
       }
     }
     console.log(data);
-    setModalJobId(data.job_id)
+    setModalJobId(data.job_id);
     setModalTitle(data.title);
     setModalDesc(data.description);
     setModalReq(data.requirement);
@@ -165,12 +168,94 @@ export default function CareerPage() {
     //   console.log(formData);
   };
 
-  const handleApply = () => {
+  const handleApplyConfirm = (career) => {
+    swal({
+      title: `You will apply as a ${career.title}. Do you want to continue?`,
+      buttons: {
+        apply: {
+          text: `APPLY`,
+          value: "apply",
+        },
+        cancelApply: {
+          text: `CANCEL`,
+          value: "cancel-apply",
+        },
+      },
+      icon: "warning",
+    }).then((value) => {
+      switch (value) {
+        case "apply":
+          swal({
+            title: `You apply as a ${career.title} successfully.`,
+            buttons: {
+              OK: {
+                text: `OK`,
+              },
+            },
+            icon: "success",
+          });
+
+          let dataApply = {
+            status: "Waiting",
+            date: date,
+            career: {
+              job_id: career.job_id,
+            },
+            applicant: {
+              user_id: localStorage.getItem("userId"),
+            },
+          };
+          console.log(dataApply);
+
+          axios
+            .post(
+              "http://localhost:8088/api/apply",
+              JSON.stringify(dataApply),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response);
+              setOpen(false);
+              navigate("/main/apply_job");
+            })
+            .catch((error) => {
+              console.log(error);
+              setOpen(false);
+            });
+          break;
+        case "cancel-apply":
+          break;
+        default:
+          break;
+      }
+    });
+    // Swal.fire({
+    //   title: `Do you want to apply to ${career.title}?`,
+    //   showCancelButton:true,
+    //   confirmButtonText:"APPLY",
+    //   cancelButtonText:"CANCEL"
+    // }).then((result) => {
+    //   /* Read more about isConfirmed, isDenied below */
+    //   if (result.isConfirmed) {
+    // } else if (result.isDenied) {
+    //   Swal.fire("Changes are not saved", "", "info");
+    // }
+    // });
+  };
+
+  const handleApply = (career) => {
+    console.log(career);
     let dataApply = {
-      status: "Waiting",
+      status: {
+        status_id: 1
+      },
       date: date,
       career: {
-        job_id: modalJobId,
+        job_id: career.job_id,
       },
       applicant: {
         user_id: localStorage.getItem("userId"),
@@ -187,7 +272,7 @@ export default function CareerPage() {
       .then((response) => {
         console.log(response);
         setOpen(false);
-        navigate("/main/apply_job")
+        navigate("/main/apply_job");
       })
       .catch((error) => {
         console.log(error);
@@ -261,21 +346,21 @@ export default function CareerPage() {
       </div>
 
       <div id="search-div">
-        <select id="select-input">
+        {/* <select id="select-input">
           <option value="" selected>
             Job Type
           </option>
           <option value="Full Time">Full Time</option>
           <option value="Contract">Contract</option>
-        </select>
-        <input id="search-input" placeholder="Kata Kunci Pencarian"></input>
-        <SearchIcon className="search-icon" />
-
+        </select> */}
         {localStorage.getItem("role") === "TA" ? (
           <button id="add-job-btn" onClick={() => handleOpenAddJob()}>
             ADD JOB VACANCY
           </button>
         ) : null}
+
+        <input id="search-input" style={localStorage.getItem("role") !== "TA" ? {marginLeft:'180px'} : null}  placeholder="Kata Kunci Pencarian"></input>
+        <SearchIcon className="search-icon" />
 
         <Modal
           aria-labelledby="transition-modal-title"
@@ -311,7 +396,9 @@ export default function CareerPage() {
               </div>
               <div class="modal-body" id="modal-body-add-job">
                 <div>
+                  <label for="title">Job Title</label>
                   <input
+                    id="title"
                     name="title"
                     value={dataJob.title}
                     onChange={handleChange}
@@ -320,7 +407,9 @@ export default function CareerPage() {
                 </div>
 
                 <div>
+                  <label for="placement">Placement</label>
                   <input
+                    id="placement"
                     name="placement"
                     value={dataJob.placement}
                     onChange={handleChange}
@@ -329,7 +418,8 @@ export default function CareerPage() {
                 </div>
 
                 <div>
-                  <select name="type" onChange={handleChange}>
+                  <label for="type">Job Employment</label>
+                  <select id="type" name="type" onChange={handleChange}>
                     <option selected>Job Employment</option>
                     <option value="Full Time">Full Time</option>
                     <option value="Contract">Contract</option>
@@ -337,7 +427,9 @@ export default function CareerPage() {
                 </div>
 
                 <div>
+                  <label for="description">Job Description</label>
                   <textarea
+                    id="description"
                     name="description"
                     value={dataJob.description}
                     onChange={handleChange}
@@ -346,7 +438,9 @@ export default function CareerPage() {
                 </div>
 
                 <div>
+                  <label for="requirement">Job Requirement</label>
                   <textarea
+                    id="requirement"
                     name="requirement"
                     value={dataJob.requirement}
                     onChange={handleChange}
@@ -404,7 +498,7 @@ export default function CareerPage() {
           var monthStart = dateStart.getMonth();
           var yearStart = dateStart.getFullYear();
           return (
-            <div id="job-data" onClick={() => handleOpen(career)}>
+            <div id="job-data">
               <img src={"/image/" + career.picture} />
               <p id="job-date">
                 {dayStart + " " + months[monthStart] + " " + yearStart}
@@ -412,7 +506,16 @@ export default function CareerPage() {
               <p id="job-title">{career.title}</p>
               <p id="job-type">{career.type}</p>
               <div id="cd2-btndiv">
-                <button>LEARN MORE</button>
+                {
+                  localStorage.getItem("role")==="Applicant"
+                  ?
+                  <button onClick={() => handleApplyConfirm(career)}>
+                  APPLY
+                </button>
+                  :
+                  null
+                }
+                <button onClick={() => handleOpen(career)}>DETAIL</button>
               </div>
             </div>
           );
@@ -476,11 +579,11 @@ export default function CareerPage() {
               </div>
             </div>
             <div class="modal-footer">
-              {localStorage.getItem("role") === "Applicant" ? (
+              {/* {localStorage.getItem("role") === "Applicant" ? (
                 <button type="button" id="apply-btn" onClick={handleApply}>
                   APPLY
                 </button>
-              ) : null}
+              ) : null} */}
 
               <button
                 type="button"

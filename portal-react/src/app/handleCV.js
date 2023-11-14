@@ -22,11 +22,10 @@ export default function MyDocument() {
   const [educationList, setEducationList] = useState([]);
   const [certificationList, setCertificationList] = useState([]);
 
-  const [softSkills, setSoftSkills] = useState([]);
-  const [hardSkills, setHardSkills] = useState([]);
-
-  console.log(softSkills);
-  console.log(hardSkills);
+  const [softSkillsList, setSoftSkillsList] = useState([]);
+  const [hardSkillsList, setHardSkillsList] = useState([]);
+  console.log(softSkillsList);
+  console.log(hardSkillsList);
   console.log(skillList);
 
   const [userName, setUserName] = useState();
@@ -54,7 +53,11 @@ export default function MyDocument() {
     },
   });
 
+  let softSkills=[]
+  let hardSkills=[]
+
   useEffect(() => {
+    
     axios
       .get(url + localStorage.getItem("userId") + "/skill")
       .then((response) => {
@@ -148,44 +151,79 @@ export default function MyDocument() {
                 padding: "20px 20px 0px 20px",
               }}
             >
-              <View>
+              <View style={{marginRight:"30px"}}>
                 <Text
                   style={{
-                    fontSize: "17px",
+                    fontSize: "13px",
                     fontWeight: "bolder",
                     marginBottom: "10px",
                     width: "100%",
-                    flexBasis: "75%",
+                    flexBasis: "35%",
+                  }}
+                >
+                  Name
+                </Text>
+                <Text
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "bolder",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Phone
+                </Text>
+                <Text
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "bolder",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Address
+                </Text>
+                <Text style={{ fontSize: "13px", fontWeight: "bolder" }}>
+                  Email
+                </Text>
+              </View>
+
+              <View>
+                <Text
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "bolder",
+                    marginBottom: "10px",
+                    width: "100%",
+                    flexBasis: "35%",
                     marginRight: "400px",
                   }}
                 >
-                  {userName}
+                  : {userName}
                 </Text>
                 <Text
                   style={{
-                    fontSize: "17px",
+                    fontSize: "13px",
                     fontWeight: "bolder",
                     marginBottom: "10px",
                   }}
                 >
-                  {phone}
+                  : {phone}
                 </Text>
                 <Text
                   style={{
-                    fontSize: "17px",
+                    fontSize: "13px",
                     fontWeight: "bolder",
                     marginBottom: "10px",
                   }}
                 >
-                  {address}
+                  : {address}
                 </Text>
-                <Text style={{ fontSize: "17px", fontWeight: "bolder" }}>
-                  {email}
+                <Text style={{ fontSize: "13px", fontWeight: "bolder" }}>
+                  : {email}
                 </Text>
               </View>
 
               <Image
-                style={{ width: "50px", height: "100px", flexBasis: "25%" }}
+                style={{ width: "50px", height: "100px", flexBasis: "30%" }}
                 src="/image/profile.png"
               />
             </View>
@@ -220,9 +258,9 @@ export default function MyDocument() {
                 flexDirection: "row",
               }}
             >
-              <View style={{marginRight:'20px'}}>
-                <Text style={{marginBottom:'5px'}}>Soft Skills</Text>
-                {skillList.map((s) => {
+              <View style={{marginRight:'50px'}}>
+                <Text style={{marginBottom:'5px',fontSize:'15px'}}>Soft Skills</Text>
+                {softSkillsList.map((s) => {
                   return (
                     <Text
                       style={{
@@ -232,17 +270,15 @@ export default function MyDocument() {
                         fontStyle: "italic",
                       }}
                     >
-                      {s.skill.skill_type === "Soft Skills"
-                        ? s.skill.name
-                        : false}
+                      {s.skill.name}
                     </Text>
                   );
                 })}
               </View>
 
               <View>
-              <Text>Hard Skills</Text>
-                {skillList.map((s) => {
+              <Text style={{marginBottom:'5px',fontSize:'15px'}}>Hard Skills</Text>
+                {hardSkillsList.map((s) => {
                   return (
                     <Text
                       style={{
@@ -252,9 +288,7 @@ export default function MyDocument() {
                         fontStyle: "italic",
                       }}
                     >
-                      {s.skill.skill_type === "Hard Skills"
-                        ? s.skill.name
-                        : <></>}
+                      {s.skill.name}
                     </Text>
                   );
                 })}
@@ -314,7 +348,7 @@ export default function MyDocument() {
                   <View style={{ marginBottom: "20px" }}>
                     <Text
                       style={{
-                        fontSize: "20px",
+                        fontSize: "15px",
                         fontWeight: "heavy",
                         textDecoration: "underline",
                         marginBottom: "5px",
@@ -324,7 +358,7 @@ export default function MyDocument() {
                     </Text>
                     <Text
                       style={{
-                        fontSize: "15px",
+                        fontSize: "13px",
                         fontWeight: "heavy",
                         marginBottom: "5px",
                       }}
@@ -341,7 +375,7 @@ export default function MyDocument() {
                         ")"}
                     </Text>
 
-                    <Text style={{ fontSize: "15px", fontWeight: "heavy" }}>
+                    <Text style={{ fontSize: "13px", fontWeight: "heavy" }}>
                       {e.experience.job_desc}
                     </Text>
                   </View>
@@ -400,7 +434,7 @@ export default function MyDocument() {
                       {c.certification.organizer_name}
                     </Text>
 
-                    <Text style={{ fontSize: "15px", fontWeight: "heavy" }}>
+                    <Text style={{ fontSize: "13px", fontWeight: "heavy" }}>
                       {months[monthStart] + " " + yearStart}
                     </Text>
                   </View>

@@ -4,12 +4,14 @@ import viewCareersData from "../features/viewCareersData";
 import viewProfileData from "../features/viewProfileData";
 import viewSkills from "../features/viewSkills";
 import viewEduProp from "../features/viewEduProp";
+import viewInterviewData from "../features/viewInterviewData";
 
 export const store=configureStore({
     reducer:{
-        application: viewApplication,
         viewCareersData:viewCareersData,
         viewProfileData:viewProfileData,
+        application: viewApplication,
+        interview:viewInterviewData,
         viewSkills:viewSkills,
         viewEduProp:viewEduProp
     }

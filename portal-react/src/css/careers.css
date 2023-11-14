@@ -134,9 +134,23 @@
     padding-top: 5px;
 }
 
-#cd2-btndiv > button{
-    background-color: transparent;
-    color:transparent;
+#cd2-btndiv > button:first-child{
+    background-color: #93C053;
+    color:white;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    width:130px;
+    height: 35px;
+    border: 1px transparent solid;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-top: 0px;
+    margin-right: 15px;
+}
+
+#cd2-btndiv > button:last-child{
+    background-color: #0D5A9A;
+    color:white;
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
     width:130px;
@@ -147,7 +161,13 @@
     margin-top: 0px;
 }
 
-#careers-div2 > div:hover > #cd2-btndiv > button{
+/* #careers-div2 > div:hover > #cd2-btndiv > button:first-child{
+    background-color: #93C053;
+    color:white;
+    transition: 0.3s ease-in-out;
+}
+
+#careers-div2 > div:hover > #cd2-btndiv > button:last-child{
     background-color: #0D5A9A;
     color:white;
     transition: 0.3s ease-in-out;
@@ -167,7 +187,7 @@
 #careers-div2 > div:hover > #cd2-btndiv > button:not(:hover){
     background-color: #0D5A9A;
     transition: 0.3s ease-in-out;
-}
+} */
 
 .popover{
     right: 500px;
@@ -382,7 +402,7 @@
     padding-top: 100px;
     background-color: white;
     padding-bottom: 15px;
-    padding-left: 160px;
+    padding-left: 200px;
     height: 15px;
 }
 
@@ -434,7 +454,7 @@
 }
 
 #add-job-btn{
-    width: 15%;
+    width: 17%;
     height: 50px;
     border: #CCCCCC 2px solid;
     border-radius: 30px;
@@ -443,6 +463,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     margin-top: -50px;
+    margin-right: 20px;
 }
 
 #add-job-btn:hover{
@@ -471,12 +492,21 @@
 
 #modal-body-add-job > div{
     width: 100%;
+    padding-top: 20px;
+    margin: 0px 0px 0px 0px;
+}
+
+#modal-body-add-job > div > label{
+    margin: 0px 30px 0px 30px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
 }
 
 #modal-body-add-job > div >input,select,textarea{
     width: 90%;
     height: 50px;
-    margin: 30px 30px;
+    margin: 10px 30px;
     border: 1px #D6D6D6 solid;
     border-radius: 5px;
     outline: transparent;
@@ -507,3 +537,52 @@
 #modal-body-add-job > div >input::placeholder,textarea::placeholder{
     color: #757575;
 }
+
+.swal-modal {
+    width: 700px;
+    background-color: white;
+    border: 1px solid #EEEEEE;
+    border-top: 3px solid #93C953;
+    border-radius: 10px;
+  }
+
+.swal-title{
+    font-size: 28px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    color: #333333;
+}
+
+.swal-button--apply {
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 100px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+  }
+
+  .swal-button--cancelApply {
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 100px;
+    background-color: white;
+    color: #D62F40;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    outline: transparent;
+  }
+
+  .swal-button--OK {
+    border: #CCCCCC 2px solid;
+    border-radius: 30px;
+    height: 40px;
+    width: 100px;
+    background-color: white;
+    color: #93C953;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+  }
