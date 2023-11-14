@@ -1014,7 +1014,7 @@ export default function ProfilePage() {
       end_date: eduInput.end_date,
       gpa: eduInput.gpa,
       institute: {
-        institute_id: eduInput.institute_name,
+        institute_id: instituteID,
       },
       degree: {
         degree_id: eduInput.degree_name,
@@ -1046,10 +1046,12 @@ export default function ProfilePage() {
           major_name: null,
         });
         setRefresh(true);
+        setInstituteID(null)
         setOpenAddEducation(false);
       })
       .catch((error) => {
         console.log(error);
+        setInstituteID(null)
         setOpenAddEducation(false);
       });
   };

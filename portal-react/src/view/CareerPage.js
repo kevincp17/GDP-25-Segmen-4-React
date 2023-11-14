@@ -344,21 +344,21 @@ export default function CareerPage() {
       </div>
 
       <div id="search-div">
-        <select id="select-input">
+        {/* <select id="select-input">
           <option value="" selected>
             Job Type
           </option>
           <option value="Full Time">Full Time</option>
           <option value="Contract">Contract</option>
-        </select>
-        <input id="search-input" placeholder="Kata Kunci Pencarian"></input>
-        <SearchIcon className="search-icon" />
-
+        </select> */}
         {localStorage.getItem("role") === "TA" ? (
           <button id="add-job-btn" onClick={() => handleOpenAddJob()}>
             ADD JOB VACANCY
           </button>
         ) : null}
+
+        <input id="search-input" style={localStorage.getItem("role") !== "TA" ? {marginLeft:'180px'} : null}  placeholder="Kata Kunci Pencarian"></input>
+        <SearchIcon className="search-icon" />
 
         <Modal
           aria-labelledby="transition-modal-title"
@@ -504,9 +504,15 @@ export default function CareerPage() {
               <p id="job-title">{career.title}</p>
               <p id="job-type">{career.type}</p>
               <div id="cd2-btndiv">
-                <button onClick={() => handleApplyConfirm(career)}>
+                {
+                  localStorage.getItem("role")==="Applicant"
+                  ?
+                  <button onClick={() => handleApplyConfirm(career)}>
                   APPLY
                 </button>
+                  :
+                  null
+                }
                 <button onClick={() => handleOpen(career)}>DETAIL</button>
               </div>
             </div>
