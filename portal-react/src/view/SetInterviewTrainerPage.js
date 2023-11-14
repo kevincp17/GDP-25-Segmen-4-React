@@ -3,7 +3,6 @@ import '../css/setinterview.css'
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 
 export default function SetInterviewTrainerPage() {
