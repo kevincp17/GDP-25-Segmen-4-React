@@ -89,7 +89,7 @@ function JobApplication() {
             }
         }
         await axios({
-            url: "http://localhost:8088/api/application/" + id,
+            url: "http://localhost:8088/api/apply/" + id,
             method: "POST",
             data: JSON.stringify(object),
             headers: {
@@ -200,51 +200,6 @@ function JobApplication() {
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide style={{ position: 'fixed', bottom: 0, left: 0, backgroundColor: '#ccffcc' }}>
                     <Toast.Body>Application status updated successfully</Toast.Body>
                 </Toast>
-            {/* <div className="container">
-                <table className="table">
-                    <tr>
-                        <th>No</th>
-                        <th>Job Position</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    {data.map((application) => {
-                        return (
-                            <>
-                                <tr key={application.apply_id} className="table-content"> */}
-            {/* <td className="button-td">
-                                        <button onClick={() => setExpand(!isExpand)}>
-                                            {isExpand ?
-                                                <MdExpandLess /> :
-                                                <MdExpandMore />
-                                            }
-                                        </button>
-                                    </td> */}
-            {/* <td>{application.apply_id}</td>
-                                    <td>{application.career.title}</td>
-                                    <td>{application.applicant.cv.name}</td>
-                                    <td>{application.status.name}</td>
-                                    <td ><button hidden><AiOutlineFile /></button> 
-                                    <Button variant="primary" onClick={() => handleSetInterview(application.status.status_id, application.career.job_id, application.career.title, application.applicant.cv.cv_id, application.applicant.cv.name)}><AiOutlineLink /></Button> {' '}
-                                    <Button variant="success"><AiOutlineCheck onClick={() => handleAccept(application.apply_id, application.status.status_id)} /></Button> {' '}
-                                    <Button variant="danger" onClick={() => handleReject(application.apply_id)}><AiOutlineClose /></Button>
-                                    </td>
-
-                                </tr>
-                            </>
-                        )
-                    })} */}
-            {/* <tr>
-                        {isExpand && <TableRow />}
-                    </tr> */}
-            {/* </table>
-                <div>
-                <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
-                    <Toast.Body>Status updated successfully</Toast.Body>
-                </Toast>
-                </div>
-            </div> */}
         </>
     )
 }

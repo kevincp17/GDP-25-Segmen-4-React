@@ -14,6 +14,7 @@ export default function SetInterviewTAPage() {
             status_id: 3
         },
         interview: {
+            interview_name: "Interview Trainer",
             career: {
                 job_id: localStorage.getItem("careerId"),
             }
@@ -24,7 +25,6 @@ export default function SetInterviewTAPage() {
         applicant: {
             user_id: localStorage.getItem("applicantId"),
         },
-        interview_type: "Interview Trainer"
     })
 
     const applicantName = localStorage.getItem("applicantName")
@@ -87,7 +87,7 @@ export default function SetInterviewTAPage() {
                         <h1>Set Interview Trainer</h1>
                     </div>
                     <div>
-                        <input name='interview' type='text' value={data.interview_type} onChange={handleChange} disabled/>
+                        <input name='interview' type='text' value={data.interview.interview_name} onChange={handleChange} disabled/>
                     </div>
                     <div>
                         <input name='career' type='text' value={careerName} onChange={handleChange} disabled/>
