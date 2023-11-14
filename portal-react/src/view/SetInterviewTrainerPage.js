@@ -56,7 +56,7 @@ export default function SetInterviewTrainerPage() {
             showConfirmButton: false,
             timer: 2000
         }).then(() => {
-            navigate("/main/job-application")
+            navigate("/job_apply")
         }).catch((error) => {
             console.log(error);
         });

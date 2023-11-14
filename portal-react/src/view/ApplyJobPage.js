@@ -208,9 +208,9 @@ export default function ApplyJobPage() {
     localStorage.setItem("applicantName", applicantName)
 
     if (id === 2) {
-      navigate("/main/set-interviewta")
+      navigate("/setinterview-ta")
     } if (id === 3) {
-      navigate("/main/set-interviewtrainer")
+      navigate("/setinterview-trainer")
     }
   }
 
