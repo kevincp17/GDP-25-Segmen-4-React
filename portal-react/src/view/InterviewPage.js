@@ -19,8 +19,37 @@ export default function InterviewPage() {
             selector: row => row.job_name,
         },
         {
-            name: "Interview Date",
+            name: "Date",
             selector: row => row.interview_date
+        },
+        {
+            name: "Time",
+            selector: row => row.interview_time
+        },
+        {
+            name: "Link",
+            selector: row => row.link
+        },
+    ]
+
+    const columnsTA = [
+        {
+            name: "Job Name",
+            selector: row => row.job_name,
+        },
+        {
+            
+            name: "Applicant Name",
+            selector: row => row.applicant_name,
+
+        },
+        {
+            name: "Date",
+            selector: row => row.interview_date
+        },
+        {
+            name: "Time",
+            selector: row => row.interview_time
         },
         {
             name: "Link",
@@ -39,34 +68,44 @@ export default function InterviewPage() {
 
     console.log(interviewList)
     interviewList.map(interview => {
-        // let months = [
-        //     "January",
-        //     "February",
-        //     "March",
-        //     "April",
-        //     "May",
-        //     "June",
-        //     "July",
-        //     "August",
-        //     "September",
-        //     "October",
-        //     "November",
-        //     "December",
-        // ];
+        const formatTime = (time) => {
+            const options = { hour: "2-digit", minute: "2-digit", hour12: false };
+            return new Date(time).toLocaleTimeString(undefined, options);
+        };
 
-        // let dateApply = new Date(interview.date);
-        // var dayApply = dateApply.getDate();
-        // var monthApply = dateApply.getMonth();
-        // var yearApply = dateApply.getFullYear();
+        localStorage.getItem("role") === "TA" || localStorage.getItem("role")==="Trainer"? 
         dataApplyRow.push({
             job_name: interview.interview?.career?.title,
-            // interview_date: dayApply + " " + months[monthApply] + " " + yearApply,
-            interview_date: interview.interview_date,
+            interview_date: (interview.interview_date.split("T"))[0],
+            interview_time: formatTime(interview.interview_date),
+            applicant_name: interview.applicant.cv.name,
+            link: interview.link
+        }) : 
+
+        dataApplyRow.push({
+            job_name: interview.interview?.career?.title,
+            interview_date: (interview.interview_date.split("T"))[0],
+            interview_time: formatTime(interview.interview_date),
+            
             link: interview.link
         })
     })
 
-    useEffect(() => {
+    const getApplicantData = () => {
+        axios({
+            url: url + localStorage.getItem("userId"),
+            method: "GET",
+        })
+            .then((response) => {
+                console.log(response.data);
+                setInterview(response.data.result);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const getTAData = () => {
         axios({
             url: url,
             method: "GET",
@@ -78,7 +117,31 @@ export default function InterviewPage() {
             .catch((error) => {
                 console.log(error);
             });
-    }, [url])
+    }
+
+    const getTrainerData = () => {
+        axios({
+            url: "http://localhost:8088/api/interviewsTrainer/" + localStorage.getItem("userId"),
+            method: "GET",
+        })
+            .then((response) => {
+                console.log(response.data);
+                setInterview(response.data.result);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem("role") === "TA") {
+            getTAData();
+        } else if (localStorage.getItem("role") === "Applicant") {
+            getApplicantData();
+        } else if (localStorage.getItem("role") === "Trainer") {
+            getTrainerData();
+        }
+    }, [])
 
 
     return (
@@ -87,41 +150,12 @@ export default function InterviewPage() {
             <div id="data-tb-apply">
                 <DataTable
                     className="rdt_Table"
-                    columns={columns}
+                    columns={localStorage.getItem("role")==="TA" || localStorage.getItem("role")==="Trainer" ? columnsTA : columns}
                     data={dataApplyRow}
                     customStyles={customStyle}
                     pagination
                     fixedHeader />
             </div>
         </div>
-        // <div className="interview-container">
-        //     <Table striped>
-        //         <thead>
-        //             <tr>
-        //                 <th>#</th>
-        //                 <th>Title Job</th>
-        //                 <th>Interview Name</th>
-        //                 <th>Date</th>
-        //                 <th>Link</th>
-        //             </tr>
-        //         </thead>
-
-        //         {interview.map((data, i) => {
-        //             return (
-        //                 <>
-        //                     <tbody>
-        //                         <tr key={data.interview_user_id}>
-        //                             <td>{i + 1}</td>
-        //                             <td>{data.interview?.career.title}</td>
-        //                             <td>{data.link}</td>
-        //                             <td>{data.interview_date}</td>
-        //                             <td>{data.link}</td>
-        //                         </tr>
-        //                     </tbody>
-        //                 </>
-        //             )
-        //         })}
-        //     </Table>
-        // </div>
     )
 }
