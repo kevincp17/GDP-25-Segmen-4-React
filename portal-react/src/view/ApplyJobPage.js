@@ -11,6 +11,7 @@ import Toast from 'react-bootstrap/Toast';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DataTable from "react-data-table-component";
 import SearchIcon from "@mui/icons-material/Search";
+import Swal from "sweetalert2";
 
 export default function ApplyJobPage() {
   let dataApplyRow = []
@@ -22,6 +23,7 @@ export default function ApplyJobPage() {
   const url = useSelector((state) => state.application.url)
   const [showToast, setShowToast] = useState(false);
   let dataApplyRowTA = []
+  // const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -69,28 +71,9 @@ export default function ApplyJobPage() {
   }
 
   applyList.map(apply => {
-    //   let months = [
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "April",
-    //     "May",
-    //     "June",
-    //     "July",
-    //     "August",
-    //     "September",
-    //     "October",
-    //     "November",
-    //     "December",
-    //   ];
-
-    // let dateApply = new Date(apply.date);
-    // var dayApply = dateApply.getDate();
-    // var monthApply = dateApply.getMonth();
-    // var yearApply = dateApply.getFullYear();
     dataApplyRow.push({
       job_name: apply.career.title,
-      apply_date: apply.date,
+      apply_date: (apply.date.split("T")[0]),
       status: apply.status?.name
     })
   })
@@ -110,17 +93,17 @@ export default function ApplyJobPage() {
     })
   })
 
-  const handleFilter = (e) => {
-    let newData = dataApplyRow.filter(row => {
-      // console.log((row.job_name.toLowerCase()));
-      // return row.job_name.title.toLowerCase().includes(e.target.value.toLowerCase()
-      return row.job_name.toLowerCase().includes(e.target.value.toLowerCase())
-    })
-    console.log(newData);
-    dataApplyRow = newData
-    // setRecords(newData)
+  // const handleFilter = (e) => {
+  //   let newData = dataApplyRow.filter(row => {
+  //     // console.log((row.job_name.toLowerCase()));
+  //     // return row.job_name.title.toLowerCase().includes(e.target.value.toLowerCase()
+  //     return row.job_name.toLowerCase().includes(e.target.value.toLowerCase())
+  //   })
+  //   console.log(newData);
+  //   dataApplyRow = newData
+  //   // setRecords(newData)
 
-  }
+  // }
 
   const handleAccept = async (id, statusId) => {
     const findApplication = data.find(application => application.apply_id === id);
@@ -150,7 +133,17 @@ export default function ApplyJobPage() {
         'Content-Type': "application/json"
       }
     }).then((response) => {
-      setShowToast(true)
+      // setShowToast(true)
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Application status has been updated",
+        showConfirmButton: false,
+        timer: 2000
+      }).then(()=>{
+      }).catch((error) => {
+        console.log(error);
+      });
       show()
     }).catch((error) => {
       console.log(error)
@@ -191,7 +184,17 @@ export default function ApplyJobPage() {
         'Content-Type': "application/json"
       }
     }).then((response) => {
-      setShowToast(true)
+      // setShowToast(true)
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Application status has been updated",
+        showConfirmButton: false,
+        timer: 2000
+      }).then(()=>{
+      }).catch((error) => {
+        console.log(error);
+      });
       show()
     }).catch((error) => {
       console.log(error)
@@ -216,18 +219,18 @@ export default function ApplyJobPage() {
     navigate("/cv");
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8088/api/apply/" + localStorage.getItem("userId"))
-  //     .then((response) => {
-  //       console.log(response.data.result);
-  //       setApplyList(response.data.result);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error); // Handle any errors
-  //     });
-  //   setRefresh(false);
-  // }, [refresh]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8088/api/apply/" + localStorage.getItem("userId"))
+      .then((response) => {
+        console.log(response.data.result);
+        setApplyList(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+    setRefresh(false);
+  }, [refresh]);
 
   useEffect(() => {
     show()

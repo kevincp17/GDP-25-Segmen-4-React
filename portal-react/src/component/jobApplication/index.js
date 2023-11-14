@@ -90,6 +90,7 @@ function JobApplication() {
                 'Content-Type': "application/json"
             }
         }).then((response) => {
+            // console.log(response)
             setShowToast(true)
             show()
         }).catch((error) => {
