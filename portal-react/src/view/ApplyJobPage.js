@@ -69,28 +69,9 @@ export default function ApplyJobPage() {
   }
 
   applyList.map(apply => {
-    //   let months = [
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "April",
-    //     "May",
-    //     "June",
-    //     "July",
-    //     "August",
-    //     "September",
-    //     "October",
-    //     "November",
-    //     "December",
-    //   ];
-
-    // let dateApply = new Date(apply.date);
-    // var dayApply = dateApply.getDate();
-    // var monthApply = dateApply.getMonth();
-    // var yearApply = dateApply.getFullYear();
     dataApplyRow.push({
       job_name: apply.career.title,
-      apply_date: apply.date,
+      apply_date: (apply.date.split("T")[0]),
       status: apply.status?.name
     })
   })
@@ -216,18 +197,18 @@ export default function ApplyJobPage() {
     navigate("/cv");
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8088/api/apply/" + localStorage.getItem("userId"))
-  //     .then((response) => {
-  //       console.log(response.data.result);
-  //       setApplyList(response.data.result);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error); // Handle any errors
-  //     });
-  //   setRefresh(false);
-  // }, [refresh]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8088/api/apply/" + localStorage.getItem("userId"))
+      .then((response) => {
+        console.log(response.data.result);
+        setApplyList(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+    setRefresh(false);
+  }, [refresh]);
 
   useEffect(() => {
     show()
