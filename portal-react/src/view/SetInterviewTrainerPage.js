@@ -31,10 +31,13 @@ export default function SetInterviewTrainerPage() {
       },
     applicant: {
       user_id: localStorage.getItem("applicantId"),
-      cv: {
-        cv_id: localStorage.getItem("applicantId"),
-      },
+    //   cv: {
+    //     cv_id: localStorage.getItem("applicantId"),
+    //   },
     },
+    cv: {
+        cv_id: localStorage.getItem("applicantId")
+    }
   });
 
   useEffect(() => {
@@ -81,10 +84,13 @@ export default function SetInterviewTrainerPage() {
       },
       applicant: {
         user_id: localStorage.getItem("applicantId"),
-        cv: {
-          cv_id: localStorage.getItem("applicantId"),
-        },
+        // cv: {
+        //   cv_id: localStorage.getItem("applicantId"),
+        // },
       },
+      cv: {
+        cv_id: localStorage.getItem("applicantId")
+    }
     };
 
     axios({
