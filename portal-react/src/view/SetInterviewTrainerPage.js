@@ -26,6 +26,9 @@ export default function SetInterviewTrainerPage() {
         cv_id: "",
       },
     },
+    ta: {
+        user_id: localStorage.getItem("userId"),
+      },
     applicant: {
       user_id: localStorage.getItem("applicantId"),
       cv: {
@@ -73,13 +76,15 @@ export default function SetInterviewTrainerPage() {
       trainer: {
         user_id: data.trainer.user_id,
       },
+      ta: {
+        user_id: localStorage.getItem("userId"),
+      },
       applicant: {
         user_id: localStorage.getItem("applicantId"),
         cv: {
           cv_id: localStorage.getItem("applicantId"),
         },
       },
-      ta: null,
     };
 
     axios({
@@ -105,9 +110,9 @@ export default function SetInterviewTrainerPage() {
       });
   };
 
-  const filtertrainer = trainer.filter(
-    (trainer) => trainer.role?.role_id === 2
-  );
+//   const filtertrainer = trainer.filter(
+//     (trainer) => trainer.role?.role_id === 2
+//   );
 
   return (
     <div id="setinterview-container">
