@@ -8,21 +8,12 @@ import { viewCareers, createCareer } from "../features/viewCareersData";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Navigate, useNavigate } from "react-router-dom";
-// import Swal from "sweetalert2";
 import swal from "sweetalert";
-// import 'sweetalert2/src/sweetalert2.scss'
 
 export default function CareerPage() {
   const navigate = useNavigate();
-  let dispatch = useDispatch();
   const date = new Date();
-  var day = date.getDate();
-  var month = date.getMonth() + 1;
-  var year = date.getFullYear();
-  // console.log(year+"-"+month+"-"+day);
   const [careers, setCareers] = useState([]);
-  console.log(careers);
-
   const [dataJob, setDataJob] = useState({
     title: null,
     placement: null,
@@ -32,8 +23,6 @@ export default function CareerPage() {
     start_post_date: date,
     picture: "gdp.jpg",
   });
-
-  console.log(dataJob);
 
   const [open, setOpen] = useState(false);
   const [openAddJob, setOpenAddJob] = useState(false);
@@ -47,9 +36,24 @@ export default function CareerPage() {
   const [modalType, setModalType] = useState();
 
   const [refresh, setRefresh] = useState(false);
+
+  const url = useSelector((state) => state.viewCareersData.url);
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((response) => {
+        setCareers(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+
+    setRefresh(false);
+  }, [refresh]);
+
   const handleOpen = (data) => {
     let datetime = new Date(data.start_post_date).getTime();
-    console.log(datetime);
     let now = new Date().getTime();
     let milisec_diff = 0;
     if (datetime < now) {
@@ -83,7 +87,6 @@ export default function CareerPage() {
         }
       }
     }
-    console.log(data);
     setModalJobId(data.job_id);
     setModalTitle(data.title);
     setModalDesc(data.description);
@@ -107,21 +110,8 @@ export default function CareerPage() {
     }));
   };
 
-  // let handleChangeFile = (e) => {
-  //   console.log(e.target.files[0].name);
-  //   setDataJob((prevState) => ({
-  //     ...prevState,
-  //     picture: e.target.files[0],
-  //   }));
-  // };
-
   const handleSubmit = (e) => {
-    // console.log(dataJob.picture);
-    // console.log(dataJob.picture.name);
     e.preventDefault();
-    // const urlImage = process.env.PUBLIC_URL + '/image';
-    // console.log(urlImage);
-    // dispatch(createCareer(JSON.stringify(dataJob)))
     axios
       .post(url, JSON.stringify(dataJob), {
         headers: {
@@ -153,19 +143,6 @@ export default function CareerPage() {
         });
         setOpenAddJob(false);
       });
-
-    //   const formData = new FormData();
-    //   formData.append('file', dataJob.picture);
-    //   formData.append('fileName', dataJob.picture.name);
-
-    //   const config = {
-    //     headers: {
-    //       'content-type': 'multipart/form-data',
-    //     },
-    //   };
-
-    //   axios.post(urlImage, formData);
-    //   console.log(formData);
   };
 
   const handleApplyConfirm = (career) => {
@@ -196,7 +173,9 @@ export default function CareerPage() {
           });
 
           let dataApply = {
-            status: "Waiting",
+            status: {
+              status_id: 1,
+            },
             date: date,
             career: {
               job_id: career.job_id,
@@ -204,8 +183,10 @@ export default function CareerPage() {
             applicant: {
               user_id: localStorage.getItem("userId"),
             },
+            cv: {
+              cv_id: localStorage.getItem("userId"),
+            },
           };
-          console.log(dataApply);
 
           axios
             .post(
@@ -218,7 +199,6 @@ export default function CareerPage() {
               }
             )
             .then((response) => {
-              console.log(response);
               setOpen(false);
               navigate("/apply_job");
             })
@@ -233,25 +213,12 @@ export default function CareerPage() {
           break;
       }
     });
-    // Swal.fire({
-    //   title: `Do you want to apply to ${career.title}?`,
-    //   showCancelButton:true,
-    //   confirmButtonText:"APPLY",
-    //   cancelButtonText:"CANCEL"
-    // }).then((result) => {
-    //   /* Read more about isConfirmed, isDenied below */
-    //   if (result.isConfirmed) {
-    // } else if (result.isDenied) {
-    //   Swal.fire("Changes are not saved", "", "info");
-    // }
-    // });
   };
 
   const handleApply = (career) => {
-    console.log(career);
     let dataApply = {
       status: {
-        status_id: 1
+        status_id: 1,
       },
       date: date,
       career: {
@@ -261,7 +228,6 @@ export default function CareerPage() {
         user_id: localStorage.getItem("userId"),
       },
     };
-    console.log(dataApply);
 
     axios
       .post("http://localhost:8088/api/apply", JSON.stringify(dataApply), {
@@ -270,7 +236,6 @@ export default function CareerPage() {
         },
       })
       .then((response) => {
-        console.log(response);
         setOpen(false);
         navigate("/main/apply_job");
       })
@@ -280,25 +245,6 @@ export default function CareerPage() {
       });
   };
 
-  console.log(careers);
-
-  const url = useSelector((state) => state.viewCareersData.url);
-
-  useEffect(() => {
-    axios
-      .get(url)
-      .then((response) => {
-        console.log(response);
-        setCareers(response.data.result);
-      })
-      .catch((error) => {
-        console.error("Error:", error); // Handle any errors
-      });
-
-    setRefresh(false);
-  }, [refresh]);
-
-  // $(document).ready(function () {
   $("#select-input").change(function () {
     var selectValue = $(this).val().toLowerCase();
     $("#careers-div2 #job-data").filter(function () {
@@ -316,7 +262,6 @@ export default function CareerPage() {
       );
     });
   });
-  // });
 
   const style = {
     position: "absolute",
@@ -359,7 +304,15 @@ export default function CareerPage() {
           </button>
         ) : null}
 
-        <input id="search-input" style={localStorage.getItem("role") !== "TA" ? {marginLeft:'180px'} : null}  placeholder="Kata Kunci Pencarian"></input>
+        <input
+          id="search-input"
+          style={
+            localStorage.getItem("role") !== "TA"
+              ? { marginLeft: "180px" }
+              : null
+          }
+          placeholder="Kata Kunci Pencarian"
+        ></input>
         <SearchIcon className="search-icon" />
 
         <Modal
@@ -499,22 +452,18 @@ export default function CareerPage() {
           var yearStart = dateStart.getFullYear();
           return (
             <div id="job-data">
-              <img src={"/image/" + career.picture} />
+              <img src={"/image/gdp.jpg"} />
               <p id="job-date">
                 {dayStart + " " + months[monthStart] + " " + yearStart}
               </p>
               <p id="job-title">{career.title}</p>
               <p id="job-type">{career.type}</p>
               <div id="cd2-btndiv">
-                {
-                  localStorage.getItem("role")==="Applicant"
-                  ?
+                {localStorage.getItem("role") === "Applicant" ? (
                   <button onClick={() => handleApplyConfirm(career)}>
-                  APPLY
-                </button>
-                  :
-                  null
-                }
+                    APPLY
+                  </button>
+                ) : null}
                 <button onClick={() => handleOpen(career)}>DETAIL</button>
               </div>
             </div>

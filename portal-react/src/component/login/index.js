@@ -56,6 +56,7 @@ function Login() {
       console.log(Cookies.get("role"));
 
       if (decoded.role) {
+        localStorage.setItem("email", Cookies.get("email"));
         localStorage.setItem("userId", Cookies.get("user_id"));
         localStorage.setItem("role", Cookies.get("role"));
         navigate("/")

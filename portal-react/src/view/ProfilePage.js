@@ -44,7 +44,6 @@ export default function ProfilePage() {
   });
 
   const [instituteID, setInstituteID] = useState(null);
-  console.log(instituteID);
 
   const [userDataProfile, setUserDataProfile] = useState({
     cv_id: localStorage.getItem("userId"),
@@ -66,7 +65,6 @@ export default function ProfilePage() {
       cv_id: null,
     },
   });
-  console.log(skillSelect);
 
   const [expInput, setExpInput] = useState({
     exp_id: null,
@@ -90,8 +88,6 @@ export default function ProfilePage() {
     major_name: null,
   });
 
-  console.log(instituteSelect);
-
   const [certInput, setCertInput] = useState({
     certification_id: null,
     certification_name: null,
@@ -110,7 +106,6 @@ export default function ProfilePage() {
 
   const [openAddExperience, setOpenAddExperience] = useState(false);
   const handleOpenAddExperience = (exp) => {
-    console.log(exp);
     if (exp) {
       let monthStartFormat;
       let monthEndFormat;
@@ -144,7 +139,7 @@ export default function ProfilePage() {
       if (dayEnd < 10) {
         dayEnd = "0" + dayEnd;
       }
-      console.log(yearEnd + "-" + monthEndFormat + "-" + dayEnd);
+
       setExpInput({
         exp_id: exp.exp_id,
         company_name: exp.company_name,
@@ -170,7 +165,6 @@ export default function ProfilePage() {
 
   const [openAddEducation, setOpenAddEducation] = useState(false);
   const handleOpenAddEducation = (edu) => {
-    console.log(edu);
     if (edu) {
       let monthStartFormat;
       let monthEndFormat;
@@ -232,7 +226,6 @@ export default function ProfilePage() {
 
   const [openAddCertification, setOpenAddCertification] = useState(false);
   const handleOpenAddCertification = (cert) => {
-    console.log(cert);
     if (cert) {
       let issuedMonthFormat;
 
@@ -347,7 +340,6 @@ export default function ProfilePage() {
     axios
       .get(url + localStorage.getItem("userId") + "/experience")
       .then((response) => {
-        console.log(response.data.result);
         setExperienceList(response.data.result);
       })
       .catch((error) => {
@@ -357,7 +349,6 @@ export default function ProfilePage() {
     axios
       .get(url + localStorage.getItem("userId") + "/education")
       .then((response) => {
-        console.log(response.data.result);
         setEducationList(response.data.result);
       })
       .catch((error) => {
@@ -367,7 +358,6 @@ export default function ProfilePage() {
     axios
       .get(url + localStorage.getItem("userId") + "/certificate")
       .then((response) => {
-        console.log(response.data.result);
         setCertificationList(response.data.result);
       })
       .catch((error) => {
@@ -377,11 +367,10 @@ export default function ProfilePage() {
     axios
       .get(urlProfile + localStorage.getItem("userId"))
       .then((response) => {
-        console.log(response.data.result);
         setUserName(response.data.result.name);
         setPhone(response.data.result.phone);
         setAddress(response.data.result.address);
-        setEmail(response.data.result.user.email);
+        setEmail(localStorage.getItem("email"));
         setCVID(response.data.result.cv_id);
 
         setUserDataProfile({
@@ -426,17 +415,10 @@ export default function ProfilePage() {
         cv_id: localStorage.getItem("userId"),
       },
     };
-    console.log(skillData);
-    console.log(skillList);
-    // var hasMatch = skillList.some(function (val) {
-    //   console.log(val.skill.skill_id);
-    //   return (val.skill.skill_id !== skillData.skill.skill_id);
-    // }).length > 0;
 
     let skillExist = skillList.some(
       (sl) => sl.skill.skill_id == skillData.skill.skill_id
     );
-    console.log(skillExist);
 
     if (!skillExist) {
       axios
@@ -450,7 +432,6 @@ export default function ProfilePage() {
           }
         )
         .then((response) => {
-          console.log(response);
           setRefresh(true);
           setOpenAddSkill(false);
         })
@@ -461,18 +442,8 @@ export default function ProfilePage() {
     } else {
       swal({
         title: `This skill already registered in your skill batch. Pick other skill.`,
-        // buttons: {
-        //   apply: {
-        //     text: `APPLY`,
-        //     value: "apply",
-        //   },
-        //   cancelApply: {
-        //     text: `CANCEL`,
-        //     value: "cancel-apply",
-        //   },
-        // },
         icon: "info",
-      })
+      });
     }
   };
 
@@ -485,7 +456,6 @@ export default function ProfilePage() {
   };
 
   const handleAddExp = () => {
-    console.log(expInput);
     let expData = {
       exp_id: expInput.exp_id,
       company_name: expInput.company_name,
@@ -495,7 +465,6 @@ export default function ProfilePage() {
       end_date: expInput.end_date,
     };
 
-    console.log(expData);
     axios
       .post("http://localhost:8088/api/experience", JSON.stringify(expData), {
         headers: {
@@ -503,8 +472,6 @@ export default function ProfilePage() {
         },
       })
       .then((response) => {
-        console.log(response);
-        console.log(response.data.result.exp_id);
         let cvExpData = {
           experience: {
             exp_id: response.data.result.exp_id,
@@ -525,7 +492,6 @@ export default function ProfilePage() {
             }
           )
           .then((response) => {
-            console.log(response);
             setExpInput({
               company_name: null,
               job_title: null,
@@ -557,7 +523,6 @@ export default function ProfilePage() {
   };
 
   const handleAddEdu = () => {
-    console.log(eduInput);
     let instituteExist = instituteSelect.some(
       (i) => i.institute_id == instituteID
     );
@@ -578,8 +543,6 @@ export default function ProfilePage() {
           }
         )
         .then((response) => {
-          console.log(response);
-
           let eduData = {
             start_date: eduInput.start_date,
             end_date: eduInput.end_date,
@@ -606,7 +569,6 @@ export default function ProfilePage() {
               }
             )
             .then((response) => {
-              console.log(response);
               let cvEduData = {
                 education: {
                   edu_id: response.data.result.edu_id,
@@ -627,7 +589,6 @@ export default function ProfilePage() {
                   }
                 )
                 .then((response) => {
-                  console.log(response);
                   setEduInput({
                     start_date: null,
                     end_date: null,
@@ -636,12 +597,11 @@ export default function ProfilePage() {
                     degree_name: null,
                     major_name: null,
                   });
-                  setInstituteID(null)
+                  setInstituteID(null);
                   setRefresh(true);
                   setOpenAddEducation(false);
                 })
                 .catch((error) => {
-                  console.log(error);
                   setOpenAddEducation(false);
                 });
             })
@@ -676,7 +636,6 @@ export default function ProfilePage() {
           },
         })
         .then((response) => {
-          console.log(response);
           let cvEduData = {
             education: {
               edu_id: response.data.result.edu_id,
@@ -697,7 +656,6 @@ export default function ProfilePage() {
               }
             )
             .then((response) => {
-              console.log(response);
               setEduInput({
                 start_date: null,
                 end_date: null,
@@ -706,7 +664,7 @@ export default function ProfilePage() {
                 degree_name: null,
                 major_name: null,
               });
-              setInstituteID(null)
+              setInstituteID(null);
               setRefresh(true);
               setOpenAddEducation(false);
             })
@@ -731,7 +689,6 @@ export default function ProfilePage() {
   };
 
   const handleAddCert = () => {
-    console.log(certInput);
     let certData = {
       certification_name: certInput.certification_name,
       certification_number: certInput.certification_number,
@@ -739,7 +696,6 @@ export default function ProfilePage() {
       issued_date: certInput.issued_date,
     };
 
-    console.log(certData);
     axios
       .post(
         "http://localhost:8088/api/certification",
@@ -751,8 +707,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
-        console.log(response.data.result.certification_id);
         let cvCertData = {
           certification: {
             certification_id: response.data.result.certification_id,
@@ -773,7 +727,6 @@ export default function ProfilePage() {
             }
           )
           .then((response) => {
-            console.log(response);
             setCertInput({
               certification_name: null,
               certification_number: null,
@@ -807,7 +760,6 @@ export default function ProfilePage() {
         user_id: cvID,
       },
     };
-    console.log(dataProfile);
 
     axios
       .post(
@@ -820,7 +772,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setRefresh(true);
         setOpenEditProfile(false);
       })
@@ -831,7 +782,6 @@ export default function ProfilePage() {
   };
 
   const handleDeleteSkill = (skill_user) => {
-    console.log(skill_user);
     let cvInfoSkill = {
       cv_info_id: skill_user.cv_info_id,
       skill: {
@@ -841,7 +791,7 @@ export default function ProfilePage() {
         cv_id: skill_user.cv.cv_id,
       },
     };
-    console.log(cvInfoSkill);
+
     axios
       .delete(
         "http://localhost:8088/api/cvinfo/" +
@@ -856,7 +806,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setRefresh(true);
       })
       .catch((error) => {
@@ -865,7 +814,6 @@ export default function ProfilePage() {
   };
 
   const handleDeleteExperience = (exp_user) => {
-    console.log(exp_user);
     let cvInfoExp = {
       cv_info_id: exp_user.cv_info_id,
       experience: {
@@ -875,7 +823,7 @@ export default function ProfilePage() {
         cv_id: exp_user.cv.cv_id,
       },
     };
-    console.log(cvInfoExp);
+
     axios
       .delete(
         "http://localhost:8088/api/cvinfo/" +
@@ -890,7 +838,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setRefresh(true);
       })
       .catch((error) => {
@@ -899,7 +846,6 @@ export default function ProfilePage() {
   };
 
   const handleDeleteEducation = (user_edu) => {
-    console.log(user_edu);
     let cvInfoEdu = {
       cv_info_id: user_edu.cv_info_id,
       education: {
@@ -909,7 +855,7 @@ export default function ProfilePage() {
         cv_id: user_edu.cv.cv_id,
       },
     };
-    console.log(cvInfoEdu);
+
     axios
       .delete(
         "http://localhost:8088/api/cvinfo/" +
@@ -924,7 +870,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setRefresh(true);
       })
       .catch((error) => {
@@ -933,7 +878,6 @@ export default function ProfilePage() {
   };
 
   const handleDeleteCertification = (user_cert) => {
-    console.log(user_cert);
     let cvInfoCert = {
       cv_info_id: user_cert.cv_info_id,
       certification: {
@@ -943,7 +887,7 @@ export default function ProfilePage() {
         cv_id: user_cert.cv.cv_id,
       },
     };
-    console.log(cvInfoCert);
+
     axios
       .delete(
         "http://localhost:8088/api/cvinfo/" +
@@ -958,7 +902,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setRefresh(true);
       })
       .catch((error) => {
@@ -967,7 +910,6 @@ export default function ProfilePage() {
   };
 
   const handleEditExp = () => {
-    console.log(expInput);
     let expData = {
       exp_id: expInput.exp_id,
       company_name: expInput.company_name,
@@ -976,7 +918,7 @@ export default function ProfilePage() {
       start_date: expInput.start_date,
       end_date: expInput.end_date,
     };
-    console.log(expData);
+
     axios
       .post(
         "http://localhost:8088/api/experience/" + expInput.exp_id,
@@ -988,7 +930,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setExpInput({
           exp_id: null,
           company_name: null,
@@ -1007,7 +948,6 @@ export default function ProfilePage() {
   };
 
   const handleEditEdu = () => {
-    console.log(eduInput);
     let eduData = {
       edu_id: eduInput.edu_id,
       start_date: eduInput.start_date,
@@ -1023,7 +963,7 @@ export default function ProfilePage() {
         major_id: eduInput.major_name,
       },
     };
-    console.log(eduData);
+
     axios
       .post(
         "http://localhost:8088/api/education/" + eduInput.edu_id,
@@ -1035,7 +975,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setEduInput({
           edu_id: null,
           start_date: null,
@@ -1046,18 +985,17 @@ export default function ProfilePage() {
           major_name: null,
         });
         setRefresh(true);
-        setInstituteID(null)
+        setInstituteID(null);
         setOpenAddEducation(false);
       })
       .catch((error) => {
         console.log(error);
-        setInstituteID(null)
+        setInstituteID(null);
         setOpenAddEducation(false);
       });
   };
 
   const handleEditCert = () => {
-    console.log(certInput);
     let certData = {
       certification_id: certInput.certification_id,
       certification_name: certInput.certification_name,
@@ -1065,7 +1003,7 @@ export default function ProfilePage() {
       organizer_name: certInput.organizer_name,
       issued_date: certInput.issued_date,
     };
-    console.log(certData);
+
     axios
       .post(
         "http://localhost:8088/api/certification/" + certInput.certification_id,
@@ -1077,7 +1015,6 @@ export default function ProfilePage() {
         }
       )
       .then((response) => {
-        console.log(response);
         setCertInput({
           certification_id: null,
           certification_name: null,
@@ -1110,8 +1047,6 @@ export default function ProfilePage() {
   const handleMakeCV = () => {
     navigate("/cv");
   };
-
-  //autocomplete
 
   return (
     <div id="profile-div">
@@ -1561,7 +1496,6 @@ export default function ProfilePage() {
                   "December",
                 ];
                 let dateStart = new Date(e.experience.start_date);
-                console.log(e.experience.start_date);
                 var dayStart = dateStart.getDate();
                 var monthStart = dateStart.getMonth();
                 var yearStart = dateStart.getFullYear();
@@ -1676,7 +1610,7 @@ export default function ProfilePage() {
                             name="institute_name"
                             value={eduInput.institute_name}
                             onChange={handleEduInput}
-                            style = {{width: 640,marginLeft:30}}
+                            style={{ width: 640, marginLeft: 30 }}
                             InputProps={{
                               ...params.InputProps,
                               type: "search",

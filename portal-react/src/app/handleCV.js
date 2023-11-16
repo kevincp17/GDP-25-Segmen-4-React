@@ -73,6 +73,24 @@ export default function MyDocument() {
         console.error("Error:", error);
       });
 
+      axios
+      .get(url + localStorage.getItem("userId") + "/softskill")
+      .then((response) => {
+        setSoftSkillsList(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+
+      axios
+      .get(url + localStorage.getItem("userId") + "/hardskill")
+      .then((response) => {
+        setHardSkillsList(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+
     axios
       .get(url + localStorage.getItem("userId") + "/experience")
       .then((response) => {

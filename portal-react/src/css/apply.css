@@ -62,3 +62,31 @@
     justify-content: left;
     display: flex;
 }
+
+#btn-cv{
+    background-color: #4d79ff;
+    border: 1px #4d79ff solid;
+    border-radius: 5px;
+    color: white;
+}
+
+#btn-itv{
+    background-color: #CCCCCC;
+    border: 1px #CCCCCC solid;
+    border-radius: 5px;
+    color: white;
+}
+
+#btn-check{
+    background-color: #93C953;
+    border: 1px #93C953 solid;
+    border-radius: 5px;
+    color: white;
+}
+
+#btn-x{
+    background-color: #aa222f;
+    border: 1px #aa222f solid;
+    border-radius: 5px;
+    color: white;
+}

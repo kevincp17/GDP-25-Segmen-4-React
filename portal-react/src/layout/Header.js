@@ -89,7 +89,8 @@ export default function Headers() {
               <div
                 id="popover-body"
                 style={
-                  localStorage.getItem("role") === "Guest" 
+                  localStorage.getItem("role") === "Guest" ||
+                  localStorage.getItem("role") === "Trainer"
                     ? { height: "30px" }
                     : null
                 }
@@ -104,7 +105,8 @@ export default function Headers() {
                 >
                   View Careers
                 </a>
-                {localStorage.getItem("role") === "Guest" ? null : (
+                {localStorage.getItem("role") === "Guest" ||
+                localStorage.getItem("role") === "Trainer" ? null : (
                   <>
                     <hr />
                     <a
@@ -119,10 +121,15 @@ export default function Headers() {
               </div>
             </div>
           </Popover>
-
-          <Link to="/interviews">
-            <button>INTERVIEWS</button>
-          </Link>
+          {localStorage.getItem("role") === "Guest" ? (
+            <a href="/login">
+              <button>INTERVIEWS</button>
+            </a>
+          ) : (
+            <Link to="/interviews">
+              <button>INTERVIEWS</button>
+            </Link>
+          )}
         </div>
 
         <div id="sosmed-btn">

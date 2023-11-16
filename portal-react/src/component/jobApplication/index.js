@@ -6,15 +6,8 @@ import { useSelector } from 'react-redux';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Toast from 'react-bootstrap/Toast';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import Toast from 'react-bootstrap/Toast';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import DataTable from "react-data-table-component";
 
 function JobApplication() {
