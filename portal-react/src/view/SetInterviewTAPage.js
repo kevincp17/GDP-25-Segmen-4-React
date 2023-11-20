@@ -16,7 +16,7 @@ export default function SetInterviewTAPage() {
       status_id: 2,
     },
     interview: {
-      interview_name: "Interview TA",
+      interview_name: localStorage.getItem("statusName"),
       career: {
         job_id: localStorage.getItem("careerId"),
       },

@@ -15,25 +15,19 @@ export default function SetInterviewTrainerPage() {
       status_id: 3,
     },
     interview: {
-      interview_name: "Interview Trainer",
+      interview_name: localStorage.getItem("statusName"),
       career: {
         job_id: localStorage.getItem("careerId"),
       },
     },
     trainer: {
       user_id: "",
-      cv: {
-        cv_id: "",
-      },
     },
     ta: {
         user_id: localStorage.getItem("userId"),
       },
     applicant: {
       user_id: localStorage.getItem("applicantId"),
-    //   cv: {
-    //     cv_id: localStorage.getItem("applicantId"),
-    //   },
     },
     cv: {
         cv_id: localStorage.getItem("applicantId")
@@ -71,9 +65,9 @@ export default function SetInterviewTrainerPage() {
         status_id: 3,
       },
       interview: {
-        interview_name: "Interview Trainer",
+        interview_name: data.interview.interview_name,
         career: {
-          job_id: localStorage.getItem("careerId"),
+          job_id: data.interview.career.job_id,
         },
       },
       trainer: {
@@ -83,13 +77,10 @@ export default function SetInterviewTrainerPage() {
         user_id: localStorage.getItem("userId"),
       },
       applicant: {
-        user_id: localStorage.getItem("applicantId"),
-        // cv: {
-        //   cv_id: localStorage.getItem("applicantId"),
-        // },
+        user_id: data.applicant.user_id,
       },
       cv: {
-        cv_id: localStorage.getItem("applicantId")
+        cv_id: data.cv.cv_id
     }
     };
 

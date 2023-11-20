@@ -53,14 +53,6 @@ export default function InterviewPage() {
             name: "Applicant Name",
             selector: (row) => row.applicant_name,
         },
-        // {
-        //     name: "TA Name",
-        //     selector: (row) => row.ta_name,
-        // },
-        // {
-        //     name: "Trainer Name",
-        //     selector: (row) => row.trainer_name,
-        // },
         {
             name: "Date",
             selector: (row) => row.interview_date,
@@ -101,8 +93,6 @@ export default function InterviewPage() {
                 interview_date: interview.interview_date.split("T")[0],
                 interview_time: formatTime(interview.interview_date),
                 applicant_name: interview.cv?.name,
-                // ta_name: interview.cv?.name,
-                // trainer_name: interview.cv?.name,
                 link: interview.link,
                 action: <Button
                     id="btn-cv"
@@ -136,7 +126,8 @@ export default function InterviewPage() {
 
     const getTAData = () => {
         axios({
-            url: url,
+            url: "http://localhost:8088/api/interviewsTA/" +
+            localStorage.getItem("userId"),
             method: "GET",
         })
             .then((response) => {
