@@ -318,7 +318,7 @@ export default function ApplyJobPage() {
           />
         </div>
       </div>
-      <Toast
+      {/* <Toast
         onClose={() => setShowToast(false)}
         show={showToast}
         delay={3000}
@@ -331,7 +331,7 @@ export default function ApplyJobPage() {
         }}
       >
         <Toast.Body>Application status updated successfully</Toast.Body>
-      </Toast>
+      </Toast> */}
     </>
   );
 }
