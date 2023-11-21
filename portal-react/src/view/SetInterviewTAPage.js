@@ -16,7 +16,7 @@ export default function SetInterviewTAPage() {
       status_id: 2,
     },
     interview: {
-      interview_name: "Interview TA",
+      interview_name: localStorage.getItem("statusName"),
       career: {
         job_id: localStorage.getItem("careerId"),
       },
@@ -26,10 +26,13 @@ export default function SetInterviewTAPage() {
     },
     applicant: {
       user_id: localStorage.getItem("applicantId"),
-      cv: {
-        cv_id: localStorage.getItem("applicantId"),
-      },
+    //   cv: {
+    //     cv_id: localStorage.getItem("applicantId"),
+    //   },
     },
+    cv: {
+        cv_id: localStorage.getItem("applicantId")
+    }
   });
 
   useEffect(() => {
@@ -75,6 +78,9 @@ export default function SetInterviewTAPage() {
       status: {
         status_id: data.status.status_id,
       },
+      cv: {
+        cv_id: data.cv.cv_id
+    }
     };
 
     axios

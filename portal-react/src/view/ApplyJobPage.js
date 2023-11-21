@@ -133,7 +133,8 @@ export default function ApplyJobPage() {
                 apply.career.job_id,
                 apply.career.title,
                 apply.cv.cv_id,
-                apply.cv.name
+                apply.cv.name,
+                apply.status.name
               )
             }
           >
@@ -274,12 +275,14 @@ export default function ApplyJobPage() {
     careerId,
     careerName,
     applicantId,
-    applicantName
+    applicantName,
+    statusName
   ) => {
     localStorage.setItem("careerId", careerId);
     localStorage.setItem("careerName", careerName);
     localStorage.setItem("applicantId", applicantId);
     localStorage.setItem("applicantName", applicantName);
+    localStorage.setItem("statusName", statusName);
 
     if (id === 2) {
       navigate("/setinterview-ta");
