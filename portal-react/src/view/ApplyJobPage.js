@@ -107,8 +107,7 @@ export default function ApplyJobPage() {
     const buttonStatus = apply.status.status_id >= 5 ? true : false;
     const buttonInterview =
       apply.status.name === "HR Interview" ||
-      apply.status.name === "User Interview" ||
-      apply.status.name === "Offering"
+      apply.status.name === "User Interview"
         ? false
         : true;
     dataApplyRowTA.push({
@@ -288,9 +287,9 @@ export default function ApplyJobPage() {
     if (id === 3) {
       navigate("/setinterview-trainer");
     }
-    if (id === 4){
-      navigate("/set-offering");
-    }
+    // if (id === 4){
+    //   navigate("/set-offering");
+    // }
   };
 
   const handleMakeCV = (id) => {
