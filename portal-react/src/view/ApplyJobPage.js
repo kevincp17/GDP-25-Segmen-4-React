@@ -26,6 +26,8 @@ export default function ApplyJobPage() {
   const [data, setData] = useState([]);
   const url = useSelector((state) => state.application.url);
   const [showToast, setShowToast] = useState(false);
+  let dataApplyRow = [];
+  let dataApplyRowTA = [];
 
   useEffect(() => {
     axios
@@ -50,8 +52,7 @@ export default function ApplyJobPage() {
     setRefresh(false);
   }, [refresh]);
 
-  let dataApplyRow = [];
-  let dataApplyRowTA = [];
+
 
   const columns = [
     {
@@ -107,7 +108,7 @@ export default function ApplyJobPage() {
     const buttonStatus = apply.status.status_id >= 5 ? true : false;
     const buttonInterview =
       apply.status.name === "HR Interview" ||
-      apply.status.name === "User Interview"
+        apply.status.name === "User Interview"
         ? false
         : true;
     dataApplyRowTA.push({
@@ -190,14 +191,14 @@ export default function ApplyJobPage() {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => {
+      .then(() => {
         Swal.fire({
           position: "center",
           icon: "success",
           title: "Application status has been updated",
           showConfirmButton: false,
         })
-          .then(() => {})
+          .then(() => { })
           .catch((error) => {
             console.log(error);
           });
@@ -257,7 +258,7 @@ export default function ApplyJobPage() {
           showConfirmButton: false,
           timer: 2000,
         })
-          .then(() => {})
+          .then(() => { })
           .catch((error) => {
             console.log(error);
           });
@@ -297,6 +298,27 @@ export default function ApplyJobPage() {
     navigate("/cv");
   };
 
+  // const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
+  const ExpandedComponent = ({data}) => {
+    console.log(data)
+    return(
+      <div style={{margin:"20px", fontSize:"12px"}}>
+        <p>{data.applicant_name}</p>
+        <label>SQL : </label><br/>
+        <input style={{marginBottom: "10px"}}/><br/>
+
+        <label>Java : </label><br/>
+        <input style={{marginBottom: "10px"}}/><br/>
+
+        <label>OOP : </label><br/>
+        <input style={{marginBottom: "10px"}}/><br/>
+
+        <button style={{backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white"}}>save</button>
+      </div>
+    )
+  }
+
+
   return (
     <>
       <div id="apply-div">
@@ -308,30 +330,15 @@ export default function ApplyJobPage() {
               localStorage.getItem("role") === "TA" ? columnsTA : columns
             }
             data={
-              localStorage.getItem("role") === "TA"
-                ? dataApplyRowTA
-                : dataApplyRow
+              localStorage.getItem("role") === "TA" ? dataApplyRowTA : dataApplyRow
             }
+            expandableRows expandableRowsComponent={ExpandedComponent}
             customStyles={customStyle}
             pagination
             fixedHeader
           />
         </div>
       </div>
-      {/* <Toast
-        onClose={() => setShowToast(false)}
-        show={showToast}
-        delay={3000}
-        autohide
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          backgroundColor: "#ccffcc",
-        }}
-      >
-        <Toast.Body>Application status updated successfully</Toast.Body>
-      </Toast> */}
     </>
   );
 }
