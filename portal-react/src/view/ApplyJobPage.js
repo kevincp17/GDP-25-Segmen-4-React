@@ -23,11 +23,30 @@ export default function ApplyJobPage() {
   const [refresh, setRefresh] = useState(false);
   const [records, setRecords] = useState([]);
   const [isExpand, setExpand] = useState(false);
-  const [data, setData] = useState([]);
+  const [dataApply, setData] = useState([]);
   const url = useSelector((state) => state.application.url);
   const [showToast, setShowToast] = useState(false);
+  const [dataQJ, setDataQJ] = useState([{}]);
+  const [expanded, setExpanded] = useState(false);
   let dataApplyRow = [];
   let dataApplyRowTA = [];
+
+  const [dataScore, setDataScore] = useState({
+    score: "",
+    qualificationJob: {
+      qualification_job_id: ""
+    },
+    qualification: {
+      qualification_id: ""
+    },
+    career: {
+      job_id: ""
+    },
+    apply: {
+      apply_id: ""
+    }
+  }
+  )
 
   useEffect(() => {
     axios
@@ -49,12 +68,34 @@ export default function ApplyJobPage() {
         console.error("Error:", error); // Handle any errors
       });
 
+    // if(!loading){
+
+    // }
+
     setRefresh(false);
   }, [refresh]);
 
+  // const getQJ = () => {
+  //   axios
+  //   .get("http://localhost:8088/api/qualification-job/" + localStorage.getItem("job_id"))
+  //   .then((response) => {
+  //     console.log(response.data.result)
+  //     // setDataQJ(response.data.result)
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   });
+  // }
 
+  // useEffect(()=>{
+  //   getQJ()
+  // },[expanded])
 
   const columns = [
+    {
+      name: "No.",
+      selector: (row) => row.index,
+    },
     {
       name: "Job Name",
       selector: (row) => row.job_name,
@@ -70,6 +111,10 @@ export default function ApplyJobPage() {
   ];
 
   const columnsTA = [
+    {
+      name: "No.",
+      selector: (row) => row.index,
+    },
     {
       name: "Job Name",
       selector: (row) => row.job_name,
@@ -98,13 +143,14 @@ export default function ApplyJobPage() {
 
   applyList.map((apply) => {
     dataApplyRow.push({
+      index: apply.apply_id,
       job_name: apply.career.title,
       apply_date: apply.date.split("T")[0],
       status: apply.status?.name,
     });
   });
 
-  data.map((apply) => {
+  dataApply.map((apply) => {
     const buttonStatus = apply.status.status_id >= 5 ? true : false;
     const buttonInterview =
       apply.status.name === "HR Interview" ||
@@ -112,6 +158,8 @@ export default function ApplyJobPage() {
         ? false
         : true;
     dataApplyRowTA.push({
+      index: apply.apply_id,
+      job_id: apply.career.job_id,
       job_name: apply.career.title,
       applicant_name: apply.cv.name,
       status: apply.status.name,
@@ -156,13 +204,14 @@ export default function ApplyJobPage() {
           >
             <AiOutlineClose />
           </Button>
+
         </>
       ),
     });
   });
 
   const handleAccept = async (id, statusId) => {
-    const findApplication = data.find(
+    const findApplication = dataApply.find(
       (application) => application.apply_id === id
     );
     if (!findApplication) {
@@ -211,24 +260,24 @@ export default function ApplyJobPage() {
       });
   };
 
-  const show = async () => {
-    await axios({
-      url: url,
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        setData(response.data.result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const show = async () => {
+  //   await axios({
+  //     url: url,
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => {
+  //       setData(response.data.result);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const handleReject = async (id) => {
-    const findApplication = data.find(
+    const findApplication = dataApply.find(
       (application) => application.apply_id === id
     );
     if (!findApplication) {
@@ -288,9 +337,6 @@ export default function ApplyJobPage() {
     if (id === 3) {
       navigate("/setinterview-trainer");
     }
-    // if (id === 4){
-    //   navigate("/set-offering");
-    // }
   };
 
   const handleMakeCV = (id) => {
@@ -298,26 +344,84 @@ export default function ApplyJobPage() {
     navigate("/cv");
   };
 
-  const saveScore = (id) => {
+  let handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataScore((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
+  const saveScore = async (apply_id, job_id) => {
+    const object = {
+      score: dataScore.score,
+      qualificationJob: {
+        qualification_job_id: 1
+      },
+      qualification: {
+        qualification_id: 1
+      },
+      career: {
+        job_id: job_id
+      },
+      apply: {
+        apply_id: apply_id
+      }
+    }
+
+    await axios({
+      url: "http://localhost:8088/api/score/",
+      method: "POST",
+      data: JSON.stringify(object),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   }
 
-  // const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
-  const ExpandedComponent = ({data}) => {
-    console.log(data.apply_id)
-    return(
-      <div style={{margin:"20px", fontSize:"12px"}}>
-        <p>{data.applicant_name}</p>
-        <label>SQL : </label><br/>
-        <input style={{marginBottom: "10px"}}/><br/>
+  const ExpandedComponent = ({ data }) => {
+    const dummy = [
+      {
+        name: "april"
+      },
+      {
+        name: "alsha"
+      }]
+    localStorage.setItem("job_id", data.job_id)
+    // getQJ()
+    // console.log(dataQJ.qualification_job_id)
+    axios
+      .get("http://localhost:8088/api/qualification-job/" + localStorage.getItem("job_id"))
+      .then((response) => {
+        setDataQJ(response.data.result)
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    setExpanded(true)
+    return (
+      <div style={{ margin: "20px", fontSize: "12px" }}>
+        {/* <Button onClick={() => console.log(dataQJ[0].qualification.name)}>coba</Button> */}
 
-        <label>Java : </label><br/>
-        <input style={{marginBottom: "10px"}}/><br/>
+        {dataQJ.map((QJ) => {
+          return (
+            <>            
+            <label>{QJ.qualification?.name}</label>
+              <input name="qualification_job_id" onChange={handleChange} type="text" style={{ marginBottom: "10px" }}></input><br />
+            </>
 
-        <label>OOP : </label><br/>
-        <input style={{marginBottom: "10px"}}/><br/>
+          )
+        })}
+        {/* <label>SQL : </label><br />
+        <input name="score" value={dataScore.score} onChange={handleChange} type="text" style={{ marginBottom: "10px" }} /><br /> */}
+        {/* <input name="qualification_job_id" onChange={handleChange} type="text" style={{ marginBottom: "10px" }}></input><br /> */}
+        {/* <label>Java : </label><br />
+        <input style={{ marginBottom: "10px" }} /><br />
 
-        <button onClick={() => saveScore(data.apply_id)} style={{backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white"}}>save</button>
+        <label>OOP : </label><br />
+        <input style={{ marginBottom: "10px" }} /><br /> */}
+
+        <button onClick={() => saveScore(data.index, data.job_id)} style={{ backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white" }}>save</button>
       </div>
     )
   }
@@ -328,13 +432,14 @@ export default function ApplyJobPage() {
       <div id="apply-div">
         <p id="apply-title">Apply Job List</p>
         <div id="data-tb-apply">
+
           <DataTable
             className="rdt_Table"
             columns={
               localStorage.getItem("role") === "TA" ? columnsTA : columns
             }
-            data={
-              localStorage.getItem("role") === "TA" ? dataApplyRowTA : dataApplyRow
+            data={localStorage.getItem("role") === "TA" ?
+              dataApplyRowTA : dataApplyRow
             }
             expandableRows expandableRowsComponent={ExpandedComponent}
             customStyles={customStyle}
