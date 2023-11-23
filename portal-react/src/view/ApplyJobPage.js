@@ -298,9 +298,13 @@ export default function ApplyJobPage() {
     navigate("/cv");
   };
 
+  const saveScore = (id) => {
+
+  }
+
   // const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
   const ExpandedComponent = ({data}) => {
-    console.log(data)
+    console.log(data.apply_id)
     return(
       <div style={{margin:"20px", fontSize:"12px"}}>
         <p>{data.applicant_name}</p>
@@ -313,7 +317,7 @@ export default function ApplyJobPage() {
         <label>OOP : </label><br/>
         <input style={{marginBottom: "10px"}}/><br/>
 
-        <button style={{backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white"}}>save</button>
+        <button onClick={() => saveScore(data.apply_id)} style={{backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white"}}>save</button>
       </div>
     )
   }
