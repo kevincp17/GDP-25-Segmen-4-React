@@ -28,6 +28,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import swal from "sweetalert";
 
 export default function ProfilePage() {
+  let percentage = 0;
   const navigate = useNavigate();
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
@@ -44,6 +45,7 @@ export default function ProfilePage() {
   });
 
   const [instituteID, setInstituteID] = useState(null);
+  const [majorID, setMajorID] = useState(null);
 
   const [userDataProfile, setUserDataProfile] = useState({
     cv_id: localStorage.getItem("userId"),
@@ -387,8 +389,33 @@ export default function ProfilePage() {
       .catch((error) => {
         console.error("Error:", error); // Handle any errors
       });
+    // checkPercentage();
     setRefresh(false);
   }, [refresh]);
+
+  // const checkPercentage = () => {
+    
+  // };
+
+  if (userName && email && phone && address) {
+    percentage = percentage + 20;
+  }
+
+  if (skillList.length!=0) {
+    percentage = percentage + 20;
+  }
+
+  if (educationList.length!=0) {
+    percentage = percentage + 20;
+  }
+
+  if (experienceList.length!=0) {
+    percentage = percentage + 20;
+  }
+
+  if (certificationList.length!=0) {
+    percentage = percentage + 20;
+  }
 
   let handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -527,6 +554,8 @@ export default function ProfilePage() {
       (i) => i.institute_id == instituteID
     );
 
+    let majorExist = majorSelect.some((m) => m.major_id == majorID);
+
     if (!instituteExist) {
       let newInstitute = {
         name: eduInput.institute_name,
@@ -614,6 +643,91 @@ export default function ProfilePage() {
           console.log(error);
           setOpenAddEducation(false);
         });
+    } else if (!majorExist) {
+      let newMajor = {
+        name: eduInput.major_name,
+      };
+
+      axios
+        .post("http://localhost:8088/api/major", JSON.stringify(newMajor), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          let eduData = {
+            start_date: eduInput.start_date,
+            end_date: eduInput.end_date,
+            gpa: eduInput.gpa,
+            institute: {
+              institute_id: instituteID,
+            },
+            degree: {
+              degree_id: eduInput.degree_name,
+            },
+            major: {
+              major_id: response.data.result.major_id,
+            },
+          };
+
+          console.log(eduData);
+
+          axios
+            .post(
+              "http://localhost:8088/api/education",
+              JSON.stringify(eduData),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              let cvEduData = {
+                education: {
+                  edu_id: response.data.result.edu_id,
+                },
+                cv: {
+                  cv_id: localStorage.getItem("userId"),
+                },
+              };
+
+              axios
+                .post(
+                  url + localStorage.getItem("userId") + "/education",
+                  JSON.stringify(cvEduData),
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                .then((response) => {
+                  setEduInput({
+                    start_date: null,
+                    end_date: null,
+                    gpa: null,
+                    institute_name: null,
+                    degree_name: null,
+                    major_name: null,
+                  });
+                  setMajorID(null);
+                  setRefresh(true);
+                  setOpenAddEducation(false);
+                })
+                .catch((error) => {
+                  setOpenAddEducation(false);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+              setOpenAddEducation(false);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          setOpenAddEducation(false);
+        });
     } else {
       let eduData = {
         start_date: eduInput.start_date,
@@ -626,9 +740,10 @@ export default function ProfilePage() {
           degree_id: eduInput.degree_name,
         },
         major: {
-          major_id: eduInput.major_name,
+          major_id: majorID,
         },
       };
+
       axios
         .post("http://localhost:8088/api/education", JSON.stringify(eduData), {
           headers: {
@@ -1051,136 +1166,145 @@ export default function ProfilePage() {
   return (
     <div id="profile-div">
       <div id="profile-div1">
-        <button>
-          <img src="/image/profile.png" />
-        </button>
-
-        <div id="profile-div1-info">
-          <p>
-            <PersonIcon style={{ marginRight: "5px" }} />
-            {userName}
-          </p>
-          <p>
-            <LocalPhoneIcon style={{ marginRight: "5px" }} />
-            {phone}
-          </p>
-          <p>
-            <HomeIcon style={{ marginRight: "5px" }} />
-            {address}
-          </p>
-          <p>
-            <EmailIcon style={{ marginRight: "5px" }} />
-            {email}
-          </p>
-        </div>
-
-        <div id="profile-div1-edit">
-          {localStorage.getItem("role") === "Applicant" ? (
-            <button onClick={() => handleOpenEditProfile()}>
-              <EditIcon />
-            </button>
-          ) : null}
-
-          <button onClick={() => handleMakeCV()}>
-            <PictureAsPdfIcon />
+        <div id="profile-div1-up">
+          <button>
+            <img src="/image/profile.png" />
           </button>
 
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={openEditProfile}
-            onClose={handleCloseEditProfile}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                timeout: 500,
-              },
-            }}
-          >
-            <Fade in={openEditProfile}>
-              <div class="modal">
-                <div class="modal-header">
-                  <div>
-                    <p id="modal-title-form-add" class="modal-title">
-                      Update your profile
-                    </p>
-                  </div>
+          <div id="profile-div1-info">
+            <p>
+              <PersonIcon style={{ marginRight: "5px" }} />
+              {userName}
+            </p>
+            <p>
+              <LocalPhoneIcon style={{ marginRight: "5px" }} />
+              {phone}
+            </p>
+            <p>
+              <HomeIcon style={{ marginRight: "5px" }} />
+              {address}
+            </p>
+            <p>
+              <EmailIcon style={{ marginRight: "5px" }} />
+              {email}
+            </p>
+          </div>
 
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                    onClick={handleCloseEditProfile}
-                  >
-                    <CloseIcon />
-                  </button>
+          <div id="profile-div1-edit">
+            {localStorage.getItem("role") === "Applicant" ? (
+              <button onClick={() => handleOpenEditProfile()}>
+                <EditIcon />
+              </button>
+            ) : null}
+
+            <button onClick={() => handleMakeCV()}>
+              <PictureAsPdfIcon />
+            </button>
+
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              open={openEditProfile}
+              onClose={handleCloseEditProfile}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  timeout: 500,
+                },
+              }}
+            >
+              <Fade in={openEditProfile}>
+                <div class="modal">
+                  <div class="modal-header">
+                    <div>
+                      <p id="modal-title-form-add" class="modal-title">
+                        Update your profile
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      onClick={handleCloseEditProfile}
+                    >
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  <div class="modal-body" id="modal-body-add-job">
+                    <div>
+                      <label for="name">User Name</label>
+                      <input
+                        id="name"
+                        name="name"
+                        value={userDataProfile.name}
+                        onChange={handleProfileChange}
+                        placeholder="Masukkan nama user baru"
+                      />
+                    </div>
+
+                    <div>
+                      <label for="phone">Phone Number</label>
+                      <input
+                        id="phone"
+                        name="phone"
+                        value={userDataProfile.phone}
+                        onChange={handleProfileChange}
+                        placeholder="Masukkan nomor telpon baru"
+                      />
+                    </div>
+
+                    <div>
+                      <label for="address">Adress</label>
+                      <input
+                        id="address"
+                        name="address"
+                        value={userDataProfile.address}
+                        onChange={handleProfileChange}
+                        placeholder="Masukkan alamat baru"
+                      />
+                    </div>
+
+                    <div hidden>
+                      <input
+                        id="file-input"
+                        type="file"
+                        name="picture"
+                        placeholder="Masukkan penempatan lowongan"
+                      />
+                      {/* <img style={{paddingLeft:'30px'}} src={URL.createObjectURL(dataJob.picture)} width={"200px"} height={"200px"}/> */}
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      id="apply-btn"
+                      onClick={handleEditProfile}
+                    >
+                      SUBMIT
+                    </button>
+                    <button
+                      type="button"
+                      id="close-btn"
+                      data-bs-dismiss="modal"
+                      onClick={handleCloseEditProfile}
+                    >
+                      CLOSE
+                    </button>
+                  </div>
                 </div>
-                <div class="modal-body" id="modal-body-add-job">
-                  <div>
-                    <label for="name">User Name</label>
-                    <input
-                      id="name"
-                      name="name"
-                      value={userDataProfile.name}
-                      onChange={handleProfileChange}
-                      placeholder="Masukkan nama user baru"
-                    />
-                  </div>
+              </Fade>
+            </Modal>
+          </div>
+        </div>
 
-                  <div>
-                    <label for="phone">Phone Number</label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      value={userDataProfile.phone}
-                      onChange={handleProfileChange}
-                      placeholder="Masukkan nomor telpon baru"
-                    />
-                  </div>
-
-                  <div>
-                    <label for="address">Adress</label>
-                    <input
-                      id="address"
-                      name="address"
-                      value={userDataProfile.address}
-                      onChange={handleProfileChange}
-                      placeholder="Masukkan alamat baru"
-                    />
-                  </div>
-
-                  <div hidden>
-                    <input
-                      id="file-input"
-                      type="file"
-                      name="picture"
-                      placeholder="Masukkan penempatan lowongan"
-                    />
-                    {/* <img style={{paddingLeft:'30px'}} src={URL.createObjectURL(dataJob.picture)} width={"200px"} height={"200px"}/> */}
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    id="apply-btn"
-                    onClick={handleEditProfile}
-                  >
-                    SUBMIT
-                  </button>
-                  <button
-                    type="button"
-                    id="close-btn"
-                    data-bs-dismiss="modal"
-                    onClick={handleCloseEditProfile}
-                  >
-                    CLOSE
-                  </button>
-                </div>
-              </div>
-            </Fade>
-          </Modal>
+        <div id="profile-div1-down">
+          <p>CV Data Completion {percentage}%</p>
+          <div id="progress-bar-container">
+            <div id="progress-bar" style={{ width: `${percentage}%` }}></div>
+          </div>
         </div>
       </div>
 
@@ -1200,18 +1324,6 @@ export default function ProfilePage() {
               Skill
             </button>
             <button
-              id="nav-exp-tab"
-              onClick={() => {
-                setSkill(false);
-                setExperience(true);
-                setEducation(false);
-                setCertification(false);
-              }}
-            >
-              <WorkIcon className="exp-icon" />
-              Experience
-            </button>
-            <button
               id="nav-edu-tab"
               onClick={() => {
                 setSkill(false);
@@ -1222,6 +1334,18 @@ export default function ProfilePage() {
             >
               <SchoolIcon className="edu-icon" />
               Education
+            </button>
+            <button
+              id="nav-exp-tab"
+              onClick={() => {
+                setSkill(false);
+                setExperience(true);
+                setEducation(false);
+                setCertification(false);
+              }}
+            >
+              <WorkIcon className="exp-icon" />
+              Experience
             </button>
             <button
               id="nav-cert-tab"
@@ -1670,7 +1794,31 @@ export default function ProfilePage() {
 
                     <div>
                       <label for="major_name">Major Name</label>
-                      <select
+                      <Autocomplete
+                        freeSolo
+                        id="free-solo-2-demo"
+                        disableClearable
+                        onChange={(event, newValue) => {
+                          setMajorID(newValue.major_id);
+                        }}
+                        options={majorSelect}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Major Name"
+                            name="major_name"
+                            value={eduInput.major_name}
+                            onChange={handleEduInput}
+                            style={{ width: 640, marginLeft: 30 }}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
+                      />
+                      {/* <select
                         id="major_name"
                         name="major_name"
                         onChange={handleEduInput}
@@ -1690,7 +1838,7 @@ export default function ProfilePage() {
                             </option>
                           );
                         })}
-                      </select>
+                      </select> */}
                     </div>
 
                     <div>

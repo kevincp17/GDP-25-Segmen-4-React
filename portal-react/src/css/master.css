@@ -1,0 +1,39 @@
+#skill-table-adm{
+    padding-top: 50px;
+    padding-left: 330px;
+    padding-right: 100px;
+    margin-bottom: 100px;
+}
+
+#add-btn,#action-btn > button{
+    border: 1px transparent solid;
+    border-radius: 10px;
+    margin-right: 20px;
+    height: 30px;
+    width: 100px;
+}
+
+#add-btn{
+    background-color: #93C953;
+    color: white;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    width: 150px;
+}
+
+#action-btn > button:first-child{
+    background-color: #3877AC;
+    color: white;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#action-btn > button:last-child{
+    background-color: #AA222F;
+    color: white;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+}

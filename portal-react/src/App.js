@@ -19,6 +19,12 @@ import MyDocument from "./app/handleCV";
 import ControllableStates from "./app/autocomplete";
 import SetInterviewTAPage from "./view/SetInterviewTAPage";
 import SetInterviewTrainerPage from "./view/SetInterviewTrainerPage";
+import InterviewTAPage from "./view/InterviewTAPage";
+import InterviewTrainerPage from "./view/InterviewTrainerPage";
+import MasterSkill from "./view/MasterSkill";
+import MasterMajor from "./view/MasterMajor";
+import MasterInstitute from "./view/MasterInstitute";
+import MasterDegree from "./view/MasterDegree";
 
 function App() {
   return (
@@ -28,8 +34,14 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainPage />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/master_skill" element={<MasterSkill />} />
+          <Route path="/master_degree" element={<MasterDegree />} />
+          <Route path="/master_institute" element={<MasterInstitute />} />
+          <Route path="/master_major" element={<MasterMajor />} />
           <Route path="/careers" element={<CareerPage />} />
           <Route path="/interviews" element={<InterviewPage />} />
+          <Route path="/interviews/ta" element={<InterviewTAPage />} />
+          <Route path="/interviews/trainer" element={<InterviewTrainerPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/apply_job" element={<ApplyJobPage />} />
           <Route path="/job-application" element={<JobApplication />} />

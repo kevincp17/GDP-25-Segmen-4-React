@@ -26,6 +26,7 @@ export default function ApplyJobPage() {
   const [data, setData] = useState([]);
   const url = useSelector((state) => state.application.url);
   const [showToast, setShowToast] = useState(false);
+  console.log(data);
 
   useEffect(() => {
     axios
@@ -84,6 +85,45 @@ export default function ApplyJobPage() {
     {
       name: "Action",
       selector: (row) => row.action,
+    },
+  ];
+
+  const columnApplyAdmin = [
+    {
+      name: "Job Name",
+      selector: (row) => row.career.title,
+    },
+    {
+      name: "Applicant Name",
+      selector: (row) => row.cv.name,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status.name,
+    },
+    {
+      name: "Created At",
+      selector: (row) =>{
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        let dateStart = new Date(row.date);
+        var dayStart = dateStart.getDate();
+        var monthStart = dateStart.getMonth();
+        var yearStart = dateStart.getFullYear();
+        return dayStart+" "+months[monthStart]+" "+yearStart
+      },
     },
   ];
 
@@ -151,7 +191,7 @@ export default function ApplyJobPage() {
             id="btn-x"
             variant="danger"
             hidden={buttonStatus}
-            onClick={() => handleReject(apply.apply_id)}
+            onClick={() => handleReject(apply)}
           >
             <AiOutlineClose />
           </Button>
@@ -226,22 +266,28 @@ export default function ApplyJobPage() {
       });
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (apply) => {
+    console.log(apply);
+    let applyDate=new Date(apply.date)
+    let cooldownDate=new Date(applyDate.setMonth(applyDate.getMonth()+6))
+    console.log(cooldownDate);
     const findApplication = data.find(
-      (application) => application.apply_id === id
+      (application) => application.apply_id === apply.apply_id
     );
+
     if (!findApplication) {
       return null;
     }
 
     const object = {
-      apply_id: id,
+      apply_id: apply.apply_id,
       status: {
         status_id: 6,
       },
+      cooldown_date:cooldownDate
     };
     await axios({
-      url: "http://localhost:8088/api/apply/" + id,
+      url: "http://localhost:8088/api/apply/" + apply.apply_id,
       method: "POST",
       data: JSON.stringify(object),
       headers: {
@@ -296,24 +342,48 @@ export default function ApplyJobPage() {
 
   return (
     <>
-      <div id="apply-div">
-        <p id="apply-title">Apply Job List</p>
-        <div id="data-tb-apply">
-          <DataTable
+      <div
+        id={
+          localStorage.getItem("role") === "Admin"
+            ? "apply-div-adm"
+            : "apply-div"
+        }
+      >
+        {localStorage.getItem("role") === "Admin" ? (
+          <>
+            <div id="apply-table-adm">
+            <h1>Job Appliance List</h1>
+            <DataTable
             className="rdt_Table"
-            columns={
-              localStorage.getItem("role") === "TA" ? columnsTA : columns
-            }
-            data={
-              localStorage.getItem("role") === "TA"
-                ? dataApplyRowTA
-                : dataApplyRow
-            }
+            columns={columnApplyAdmin}
+            data={data}
             customStyles={customStyle}
             pagination
             fixedHeader
           />
-        </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p id="apply-title">Apply Job List</p>
+            <div id="data-tb-apply">
+              <DataTable
+                className="rdt_Table"
+                columns={
+                  localStorage.getItem("role") === "TA" ? columnsTA : columns
+                }
+                data={
+                  localStorage.getItem("role") === "TA"
+                    ? dataApplyRowTA
+                    : dataApplyRow
+                }
+                customStyles={customStyle}
+                pagination
+                fixedHeader
+              />
+            </div>
+          </>
+        )}
       </div>
       <Toast
         onClose={() => setShowToast(false)}

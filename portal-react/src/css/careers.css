@@ -586,3 +586,14 @@
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
   }
+
+#career-table-adm{
+    padding-top: 50px;
+    padding-left: 330px;
+    padding-right: 100px;
+    margin-bottom: 100px;
+}
+
+#multi-sel{
+    height: 150px;
+}
