@@ -25,19 +25,22 @@ import MasterSkill from "./view/MasterSkill";
 import MasterMajor from "./view/MasterMajor";
 import MasterInstitute from "./view/MasterInstitute";
 import MasterDegree from "./view/MasterDegree";
+import MasterQualification from "./view/MasterQualification";
 
 function App() {
+  console.log(localStorage.getItem("role"));
   return (
     <BrowserRouter>
       <Routes>
       <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainPage />}>
-          <Route path="/" element={<HomePage />} />
+          <Route index path="/" element={<HomePage />}/>
           <Route path="/master_skill" element={<MasterSkill />} />
           <Route path="/master_degree" element={<MasterDegree />} />
           <Route path="/master_institute" element={<MasterInstitute />} />
           <Route path="/master_major" element={<MasterMajor />} />
+          <Route path="/master_qualification" element={<MasterQualification />} />
           <Route path="/careers" element={<CareerPage />} />
           <Route path="/interviews" element={<InterviewPage />} />
           <Route path="/interviews/ta" element={<InterviewTAPage />} />

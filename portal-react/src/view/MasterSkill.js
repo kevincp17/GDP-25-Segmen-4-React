@@ -63,6 +63,7 @@ export default function MasterSkill() {
     {
       name: "Skill Name",
       selector: (row) => row.name,
+      sortable:true
     },
     {
       name: "Skill Type",
@@ -220,7 +221,6 @@ export default function MasterSkill() {
       </Modal>
 
       <DataTable
-        className="rdt_Table"
         columns={columnsSkill}
         data={skillList}
         customStyles={customStyle}

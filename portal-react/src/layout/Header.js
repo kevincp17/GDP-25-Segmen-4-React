@@ -13,7 +13,7 @@ import { viewUserProfile } from "../features/viewProfileData";
 import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Headers() {
-  console.log(localStorage.getItem("role"));
+  console.log(localStorage.getItem("token"));
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorCareer, setAnchorCareer] = useState(null);
@@ -63,6 +63,7 @@ export default function Headers() {
     localStorage.clear();
     localStorage.setItem("role", "Guest");
     navigate("/");
+    
   };
 
   const openPopover = Boolean(anchorEl);
@@ -161,7 +162,7 @@ export default function Headers() {
                     <button>HOME</button>
                   </Link>
 
-                  {localStorage.getItem("role") === "Admin" ? (
+                  {localStorage.getItem("role") === "Admin"? (
                     <>
                       <Link>
                         <button
@@ -186,7 +187,7 @@ export default function Headers() {
                         <div id="popover">
                           <p id="popover-header">Master Menu</p>
 
-                          <div id="popover-body" style={{height:"125px"}}>
+                          <div id="popover-body" style={{height:"160px"}}>
                             <a
                               style={
                                 localStorage.getItem("role") !== "Applicant"
@@ -223,6 +224,15 @@ export default function Headers() {
                               href="/master_major"
                             >
                               Major Data
+                            </a>
+
+                            <hr />
+                            <a
+                              id="apply-list-btn"
+                              style={{ color: "#4C5666" }}
+                              href="/master_qualification"
+                            >
+                              Qualification Data
                             </a>
                           </div>
                         </div>

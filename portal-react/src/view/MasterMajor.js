@@ -60,6 +60,7 @@ export default function MasterMajor() {
     {
       name: "Major Name",
       selector: (row) => row.name,
+      sortable:true
     },
     {
       name: "Action",

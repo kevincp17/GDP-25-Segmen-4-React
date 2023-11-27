@@ -5,31 +5,31 @@ import { Backdrop, Modal, Fade, Popover } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import "../css/master.css";
 
-export default function MasterDegree() {
-  const [degreeList, setDegreeList] = useState([]);
+export default function MasterQualification() {
+  const [qualificationList, setQualificationList] = useState([]);
 
-  const [openAddDegree, setOpenAddDegree] = useState(false);
-  const handleOpenAddDegree = (degree) => {
-    if (degree) {
-      console.log(degree);
+  const [openAddQualification, setOpenAddQualification] = useState(false);
+  const handleOpenAddQualification = (qualification) => {
+    if (qualification) {
+      console.log(qualification);
 
-      setDegreeInput({
-        degree_id: degree.degree_id,
-        name: degree.name,
+      setQualificationInput({
+        qualification_id: qualification.qualification_id,
+        name: qualification.name,
       });
     }
-    setOpenAddDegree(true);
+    setOpenAddQualification(true);
   };
-  const handleCloseAddDegree = () => {
-    setDegreeInput({
-      degree_id: "",
+  const handleCloseAddQualification = () => {
+    setQualificationInput({
+      qualification_id: "",
       name: null,
     });
-    setOpenAddDegree(false);
+    setOpenAddQualification(false);
   };
 
-  const [degreeInput, setDegreeInput] = useState({
-    degree_id: "",
+  const [qualificationInput, setQualificationInput] = useState({
+    qualification_id: "",
     name: null,
   });
 
@@ -37,10 +37,10 @@ export default function MasterDegree() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8088/api/degree")
+      .get("http://localhost:8088/api/qualification")
       .then((response) => {
         console.log(response.data.result);
-        setDegreeList(response.data.result);
+        setQualificationList(response.data.result);
       })
       .catch((error) => {
         console.error("Error:", error); // Handle any errors
@@ -56,9 +56,9 @@ export default function MasterDegree() {
     },
   };
 
-  const columnsDegree = [
+  const columnsQualification = [
     {
-      name: "Degree Name",
+      name: "Qualification Name",
       selector: (row) => row.name,
       sortable:true
     },
@@ -67,33 +67,33 @@ export default function MasterDegree() {
       selector: (row) => {
         return (
           <div id="action-btn">
-            <button onClick={() => handleOpenAddDegree(row)}>Update</button>
-            <button onClick={() => handleDeleteDegree(row)}>Delete</button>
+            <button onClick={() => handleOpenAddQualification(row)}>Update</button>
+            <button onClick={() => handleDeleteQualification(row)}>Delete</button>
           </div>
         );
       },
     },
   ];
 
-  let handleDegreeInput = (e) => {
+  let handleQualificationInput = (e) => {
     const { name, value } = e.target;
-    setDegreeInput((prevState) => ({
+    setQualificationInput((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const handleAddDegree = () => {
-    console.log(degreeInput);
-    let degreeData = {
-      degree_id: degreeInput.degree_id,
-      name: degreeInput.name,
+  const handleAddQualification = () => {
+    console.log(qualificationInput);
+    let qualificationData = {
+      qualification_id: qualificationInput.qualification_id,
+      name: qualificationInput.name,
     };
-    console.log(degreeData);
+    console.log(qualificationData);
     axios
       .post(
-        `http://localhost:8088/api/degree/${degreeInput.degree_id}`,
-        JSON.stringify(degreeData),
+        `http://localhost:8088/api/qualification/${qualificationInput.qualification_id}`,
+        JSON.stringify(qualificationData),
         {
           headers: {
             "Content-Type": "application/json",
@@ -103,30 +103,29 @@ export default function MasterDegree() {
       .then((response) => {
         console.log(response);
         setRefresh(true);
-        setOpenAddDegree(false);
-        setDegreeInput({
-          degree_id: "",
+        setOpenAddQualification(false);
+        setQualificationInput({
+          qualification_id: "",
           name: null,
         });
       })
       .catch((error) => {
         console.log(error);
-        setOpenAddDegree(false);
+        setOpenAddQualification(false);
       });
   };
 
-  const handleDeleteDegree = (degree) => {
-    let degreeData = {
-      degree_id: degree.degree_id,
-      name: degree.name,
+  const handleDeleteQualification = (qualification) => {
+    let qualificationData = {
+      qualification_id: qualification.qualification_id,
+      name: qualification.name,
     };
-
     axios
-      .delete(`http://localhost:8088/api/degree/${degree.degree_id}`, {
+      .delete(`http://localhost:8088/api/qualification/${qualification.qualification_id}`, {
         headers: {
           "Content-Type": "application/json",
         },
-        data: JSON.stringify(degreeData),
+        data: JSON.stringify(qualificationData),
       })
       .then((response) => {
         console.log(response);
@@ -136,19 +135,18 @@ export default function MasterDegree() {
         console.log(error);
       });
   };
-
   return (
     <div id="skill-table-adm">
-      <h1>Degree List</h1>
-      <button id="add-btn" onClick={() => handleOpenAddDegree()}>
-        Add Degree
+      <h1>Qualification List</h1>
+      <button id="add-btn" onClick={() => handleOpenAddQualification()}>
+        Add Qualification
       </button>
 
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={openAddDegree}
-        onClose={handleCloseAddDegree}
+        open={openAddQualification}
+        onClose={handleCloseAddQualification}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -157,12 +155,12 @@ export default function MasterDegree() {
           },
         }}
       >
-        <Fade in={openAddDegree}>
+        <Fade in={openAddQualification}>
           <div class="modal">
             <div class="modal-header">
               <div>
                 <p id="modal-title-form-add" class="modal-title">
-                  Add Degree Data
+                  Add Qualification Data
                 </p>
               </div>
 
@@ -171,7 +169,7 @@ export default function MasterDegree() {
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-                onClick={handleCloseAddDegree}
+                onClick={handleCloseAddQualification}
               >
                 <CloseIcon />
               </button>
@@ -182,19 +180,19 @@ export default function MasterDegree() {
               style={{ height: "180px" }}
             >
               <div>
-                <label for="skill_id">Degree Name</label>
-                <input name="name" value={degreeInput.name} onChange={handleDegreeInput}/>
+                <label for="skill_id">Qualification Name</label>
+                <input name="name" value={qualificationInput.name} onChange={handleQualificationInput}/>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" id="apply-btn" onClick={handleAddDegree}>
+              <button type="button" id="apply-btn" onClick={handleAddQualification}>
                 SUBMIT
               </button>
               <button
                 type="button"
                 id="close-btn"
                 data-bs-dismiss="modal"
-                onClick={handleCloseAddDegree}
+                onClick={handleCloseAddQualification}
               >
                 CLOSE
               </button>
@@ -204,8 +202,8 @@ export default function MasterDegree() {
       </Modal>
       <DataTable
         className="rdt_Table"
-        columns={columnsDegree}
-        data={degreeList}
+        columns={columnsQualification}
+        data={qualificationList}
         customStyles={customStyle}
         pagination
         fixedHeader

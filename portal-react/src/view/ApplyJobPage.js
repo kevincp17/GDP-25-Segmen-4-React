@@ -92,10 +92,12 @@ export default function ApplyJobPage() {
     {
       name: "Job Name",
       selector: (row) => row.career.title,
+      sortable:true
     },
     {
       name: "Applicant Name",
       selector: (row) => row.cv.name,
+      sortable:true
     },
     {
       name: "Status",
@@ -124,6 +126,7 @@ export default function ApplyJobPage() {
         var yearStart = dateStart.getFullYear();
         return dayStart+" "+months[monthStart]+" "+yearStart
       },
+      sortable:true
     },
   ];
 
@@ -268,6 +271,20 @@ export default function ApplyJobPage() {
 
   const handleReject = async (apply) => {
     console.log(apply);
+    let months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     let applyDate=new Date(apply.date)
     let cooldownDate=new Date(applyDate.setMonth(applyDate.getMonth()+6))
     console.log(cooldownDate);
@@ -284,8 +301,9 @@ export default function ApplyJobPage() {
       status: {
         status_id: 6,
       },
-      cooldown_date:cooldownDate
+      cooldown_date:cooldownDate.getFullYear()+"-"+(cooldownDate.getMonth()+1 <10 ? "0"+(cooldownDate.getMonth()+1) : cooldownDate.getMonth()+1)+"-"+(cooldownDate.getDate() < 10 ? "0"+cooldownDate.getDate() : cooldownDate.getDate())
     };
+    console.log(object);
     await axios({
       url: "http://localhost:8088/api/apply/" + apply.apply_id,
       method: "POST",
@@ -354,7 +372,6 @@ export default function ApplyJobPage() {
             <div id="apply-table-adm">
             <h1>Job Appliance List</h1>
             <DataTable
-            className="rdt_Table"
             columns={columnApplyAdmin}
             data={data}
             customStyles={customStyle}

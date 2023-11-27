@@ -481,11 +481,45 @@ body{
 #footer-div-adm > #footer-down{
     display: flex;
     align-items: center;
-    height: 20%;
+    height: 21.5%;
     background-color: #93C953;
     margin-bottom: -7px;
     font-family: Arial, Helvetica, sans-serif;
     padding-left: 40px;
+}
+
+#footer-div-adm > #footer-down{
+    display: flex;
+    align-items: center;
+    height: 21.5%;
+    background-color: #93C953;
+    margin-bottom: -7px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 40px;
+    width: 100%;
+}
+
+#footer-div-adm > #footer-down > p{
+    /* flex-basis: 10%; */
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 0px;
+    width: 1000px;
+    margin-left: 15px;
+    
+}
+
+#footer-div-adm > #footer-down > #footer-down-btn{
+    display: flex;
+    margin-right: 210px;
+    /* flex-basis: 10%; */
+}
+
+#footer-div-adm > #footer-down > button{
+    margin-right: 70px;
+    /* flex-basis: 10%; */
+    /* padding-right: 300px; */
 }
 
 #footer-down > p{

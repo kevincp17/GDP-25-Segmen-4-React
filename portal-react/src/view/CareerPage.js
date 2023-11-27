@@ -224,6 +224,7 @@ export default function CareerPage() {
     {
       name: "Job Name",
       selector: (row) => row.title,
+      sortable:true
     },
     {
       name: "Created At",
@@ -248,6 +249,7 @@ export default function CareerPage() {
         var yearStart = dateStart.getFullYear();
         return dayStart + " " + months[monthStart] + " " + yearStart;
       },
+      sortable:true
     },
   ];
 
@@ -325,8 +327,9 @@ export default function CareerPage() {
     let results = applyData.filter(
       (data) => data.career.title === career.title
     );
+    console.log(careerApplied);
     console.log(results);
-
+   
     if (
       percentage <= 60 &&
       (skillList.length == 0 || educationList.length == 0)
@@ -356,15 +359,15 @@ export default function CareerPage() {
         }
       });
     } else if (careerApplied && results.length != 0) {
-      console.log(results[0].date);
-      let applyDate = new Date(results[0].date);
+      console.log(results[results.length-1].date);
+      let applyDate = new Date(results[results.length-1].date);
       let cooldownDate = new Date(applyDate.setMonth(applyDate.getMonth() + 6));
       console.log(new Date());
       console.log(cooldownDate);
 
       if (
-        results[0].status.name != "Rejected" &&
-        results[0].status.name != "Accepted"
+        results[results.length-1].status.name != "Rejected" &&
+        results[results.length-1].status.name != "Accepted"
       ) {
         swal({
           title: `You've already applied this position. Wait for the result.`,
@@ -384,8 +387,8 @@ export default function CareerPage() {
           }
         });
       } else if (
-        results[0].status.name == "Rejected" &&
-        new Date(results[0].cooldown_date) > new Date()
+        results[results.length-1].status.name == "Rejected" &&
+        new Date(results[results.length-1].cooldown_date) > new Date()
       ) {
         swal({
           title: `You've been rejected for this position. Please wait for 6 months.`,
@@ -398,6 +401,78 @@ export default function CareerPage() {
           icon: "info",
         }).then((value) => {
           switch (value) {
+            case "cancel-apply":
+              break;
+            default:
+              break;
+          }
+        });
+      }
+      else if (
+        results[results.length-1].status.name == "Rejected" &&
+        new Date(results[results.length-1].cooldown_date) <= new Date()
+      ) {
+        swal({
+          title: `You will apply as a ${career.title}. Do you want to continue?`,
+          buttons: {
+            apply: {
+              text: `APPLY`,
+              value: "apply",
+            },
+            cancelApply: {
+              text: `CANCEL`,
+              value: "cancel-apply",
+            },
+          },
+          icon: "warning",
+        }).then((value) => {
+          switch (value) {
+            case "apply":
+              swal({
+                title: `You apply as a ${career.title} successfully.`,
+                buttons: {
+                  OK: {
+                    text: `OK`,
+                  },
+                },
+                icon: "success",
+              });
+  
+              let dataApply = {
+                status: {
+                  status_id: 1,
+                },
+                date: date,
+                career: {
+                  job_id: career.job_id,
+                },
+                applicant: {
+                  user_id: localStorage.getItem("userId"),
+                },
+                cv: {
+                  cv_id: localStorage.getItem("userId"),
+                },
+              };
+  
+              axios
+                .post(
+                  "http://localhost:8088/api/apply",
+                  JSON.stringify(dataApply),
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                )
+                .then((response) => {
+                  setOpen(false);
+                  navigate("/apply_job");
+                })
+                .catch((error) => {
+                  console.log(error);
+                  setOpen(false);
+                });
+              break;
             case "cancel-apply":
               break;
             default:

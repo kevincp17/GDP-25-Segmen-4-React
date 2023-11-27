@@ -12,6 +12,8 @@ import axios from "axios";
 import "../css/home.css";
 
 export default function HomePage() {
+  console.log(localStorage.getItem("role"));
+  console.log(localStorage.getItem("token"));
   const [careers, setCareers] = useState([]);
   const [applies, setApplies] = useState([]);
   const [interviewTAList, setInterviewTAList] = useState([]);
@@ -141,13 +143,12 @@ export default function HomePage() {
     { quarter: 6, earnings: rejected },
   ];
   return (
-    <div
-      id={
-        localStorage.getItem("role") === "Admin" ? "home-div-adm" : "home-div"
-      }
-    >
-      {localStorage.getItem("role") === "Admin" ? 
-          <div id="dashboard-div">
+    <>
+      {
+        localStorage.getItem("role") === "Admin" && localStorage.getItem("token")
+        ?
+          <div id="home-div-adm">
+            <div id="dashboard-div">
             <h1>Dashboard</h1>
 
             <h3 style={{fontSize:"15px"}}>Number of Activities</h3>
@@ -264,9 +265,9 @@ export default function HomePage() {
               </VictoryChart>
             </div>
           </div>
-        
-       : 
-        <div>
+          </div>
+        :
+        <div id="home-div">
           <div id="home-carousel">
             <p id="first-p">Find Your Dream Job</p>
             <p id="second-p">
@@ -318,6 +319,6 @@ export default function HomePage() {
           </div>
         </div>
       }
-    </div>
+    </>
   );
 }

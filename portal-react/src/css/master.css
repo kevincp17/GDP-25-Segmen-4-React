@@ -19,7 +19,8 @@
     text-transform: uppercase;
     font-size: 15px;
     font-weight: 600;
-    width: 150px;
+    width: 170px;
+    margin-bottom: 20px;
 }
 
 #action-btn > button:first-child{
@@ -36,4 +37,28 @@
     text-transform: uppercase;
     font-size: 15px;
     font-weight: 600;
+}
+
+/* .rdt_Table{
+    width: 1000px;
+} */
+
+.rdt_TableHeadRow{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border: 1px solid #CCCCCC;
+}
+
+.rdt_TableBody{
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
+
+.rdt_TableCol{
+    font-size: 15px;
+    /* width: 280px; */
+}
+
+.rdt_TableCell{
+    font-size: 15px; 
 }

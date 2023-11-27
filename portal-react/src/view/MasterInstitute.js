@@ -60,6 +60,7 @@ export default function MasterInstitute() {
     {
       name: "Institute Name",
       selector: (row) => row.name,
+      sortable:true
     },
     {
       name: "Action",

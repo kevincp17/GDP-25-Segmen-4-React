@@ -6,6 +6,7 @@ import TesModul from "../layout/TesModul";
 import { Outlet } from "react-router-dom";
 
 export default function MainPage() {
+  console.log(localStorage.getItem("token")==null);
   return (
     <div
       style={
@@ -14,9 +15,10 @@ export default function MainPage() {
           : null
       }
     >
-      {localStorage.getItem("role") === "Admin" ? (
+      <Headers />
+      {
+      localStorage.getItem("role") === "Admin" && localStorage.getItem("token")!=null ? (
         <>
-          <Headers />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Outlet />
             <Footer />
@@ -24,7 +26,6 @@ export default function MainPage() {
         </>
       ) : (
         <>
-          <Headers />
           <Outlet />
           <Footer />
         </>
