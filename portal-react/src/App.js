@@ -26,6 +26,7 @@ import MasterMajor from "./view/MasterMajor";
 import MasterInstitute from "./view/MasterInstitute";
 import MasterDegree from "./view/MasterDegree";
 import MasterQualification from "./view/MasterQualification";
+import SetOfferingPage from "./view/SetOfferingPage";
 
 function App() {
   console.log(localStorage.getItem("role"));
@@ -50,6 +51,7 @@ function App() {
           <Route path="/job-application" element={<JobApplication />} />
           <Route path="/setinterview-ta" element={<SetInterviewTAPage />} />
           <Route path="/setinterview-trainer" element={<SetInterviewTrainerPage />} />
+          {/* <Route path="/set-offering" element={<SetOfferingPage />} /> */}
         </Route>
         <Route path="/cv" element={<MyDocument />} />
         <Route path="/autocomplete" element={<ControllableStates />} />
