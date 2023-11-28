@@ -27,28 +27,31 @@ export default function ApplyJobPage() {
   const [dataApply, setData] = useState([]);
   const url = useSelector((state) => state.application.url);
   const [showToast, setShowToast] = useState(false);
-  console.log(data);
-  const [dataQJ, setDataQJ] = useState([{}]);
+
+  const [dataQJ, setDataQJ] = useState([]);
+  const [scoreObject, setScoreObject] = useState([]);
+  const [qualificationJobID, setQualificationJobID] = useState([]);
   const [expanded, setExpanded] = useState(false);
+  console.log(dataQJ);
+
   let dataApplyRow = [];
   let dataApplyRowTA = [];
 
   const [dataScore, setDataScore] = useState({
     score: "",
     qualificationJob: {
-      qualification_job_id: ""
+      qualification_job_id: "",
     },
     qualification: {
-      qualification_id: ""
+      qualification_id: "",
     },
     career: {
-      job_id: ""
+      job_id: "",
     },
     apply: {
-      apply_id: ""
-    }
-  }
-  )
+      apply_id: "",
+    },
+  });
 
   useEffect(() => {
     axios
@@ -70,6 +73,16 @@ export default function ApplyJobPage() {
         console.error("Error:", error); // Handle any errors
       });
 
+    axios
+      .get(`http://localhost:8088/api/qualification_job/`)
+      .then((response) => {
+        console.log(response.data.result);
+        setQualificationJobID(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
     // if(!loading){
 
     // }
@@ -77,21 +90,20 @@ export default function ApplyJobPage() {
     setRefresh(false);
   }, [refresh]);
 
-  // const getQJ = () => {
-  //   axios
-  //   .get("http://localhost:8088/api/qualification-job/" + localStorage.getItem("job_id"))
-  //   .then((response) => {
-  //     console.log(response.data.result)
-  //     // setDataQJ(response.data.result)
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
-  // }
+  const getQJ = (id) => {
+    axios
+      .get("http://localhost:8088/api/qualification_job/" + id)
+      .then((response) => {
+        setDataQJ(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
-  // useEffect(()=>{
-  //   getQJ()
-  // },[expanded])
+  useEffect(() => {
+    getQJ();
+  }, [expanded]);
 
   const columns = [
     {
@@ -139,12 +151,12 @@ export default function ApplyJobPage() {
     {
       name: "Job Name",
       selector: (row) => row.career.title,
-      sortable:true
+      sortable: true,
     },
     {
       name: "Applicant Name",
       selector: (row) => row.cv.name,
-      sortable:true
+      sortable: true,
     },
     {
       name: "Status",
@@ -152,7 +164,7 @@ export default function ApplyJobPage() {
     },
     {
       name: "Created At",
-      selector: (row) =>{
+      selector: (row) => {
         let months = [
           "January",
           "February",
@@ -171,9 +183,9 @@ export default function ApplyJobPage() {
         var dayStart = dateStart.getDate();
         var monthStart = dateStart.getMonth();
         var yearStart = dateStart.getFullYear();
-        return dayStart+" "+months[monthStart]+" "+yearStart
+        return dayStart + " " + months[monthStart] + " " + yearStart;
       },
-      sortable:true
+      sortable: true,
     },
   ];
 
@@ -194,11 +206,11 @@ export default function ApplyJobPage() {
     });
   });
 
-  dataApply.map((apply) => {
+  data.map((apply) => {
     const buttonStatus = apply.status.status_id >= 5 ? true : false;
     const buttonInterview =
       apply.status.name === "HR Interview" ||
-        apply.status.name === "User Interview"
+      apply.status.name === "User Interview"
         ? false
         : true;
     dataApplyRowTA.push({
@@ -248,7 +260,6 @@ export default function ApplyJobPage() {
           >
             <AiOutlineClose />
           </Button>
-
         </>
       ),
     });
@@ -291,7 +302,7 @@ export default function ApplyJobPage() {
           title: "Application status has been updated",
           showConfirmButton: false,
         })
-          .then(() => { })
+          .then(() => {})
           .catch((error) => {
             console.log(error);
           });
@@ -303,22 +314,6 @@ export default function ApplyJobPage() {
         console.log(error);
       });
   };
-
-  // const show = async () => {
-  //   await axios({
-  //     url: url,
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => {
-  //       setData(response.data.result);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   const handleReject = async (apply) => {
     console.log(apply);
@@ -336,8 +331,8 @@ export default function ApplyJobPage() {
       "November",
       "December",
     ];
-    let applyDate=new Date(apply.date)
-    let cooldownDate=new Date(applyDate.setMonth(applyDate.getMonth()+6))
+    let applyDate = new Date(apply.date);
+    let cooldownDate = new Date(applyDate.setMonth(applyDate.getMonth() + 6));
     console.log(cooldownDate);
     const findApplication = data.find(
       (application) => application.apply_id === apply.apply_id
@@ -352,7 +347,16 @@ export default function ApplyJobPage() {
       status: {
         status_id: 6,
       },
-      cooldown_date:cooldownDate.getFullYear()+"-"+(cooldownDate.getMonth()+1 <10 ? "0"+(cooldownDate.getMonth()+1) : cooldownDate.getMonth()+1)+"-"+(cooldownDate.getDate() < 10 ? "0"+cooldownDate.getDate() : cooldownDate.getDate())
+      cooldown_date:
+        cooldownDate.getFullYear() +
+        "-" +
+        (cooldownDate.getMonth() + 1 < 10
+          ? "0" + (cooldownDate.getMonth() + 1)
+          : cooldownDate.getMonth() + 1) +
+        "-" +
+        (cooldownDate.getDate() < 10
+          ? "0" + cooldownDate.getDate()
+          : cooldownDate.getDate()),
     };
     console.log(object);
     await axios({
@@ -372,7 +376,7 @@ export default function ApplyJobPage() {
           showConfirmButton: false,
           timer: 2000,
         })
-          .then(() => { })
+          .then(() => {})
           .catch((error) => {
             console.log(error);
           });
@@ -417,80 +421,167 @@ export default function ApplyJobPage() {
     }));
   };
 
-  const saveScore = async (apply_id, job_id) => {
+  const saveScore = async (apply_id, job_id, dataLength) => {
+    console.log(apply_id);
+    console.log(job_id);
+    console.log(dataLength);
+    
+    let scoreObject=[]
+    for (let i = 0; i < dataLength; i++) {
+      setDataScore([
+        ...dataScore,
+        {
+          score: dataScore.score,
+          qualificationJob: {
+            qualification_job_id: 1,
+          },
+          qualification: {
+            qualification_id: 1,
+          },
+          career: {
+            job_id: job_id,
+          },
+          apply: {
+            apply_id: apply_id,
+          },
+        },
+      ]);
+    }
+
     const object = {
       score: dataScore.score,
       qualificationJob: {
-        qualification_job_id: 1
+        qualification_job_id: 1,
       },
       qualification: {
-        qualification_id: 1
+        qualification_id: 1,
       },
       career: {
-        job_id: job_id
+        job_id: job_id,
       },
       apply: {
-        apply_id: apply_id
-      }
-    }
-
-    await axios({
-      url: "http://localhost:8088/api/score/",
-      method: "POST",
-      data: JSON.stringify(object),
-      headers: {
-        "Content-Type": "application/json",
+        apply_id: apply_id,
       },
-    })
-  }
+    };
+
+    // await axios({
+    //   url: "http://localhost:8088/api/score/",
+    //   method: "POST",
+    //   data: JSON.stringify(object),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+  };
 
   const ExpandedComponent = ({ data }) => {
-    const dummy = [
-      {
-        name: "april"
-      },
-      {
-        name: "alsha"
-      }]
-    localStorage.setItem("job_id", data.job_id)
-    // getQJ()
-    // console.log(dataQJ.qualification_job_id)
-    axios
-      .get("http://localhost:8088/api/qualification-job/" + localStorage.getItem("job_id"))
-      .then((response) => {
-        setDataQJ(response.data.result)
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    setExpanded(true)
+    let dataQualificationJobId = qualificationJobID.filter(
+      (q) => q.career.job_id == data.job_id
+    );
     return (
       <div style={{ margin: "20px", fontSize: "12px" }}>
-        {/* <Button onClick={() => console.log(dataQJ[0].qualification.name)}>coba</Button> */}
-
-        {dataQJ.map((QJ) => {
+        {dataQualificationJobId.map((QJ, index) => {
           return (
-            <>            
-            <label>{QJ.qualification?.name}</label>
-              <input name="qualification_job_id" onChange={handleChange} type="text" style={{ marginBottom: "10px" }}></input><br />
-            </>
-
-          )
+            <div
+              style={{
+                margin: "10px 10px",
+                display: "flex",
+                flexDirection: "column",
+                width: "1150px",
+              }}
+            >
+              <label>{QJ.qualification.name}</label>
+              <div hidden>
+                <input
+                  name={`qualification_job_id_${index}`}
+                  value={QJ.qualification.qualification_id}
+                  type="text"
+                />
+              </div>
+              <input
+                name={`qualification_job_${index}`}
+                // onChange={handleChange}
+                type="text"
+                hidden
+              />
+            </div>
+          );
         })}
-        {/* <label>SQL : </label><br />
-        <input name="score" value={dataScore.score} onChange={handleChange} type="text" style={{ marginBottom: "10px" }} /><br /> */}
-        {/* <input name="qualification_job_id" onChange={handleChange} type="text" style={{ marginBottom: "10px" }}></input><br /> */}
-        {/* <label>Java : </label><br />
-        <input style={{ marginBottom: "10px" }} /><br />
 
-        <label>OOP : </label><br />
-        <input style={{ marginBottom: "10px" }} /><br /> */}
+        <div
+          style={{
+            margin: "10px 10px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <label>Description</label>
+          <textarea type="text" style={{ width: "915px", marginLeft: "0px" }} />
+        </div>
 
-        <button onClick={() => saveScore(data.index, data.job_id)} style={{ backgroundColor: "green", border: "1px #4d79ff solid", borderRadius: "3px", color: "white" }}>save</button>
+        <div
+          style={{
+            margin: "10px 10px",
+            display: "flex",
+            width: "900px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <button
+            onClick={() =>
+              saveScore(data.index, data.job_id, dataQualificationJobId.length)
+            }
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+            }}
+          >
+            SUBMIT
+          </button>
+
+          <button
+            onClick={() => saveScore(data.index, data.job_id)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft: "10px",
+            }}
+          >
+            ACCEPT
+          </button>
+
+          <button
+            onClick={() => saveScore(data.index, data.job_id)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft: "10px",
+            }}
+          >
+            REJECT
+          </button>
+        </div>
       </div>
-    )
-  }
-
+    );
+  };
 
   return (
     <>
@@ -506,32 +597,35 @@ export default function ApplyJobPage() {
             <div id="apply-table-adm">
               <h1>Job Appliance List</h1>
               <DataTable
-              columns={columnApplyAdmin}
-              data={data}
-              customStyles={customStyle}
-              pagination
-              fixedHeader
-            />
+                columns={columnApplyAdmin}
+                data={data}
+                customStyles={customStyle}
+                pagination
+                fixedHeader
+              />
             </div>
           </>
         ) : (
           <>
-          
             <p id="apply-title">Apply Job List</p>
             <div id="data-tb-apply">
-            <DataTable
-            className="rdt_Table"
-            columns={
-              localStorage.getItem("role") === "TA" ? columnsTA : columns
-            }
-            data={localStorage.getItem("role") === "TA" ?
-              dataApplyRowTA : dataApplyRow
-            }
-            expandableRows expandableRowsComponent={ExpandedComponent}
-            customStyles={customStyle}
-            pagination
-            fixedHeader
-          />
+              <DataTable
+                className="rdt_Table"
+                columns={
+                  localStorage.getItem("role") === "TA" ? columnsTA : columns
+                }
+                data={
+                  localStorage.getItem("role") === "TA"
+                    ? dataApplyRowTA
+                    : dataApplyRow
+                }
+                expandableRows
+                expandableRowsComponent={ExpandedComponent}
+                freezeWhenExpanded={true}
+                customStyles={customStyle}
+                pagination
+                fixedHeader
+              />
             </div>
           </>
         )}

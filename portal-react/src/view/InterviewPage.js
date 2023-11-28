@@ -58,6 +58,33 @@ export default function InterviewPage() {
             selector: (row) => row.ta_name,
         },
         {
+            name: "Date",
+            selector: (row) => row.interview_date,
+        },
+        {
+            name: "Time",
+            selector: (row) => row.interview_time,
+        },
+        {
+            name: "Link",
+            selector: (row) => row.link,
+        },
+        {
+            name: "Action",
+            selector: (row) => row.action
+        }
+    ];
+
+    const columnsTrainer = [
+        {
+            name: "Job Name",
+            selector: (row) => row.job_name,
+        },
+        {
+            name: "Applicant Name",
+            selector: (row) => row.applicant_name,
+        },
+        {
             name: "Trainer Name",
             selector: (row) => row.trainer_name,
         },
@@ -136,10 +163,11 @@ export default function InterviewPage() {
 
     const getTAData = () => {
         axios({
-            url: url,
+            url: url+"ta",
             method: "GET",
         })
             .then((response) => {
+                console.log(response.data.result);
                 setInterview(response.data.result);
             })
             .catch((error) => {
@@ -155,6 +183,7 @@ export default function InterviewPage() {
             method: "GET",
         })
             .then((response) => {
+                console.log(response.data.result);
                 setInterview(response.data.result);
             })
             .catch((error) => {
@@ -174,10 +203,9 @@ export default function InterviewPage() {
                 <DataTable
                     className="rdt_Table"
                     columns={
-                        localStorage.getItem("role") === "TA" ||
-                            localStorage.getItem("role") === "Trainer"
-                            ? columnsTA
-                            : columns
+                        localStorage.getItem("role") === "TA" ? columnsTA :
+                        localStorage.getItem("role") === "Trainer" ? columnsTrainer :
+                        columns
                     }
                     data={dataInterviewRow}
                     customStyles={customStyle}
