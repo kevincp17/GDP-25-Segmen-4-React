@@ -83,12 +83,12 @@ export default function Headers() {
     <div>
       <div
         id={
-          localStorage.getItem("role") === "Admin"
+          localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
             ? "header-div-adm"
             : "header-div"
         }
       >
-        {localStorage.getItem("role") === "Admin" ? (
+        {localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer" ? (
           <>
             <a href="/">
               <img src={weblogo} />
@@ -102,7 +102,7 @@ export default function Headers() {
               <>
                 <button
                   id={
-                    localStorage.getItem("role") === "Admin"
+                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
                       ? "profile-btn-adm"
                       : "profile-btn"
                   }
@@ -153,7 +153,7 @@ export default function Headers() {
 
                 <div
                   id={
-                    localStorage.getItem("role") === "Admin"
+                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
                       ? "nav-menu-adm"
                       : "nav-menu"
                   }
@@ -302,7 +302,8 @@ export default function Headers() {
                     <a href="/login">
                       <button>INTERVIEWS</button>
                     </a>
-                  ) : (
+                  ) : localStorage.getItem("role") === "Admin" ? 
+                  (
                     <>
                       <Link>
                         <button
@@ -364,12 +365,21 @@ export default function Headers() {
                         </div>
                       </Popover>
                     </>
-                  )}
+                  )
+                :
+                localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
+                ?
+                <Link to="/interviews">
+                  <button>INTERVIEWS</button>
+                </Link>
+                :
+                null
+                }
                 </div>
 
                 <div
                   id={
-                    localStorage.getItem("role") === "Admin"
+                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
                       ? "sosmed-btn-adm"
                       : "sosmed-btn"
                   }

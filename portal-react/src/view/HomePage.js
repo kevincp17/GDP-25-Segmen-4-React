@@ -145,7 +145,7 @@ export default function HomePage() {
   return (
     <>
       {
-        localStorage.getItem("role") === "Admin" && localStorage.getItem("token")
+        localStorage.getItem("role") === "Admin"
         ?
           <div id="home-div-adm">
             <div id="dashboard-div">
