@@ -144,14 +144,14 @@ export default function HomePage() {
   ];
   return (
     <>
-      {
-        localStorage.getItem("role") === "Admin"
-        ?
-          <div id="home-div-adm">
-            <div id="dashboard-div">
+      {localStorage.getItem("role") === "Admin" ||
+      localStorage.getItem("role") === "TA" ||
+      localStorage.getItem("role") === "Trainer" ? (
+        <div id="home-div-adm">
+          <div id="dashboard-div">
             <h1>Dashboard</h1>
 
-            <h3 style={{fontSize:"15px"}}>Number of Activities</h3>
+            <h3 style={{ fontSize: "15px" }}>Number of Activities</h3>
             <div id="act-number">
               <div>
                 <p>Job vacancies</p>
@@ -175,67 +175,86 @@ export default function HomePage() {
             </div>
 
             <div id="charts">
-            <div id="job-apply-chart">
-              <h2>Job Appliance Status Chart</h2>
-              <VictoryChart
-                // adding the material theme provided with Victory
-                theme={VictoryTheme.material}
-                domainPadding={20}
-                width={550}
-              >
-                <VictoryAxis
-                  tickValues={[1, 2, 3, 4, 5, 6]}
-                  tickFormat={[
-                    "Screening CV",
-                    "HR Interview",
-                    "User Interview",
-                    "Offering",
-                    "Accepted",
-                    "Rejected",
+              <div id="job-apply-chart">
+                <h2>Job Appliance Status Chart</h2>
+                <VictoryChart
+                  // adding the material theme provided with Victory
+                  theme={VictoryTheme.material}
+                  domainPadding={20}
+                  width={550}
+                >
+                  <VictoryAxis
+                    tickValues={[1, 2, 3, 4, 5, 6]}
+                    tickFormat={[
+                      "Screening CV",
+                      "HR Interview",
+                      "User Interview",
+                      "Offering",
+                      "Accepted",
+                      "Rejected",
+                    ]}
+                    // width={20}
+                    // height={500}
+                    style={{
+                      tickLabels: { fontSize: 13 },
+                    }}
+                  />
+                  <VictoryAxis
+                    dependentAxis
+                    tickFormat={(x) => `${x}`}
+                    style={{
+                      tickLabels: { fontSize: 12 },
+                    }}
+                  />
+                  <VictoryBar
+                    data={data}
+                    x="quarter"
+                    y="earnings"
+                    style={{
+                      data: { fill: "#5088B6" },
+                    }}
+                  />
+                </VictoryChart>
+              </div>
+
+              <div id="interview-pie-chart">
+                <h2>Interview Chart</h2>
+                <VictoryPie
+                  data={[
+                    {
+                      x: `Talent Acquisition \n ${Math.round(
+                        (interviewTAList.length /
+                          (interviewTAList.length +
+                            interviewTrainerList.length)) *
+                          100
+                      )}%`,
+                      y: interviewTAList.length,
+                    },
+                    {
+                      x: `Trainer \n ${Math.round(
+                        (interviewTrainerList.length /
+                          (interviewTAList.length +
+                            interviewTrainerList.length)) *
+                          100
+                      )}%`,
+                      y: interviewTrainerList.length,
+                    },
                   ]}
-                  // width={20}
-                  // height={500}
+                  width={600}
                   style={{
-                    tickLabels: { fontSize: 13 },
+                    labels: {
+                      fontSize: 15,
+                    },
                   }}
+                  colorScale={["#19B8C5", "#264A5C"]}
                 />
-                <VictoryAxis
-                  dependentAxis
-                  tickFormat={(x) => `${x}`}
-                  style={{
-                    tickLabels: { fontSize: 12 },
-                  }}
-                />
-                <VictoryBar 
-                data={data} 
-                x="quarter" 
-                y="earnings" 
-                style={{
-                  data: { fill: "#5088B6" }
-                  }}/>
-              </VictoryChart>
+              </div>
             </div>
 
-            <div id="interview-pie-chart">
-              <h2>Interview Chart</h2>
-              <VictoryPie
-                data={[
-                  { x: `Talent Acquisition \n ${Math.round(interviewTAList.length/(interviewTAList.length+interviewTrainerList.length)*100)}%`, y: interviewTAList.length },
-                  { x: `Trainer \n ${Math.round(interviewTrainerList.length/(interviewTAList.length+interviewTrainerList.length)*100)}%` , y: interviewTrainerList.length },
-                ]}
-                width={600}
-                style={{   
-                  labels: {
-                    fontSize: 15
-                  },
-                }}
-                colorScale={["#19B8C5", "#264A5C"]}
-              />
-            </div>
-            </div>
-        
             <div id="job-apply-date-chart">
-              <h2 style={{fontSize:"15px"}}>Job Appliance Monthly Chart({currentDate.getFullYear()})</h2>
+              <h2 style={{ fontSize: "15px" }}>
+                Job Appliance Monthly Chart({currentDate.getFullYear()})
+              </h2>
               <VictoryChart
                 theme={VictoryTheme.material}
                 domainPadding={20}
@@ -265,8 +284,8 @@ export default function HomePage() {
               </VictoryChart>
             </div>
           </div>
-          </div>
-        :
+        </div>
+      ) : (
         <div id="home-div">
           <div id="home-carousel">
             <p id="first-p">Find Your Dream Job</p>
@@ -318,7 +337,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      }
+      )}
     </>
   );
 }

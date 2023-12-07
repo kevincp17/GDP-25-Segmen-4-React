@@ -63,7 +63,6 @@ export default function Headers() {
     localStorage.clear();
     localStorage.setItem("role", "Guest");
     navigate("/");
-    
   };
 
   const openPopover = Boolean(anchorEl);
@@ -83,14 +82,18 @@ export default function Headers() {
     <div>
       <div
         id={
-          localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
+          localStorage.getItem("role") === "Admin" ||
+          localStorage.getItem("role") === "TA" ||
+          localStorage.getItem("role") === "Trainer"
             ? "header-div-adm"
             : "header-div"
         }
       >
-        {localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer" ? (
+        {localStorage.getItem("role") === "Admin" ||
+        localStorage.getItem("role") === "TA" ||
+        localStorage.getItem("role") === "Trainer" ? (
           <>
-            <a href="/">
+            <a className="home-iconbtn" href="/">
               <img src={weblogo} />
             </a>
 
@@ -102,7 +105,9 @@ export default function Headers() {
               <>
                 <button
                   id={
-                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
+                    localStorage.getItem("role") === "Admin" ||
+                    localStorage.getItem("role") === "TA" ||
+                    localStorage.getItem("role") === "Trainer"
                       ? "profile-btn-adm"
                       : "profile-btn"
                   }
@@ -153,7 +158,9 @@ export default function Headers() {
 
                 <div
                   id={
-                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
+                    localStorage.getItem("role") === "Admin" ||
+                    localStorage.getItem("role") === "TA" ||
+                    localStorage.getItem("role") === "Trainer"
                       ? "nav-menu-adm"
                       : "nav-menu"
                   }
@@ -162,7 +169,7 @@ export default function Headers() {
                     <button>HOME</button>
                   </Link>
 
-                  {localStorage.getItem("role") === "Admin"? (
+                  {localStorage.getItem("role") === "Admin" ? (
                     <>
                       <Link>
                         <button
@@ -182,12 +189,12 @@ export default function Headers() {
                           vertical: "bottom",
                           horizontal: "left",
                         }}
-                        style={{marginLeft:'110px',marginTop:'-35px'}}
+                        style={{ marginLeft: "110px", marginTop: "-35px" }}
                       >
                         <div id="popover">
                           <p id="popover-header">Master Menu</p>
 
-                          <div id="popover-body" style={{height:"160px"}}>
+                          <div id="popover-body" style={{ height: "160px" }}>
                             <a
                               style={
                                 localStorage.getItem("role") !== "Applicant"
@@ -258,7 +265,7 @@ export default function Headers() {
                       vertical: "bottom",
                       horizontal: "left",
                     }}
-                    style={{marginLeft:'110px',marginTop:'-35px'}}
+                    style={{ marginLeft: "110px", marginTop: "-35px" }}
                   >
                     <div id="popover">
                       <p id="popover-header">Career Menu</p>
@@ -302,8 +309,7 @@ export default function Headers() {
                     <a href="/login">
                       <button>INTERVIEWS</button>
                     </a>
-                  ) : localStorage.getItem("role") === "Admin" ? 
-                  (
+                  ) : localStorage.getItem("role") === "Admin" ? (
                     <>
                       <Link>
                         <button
@@ -323,7 +329,7 @@ export default function Headers() {
                           vertical: "bottom",
                           horizontal: "left",
                         }}
-                        style={{marginLeft:'110px',marginTop:'-35px'}}
+                        style={{ marginLeft: "110px", marginTop: "-35px" }}
                       >
                         <div id="popover">
                           <p id="popover-header">Interview Menu</p>
@@ -365,21 +371,19 @@ export default function Headers() {
                         </div>
                       </Popover>
                     </>
-                  )
-                :
-                localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
-                ?
-                <Link to="/interviews">
-                  <button>INTERVIEWS</button>
-                </Link>
-                :
-                null
-                }
+                  ) : localStorage.getItem("role") === "TA" ||
+                    localStorage.getItem("role") === "Trainer" ? (
+                    <Link to="/interviews">
+                      <button>INTERVIEWS</button>
+                    </Link>
+                  ) : null}
                 </div>
 
                 <div
                   id={
-                    localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
+                    localStorage.getItem("role") === "Admin" ||
+                    localStorage.getItem("role") === "TA" ||
+                    localStorage.getItem("role") === "Trainer"
                       ? "sosmed-btn-adm"
                       : "sosmed-btn"
                   }
@@ -399,7 +403,7 @@ export default function Headers() {
           </>
         ) : (
           <>
-            <a href="/">
+            <a className="home-iconbtn" href="/">
               <img src={weblogo} />
             </a>
 
@@ -486,62 +490,61 @@ export default function Headers() {
                 {/* <i class="fa-brands fa-linkedin"></i> */}
                 <LinkedInIcon />
               </button>
-            </div>
+              {localStorage.getItem("role") === "Guest" ? (
+                <a href="/login">
+                  <button id="to-login">LOGIN</button>
+                </a>
+              ) : (
+                <>
+                  <button
+                    id="profile-btn"
+                    aria-describedby={idPopover}
+                    onClick={handleClick}
+                  >
+                    <img src={profile} />
+                  </button>
+                  <Popover
+                    id={idPopover}
+                    open={openPopover}
+                    anchorEl={anchorEl}
+                    onClose={handleClosePopover}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                  >
+                    <div id="popover">
+                      <p id="popover-header">User Menu</p>
 
-            {localStorage.getItem("role") === "Guest" ? (
-              <a href="/login">
-                <button id="to-login">LOGIN</button>
-              </a>
-            ) : (
-              <>
-                <button
-                  id="profile-btn"
-                  aria-describedby={idPopover}
-                  onClick={handleClick}
-                >
-                  <img src={profile} />
-                </button>
-                <Popover
-                  id={idPopover}
-                  open={openPopover}
-                  anchorEl={anchorEl}
-                  onClose={handleClosePopover}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                >
-                  <div id="popover">
-                    <p id="popover-header">User Menu</p>
-
-                    <div
-                      id="popover-body"
-                      style={
-                        localStorage.getItem("role") !== "Applicant"
-                          ? { height: "30px" }
-                          : null
-                      }
-                    >
-                      {localStorage.getItem("role") === "Applicant" ? (
-                        <>
-                          <a href="/profile">View Profile</a>
-                          <hr />
-                          <a id="logout-btn" onClick={logout}>
-                            Logout
-                          </a>
-                        </>
-                      ) : (
-                        <>
-                          <a id="logout-btn" onClick={logout}>
-                            Logout
-                          </a>
-                        </>
-                      )}
+                      <div
+                        id="popover-body"
+                        style={
+                          localStorage.getItem("role") !== "Applicant"
+                            ? { height: "30px" }
+                            : null
+                        }
+                      >
+                        {localStorage.getItem("role") === "Applicant" ? (
+                          <>
+                            <a href="/profile">View Profile</a>
+                            <hr />
+                            <a id="logout-btn" onClick={logout}>
+                              Logout
+                            </a>
+                          </>
+                        ) : (
+                          <>
+                            <a id="logout-btn" onClick={logout}>
+                              Logout
+                            </a>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Popover>
-              </>
-            )}
+                  </Popover>
+                </>
+              )}
+            </div>
           </>
         )}
       </div>
