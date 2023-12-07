@@ -8,12 +8,16 @@ export default function Footer() {
   return (
     <div
       id={
-        localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
+        localStorage.getItem("role") === "Admin" ||
+        localStorage.getItem("role") === "TA" ||
+        localStorage.getItem("role") === "Trainer"
           ? "footer-div-adm"
           : "footer-div"
       }
     >
-      {localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer" ? (
+      {localStorage.getItem("role") === "Admin" ||
+      localStorage.getItem("role") === "TA" ||
+      localStorage.getItem("role") === "Trainer" ? (
         <>
           <div id="footerup">
             <div id="footer-up1">

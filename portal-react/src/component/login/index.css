@@ -1,5 +1,5 @@
 #login-container {
-    height: 650px;
+    height: 100vh;
     width: 100%;
     background-image: url("https://w0.peakpx.com/wallpaper/957/184/HD-wallpaper-blue-background-gradient-geometric-shapes-pointer-abstract.jpg");
     align-items: center;
@@ -61,4 +61,5 @@ input[type=password], select {
     height: 35px;
     border-width: 0px;
     color: white;
+    cursor: pointer;
 }

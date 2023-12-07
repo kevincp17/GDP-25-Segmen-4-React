@@ -8,12 +8,12 @@
 }
 
 #home-carousel{
-    width: 1300px;
+    width: 100vw;
     background-image: url("../image/job-apply.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
     z-index: 0;
-    height: 185px;
+    height: 35vh;
     padding-top: 130px;
 }
 
@@ -73,7 +73,7 @@
 #home-div-down{
     display: flex;
     margin-top: 0px;
-    height:275px
+    height: 30vh;
 }
 
 #home-div-down > div{
