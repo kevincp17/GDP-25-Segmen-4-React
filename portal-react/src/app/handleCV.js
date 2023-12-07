@@ -59,7 +59,7 @@ export default function MyDocument() {
   useEffect(() => {
     
     axios
-      .get(url + localStorage.getItem("userId") + "/skill")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/skill`)
       .then((response) => {
         setSkillList(response.data.result);
         console.log(response.data.result);
@@ -74,7 +74,7 @@ export default function MyDocument() {
       });
 
       axios
-      .get(url + localStorage.getItem("userId") + "/softskill")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/softskill`)
       .then((response) => {
         setSoftSkillsList(response.data.result);
       })
@@ -83,7 +83,7 @@ export default function MyDocument() {
       });
 
       axios
-      .get(url + localStorage.getItem("userId") + "/hardskill")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/hardskill`)
       .then((response) => {
         setHardSkillsList(response.data.result);
       })
@@ -92,7 +92,7 @@ export default function MyDocument() {
       });
 
     axios
-      .get(url + localStorage.getItem("userId") + "/experience")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/experience`)
       .then((response) => {
         console.log(response.data.result);
         setExperienceList(response.data.result);
@@ -102,7 +102,7 @@ export default function MyDocument() {
       });
 
     axios
-      .get(url + localStorage.getItem("userId") + "/education")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/education`)
       .then((response) => {
         console.log(response.data.result);
         setEducationList(response.data.result);
@@ -112,7 +112,7 @@ export default function MyDocument() {
       });
 
     axios
-      .get(url + localStorage.getItem("userId") + "/certificate")
+      .get(`${url}${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}/certificate`)
       .then((response) => {
         console.log(response.data.result);
         setCertificationList(response.data.result);
@@ -122,7 +122,7 @@ export default function MyDocument() {
       });
 
     axios
-      .get(urlProfile + localStorage.getItem("userId"))
+      .get(`${urlProfile} ${localStorage.getItem("role")==="Trainer" ? localStorage.getItem("cvuserId") : localStorage.getItem("userId")}`)
       .then((response) => {
         console.log(response.data.result);
         setUserName(response.data.result.name);
@@ -337,7 +337,10 @@ export default function MyDocument() {
             </View>
 
             <View style={{ padding: "20px 20px 0px 20px" }}>
-              {experienceList.map((e) => {
+              {
+              experienceList.length!=0
+              ?  
+              experienceList.map((e) => {
                 let months = [
                   "January",
                   "February",
@@ -398,7 +401,12 @@ export default function MyDocument() {
                     </Text>
                   </View>
                 );
-              })}
+              })
+            :
+            <Text style={{ fontSize: "13px", fontWeight: "heavy" }}>
+                Experiences haven't been included
+            </Text>
+            }
             </View>
           </View>
 
@@ -425,7 +433,10 @@ export default function MyDocument() {
             </View>
 
             <View style={{ padding: "20px 20px 0px 20px" }}>
-              {certificationList.map((c) => {
+              {
+              certificationList.length!=0
+              ?
+              certificationList.map((c) => {
                 let months = [
                   "January",
                   "February",
@@ -457,7 +468,12 @@ export default function MyDocument() {
                     </Text>
                   </View>
                 );
-              })}
+              })
+            :
+            <Text style={{ fontSize: "13px", fontWeight: "heavy" }}>
+                Certifications haven't been included
+            </Text>
+            }
             </View>
           </View>
 

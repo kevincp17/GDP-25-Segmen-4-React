@@ -1,0 +1,23 @@
+@media only screen and (min-width: 40em) {
+    #home-div{
+        padding-top: 80px;
+    }
+
+    #home-carousel{
+        width: 700px;
+        background-image: url("../../image/job-apply.jpg");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        z-index: 0;
+        height: 185px;
+        padding-top: 130px;
+    }
+
+    #home-carousel > p:first-child{
+        margin-top: -75px;
+        font-size: 32px;
+        font-weight: 600;
+        color:#93C953;
+        padding-left: 120px;
+    }
+}

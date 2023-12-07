@@ -76,14 +76,14 @@ export default function SetInterviewTrainerPage() {
       trainer: {
         user_id: data.trainer.user_id,
       },
-      ta: {
-        user_id: localStorage.getItem("userId"),
-      },
       applicant: {
         user_id: localStorage.getItem("applicantId"),
-        cv: {
-          cv_id: localStorage.getItem("applicantId"),
-        },
+      },
+      cv: {
+        cv_id: localStorage.getItem("applicantId"),
+      },
+      cv_trainer: {
+        cv_id: data.trainer.user_id,
       },
     };
 

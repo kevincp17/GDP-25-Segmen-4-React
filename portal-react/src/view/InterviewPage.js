@@ -7,212 +7,756 @@ import "../css/interviews.css";
 import DataTable from "react-data-table-component";
 import { Button } from "@mui/material";
 import { AiOutlineFile } from "react-icons/ai";
+import { CiLink } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import $ from "jquery";
+import Swal from "sweetalert2";
 
 export default function InterviewPage() {
-    let dataInterviewRow = [];
-    const [interviewList, setInterview] = useState([]);
-    const url = useSelector((state) => state.interview.url);
-    const navigate = useNavigate();
+  let dataInterviewRow = [];
+  const [interviewList, setInterview] = useState([]);
+  const [qualificationJobID, setQualificationJobID] = useState([]);
+  const [dataScore, setDataScore] = useState([]);
+  const [inputForm, setInputForm] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [scoreUpdate, setScoreUpdate] = useState(false);
+  const [selectedScores, setSelectedScores] = useState([]);
 
-    useEffect(() => {
-        if (localStorage.getItem("role") === "TA") {
-            getTAData();
-        } else if (localStorage.getItem("role") === "Applicant") {
-            getApplicantData();
-        } else if (localStorage.getItem("role") === "Trainer") {
-            getTrainerData();
-        }
-    }, []);
+  const url = useSelector((state) => state.interview.url);
+  const navigate = useNavigate();
+  console.log(selectedScores[0]);
+  useEffect(() => {
+    if (localStorage.getItem("role") === "TA") {
+      getTAData();
+    } else if (localStorage.getItem("role") === "Applicant") {
+      getApplicantData();
+    } else if (localStorage.getItem("role") === "Trainer") {
+      getTrainerData();
+    }
+    axios({
+      url: "http://localhost:8088/api/qualification_job/",
+      method: "GET",
+    })
+      .then((response) => {
+        console.log(response.data.result);
+        setQualificationJobID(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-    const columns = [
-        {
-            name: "Job Name",
-            selector: (row) => row.job_name,
-        },
-        {
-            name: "Date",
-            selector: (row) => row.interview_date,
-        },
-        {
-            name: "Time",
-            selector: (row) => row.interview_time,
-        },
-        {
-            name: "Link",
-            selector: (row) => row.link,
-        },
-    ];
+      axios
+      .get("http://localhost:8088/api/score")
+      .then((response) => {
+        setDataScore(response.data.result)
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      setRefresh(false)
+  }, [refresh]);
 
-    const columnsTA = [
-        {
-            name: "Job Name",
-            selector: (row) => row.job_name,
-        },
-        {
-            name: "Applicant Name",
-            selector: (row) => row.applicant_name,
-        },
-        {
-            name: "TA Name",
-            selector: (row) => row.ta_name,
-        },
-        {
-            name: "Date",
-            selector: (row) => row.interview_date,
-        },
-        {
-            name: "Time",
-            selector: (row) => row.interview_time,
-        },
-        {
-            name: "Link",
-            selector: (row) => row.link,
-        },
-        {
-            name: "Action",
-            selector: (row) => row.action
-        }
-    ];
+  let handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputForm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const columns = [
+    {
+      name: "Job Name",
+      selector: (row) => row.interview.career.title,
+    },
+    {
+      name: "Date",
+      selector: (row) => {
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        let dateStart = new Date(row.interview_date);
+        var dayStart = dateStart.getDate();
+        var monthStart = dateStart.getMonth();
+        var yearStart = dateStart.getFullYear();
+        return dayStart + " " + months[monthStart] + " " + yearStart;
+      },
+    },
+    {
+      name: "Time",
+      selector: (row) => {
+        let dateStart = new Date(row.interview_date);
+        var hourStart = dateStart.getHours();
+        var minuteStart = dateStart.getMinutes();
+        return (
+          hourStart + ":" + minuteStart + " " + (hourStart >= 12 ? "PM" : "AM")
+        );
+      },
+    },
+    {
+      name: "Link",
+      selector: (row) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {/* <Button
+              id="btn-cv"
+              variant="primary"
+              onClick={() => handleMakeCV(row.applicant.user_id)}
+              style={{marginRight:'5px'}}
+            >
+              <AiOutlineFile />
+            </Button> */}
 
-    const columnsTrainer = [
-        {
-            name: "Job Name",
-            selector: (row) => row.job_name,
-        },
-        {
-            name: "Applicant Name",
-            selector: (row) => row.applicant_name,
-        },
-        {
-            name: "Trainer Name",
-            selector: (row) => row.trainer_name,
-        },
-        {
-            name: "Date",
-            selector: (row) => row.interview_date,
-        },
-        {
-            name: "Time",
-            selector: (row) => row.interview_time,
-        },
-        {
-            name: "Link",
-            selector: (row) => row.link,
-        },
-        {
-            name: "Action",
-            selector: (row) => row.action
-        }
-    ];
+            {/* <Button
+              id="btn-link"
+              variant="secondary"
+              href={row.link}
+            >
+              <CiLink />
+            </Button> */}
+            <a href={row.link} id="btn-link">
+              <CiLink />
+            </a>
+          </div>
+        );
+      },
+    },
+  ];
 
-    const customStyle = {
-        table: {
-            style: {
-                borderRadius: "10px",
-            },
-        },
-    };
+  const columnsScore = [
+    {
+      name: "Skill Name",
+      selector: (row) => row.qualificationJob.qualification.name,
+    },
+    {
+      name: "Score",
+      selector: (row) => row.score,
+    },
+  ];
 
-    interviewList.map((interview) => {
-        const formatTime = (time) => {
-            const options = { hour: "2-digit", minute: "2-digit", hour12: false };
-            return new Date(time).toLocaleTimeString(undefined, options);
+  const columnsTA = [
+    {
+      name: "Job Name",
+      selector: (row) => row.interview.career.title,
+    },
+    {
+      name: "Applicant Name",
+      selector: (row) => row.cv.name,
+    },
+    {
+      name: "TA Name",
+      selector: (row) => row.cv_ta.name,
+    },
+    {
+      name: "Date",
+      selector: (row) => {
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        let dateStart = new Date(row.interview_date);
+        var dayStart = dateStart.getDate();
+        var monthStart = dateStart.getMonth();
+        var yearStart = dateStart.getFullYear();
+        return dayStart + " " + months[monthStart] + " " + yearStart;
+      },
+    },
+    {
+      name: "Time",
+      selector: (row) => {
+        let dateStart = new Date(row.interview_date);
+        var hourStart = dateStart.getHours();
+        var minuteStart = dateStart.getMinutes();
+        return (
+          hourStart + ":" + minuteStart + " " + (hourStart >= 12 ? "PM" : "AM")
+        );
+      },
+    },
+    {
+      name: "Action",
+      selector: (row) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {/* <Button
+              id="btn-cv"
+              variant="primary"
+              onClick={() => handleMakeCV(row.applicant.user_id)}
+              style={{marginRight:'5px'}}
+            >
+              <AiOutlineFile />
+            </Button> */}
+
+            {/* <Button
+              id="btn-link"
+              variant="secondary"
+              href={row.link}
+            >
+              <CiLink />
+            </Button> */}
+            <a id="btn-cv" onClick={() => handleMakeCV(row.applicant.user_id)}>
+              <AiOutlineFile />
+            </a>
+            <p style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+            <a href={row.link} id="btn-link">
+              <CiLink />
+            </a>
+          </div>
+        );
+      },
+      width: "180px",
+    },
+  ];
+
+  const columnsTrainer = [
+    {
+      name: "Job Name",
+      selector: (row) => row.interview.career.title,
+    },
+    {
+      name: "Applicant Name",
+      selector: (row) => row.cv.name,
+    },
+    {
+      name: "Trainer Name",
+      selector: (row) => row.cv_trainer.name,
+    },
+    {
+      name: "Date",
+      selector: (row) => {
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        let dateStart = new Date(row.interview_date);
+        var dayStart = dateStart.getDate();
+        var monthStart = dateStart.getMonth();
+        var yearStart = dateStart.getFullYear();
+        return dayStart + " " + months[monthStart] + " " + yearStart;
+      },
+    },
+    {
+      name: "Time",
+      selector: (row) => {
+        let dateStart = new Date(row.interview_date);
+        var hourStart = dateStart.getHours();
+        var minuteStart = dateStart.getMinutes();
+        return (
+          hourStart + ":" + minuteStart + " " + (hourStart >= 12 ? "PM" : "AM")
+        );
+      },
+    },
+    {
+      name: "Action",
+      selector: (row) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {/* <Button
+              id="btn-cv"
+              variant="primary"
+              onClick={() => handleMakeCV(row.applicant.user_id)}
+              style={{marginRight:'5px'}}
+            >
+              <AiOutlineFile />
+            </Button> */}
+
+            {/* <Button
+              id="btn-link"
+              variant="secondary"
+              href={row.link}
+            >
+              <CiLink />
+            </Button> */}
+            <a id="btn-cv" onClick={() => handleMakeCV(row.applicant.user_id)}>
+              <AiOutlineFile />
+            </a>
+            <p style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+            <a href={row.link} id="btn-link">
+              <CiLink />
+            </a>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const customStyle = {
+    table: {
+      style: {
+        borderRadius: "10px",
+      },
+    },
+  };
+
+  const getApplicantData = () => {
+    axios({
+      url: url + localStorage.getItem("userId"),
+      method: "GET",
+    })
+      .then((response) => {
+        setInterview(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getTAData = () => {
+    axios({
+      url: url + "ta",
+      method: "GET",
+    })
+      .then((response) => {
+        console.log(response.data.result);
+        setInterview(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getTrainerData = () => {
+    axios({
+      url:
+        "http://localhost:8088/api/interviewsTrainer/" +
+        localStorage.getItem("userId"),
+      method: "GET",
+    })
+      .then((response) => {
+        console.log(response.data.result);
+        setInterview(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleMakeCV = (id) => {
+    localStorage.setItem("cvuserId", id);
+    navigate("/cv");
+  };
+
+  const saveScore = (apply, dataLength) => {
+    console.log(apply);
+    console.log(dataLength);
+
+    let scoreObject = [];
+    for (let i = 0; i < dataLength; i++) {
+      console.log($(`#qualification_job_${i}`).val());
+      console.log($(`#qualification_job_id_${i}`).val());
+      console.log($('#score_des').val());
+      let objScore={
+        score: $(`#qualification_job_${i}`).val(),
+        description:$('#score_des').val(),
+          qualificationJob: {
+            qualification_job_id: $(`#qualification_job_id_${i}`).val(),
+          },
+          interviewUser: {
+            interview_user_id: apply.interview_user_id,
+          },
+      }
+      
+        axios
+      .post("http://localhost:8088/api/score", JSON.stringify(objScore), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setRefresh(true)
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  };
+
+  const updateScore=(id)=>{
+    let dataScoresUpdate = dataScore.filter(
+      (q) => q.interviewUser.interview_user_id == id
+    );
+    setSelectedScores(dataScoresUpdate)
+    setScoreUpdate(true)
+  }
+
+  const ExpandedComponent = ({ data }) => {
+    console.log(data);
+    let dataQualificationJobId = qualificationJobID.filter(
+      (q) => q.career.job_id == data.interview.career.job_id
+    );
+
+    let dataScores = dataScore.filter(
+      (q) => q.interviewUser.interview_user_id == data.interview_user_id
+    );
+    console.log(dataQualificationJobId);
+    console.log(dataScores);
+  
+    let scoreSum=0
+    dataScores.map(sc=>scoreSum+=sc.score)
+
+    const handleAcceptApplicant=(apply)=>{
+      console.log(apply);
+      axios
+      .get("http://localhost:8088/api/apply/" + apply.applicant.user_id+"/"+apply.interview.career.job_id)
+      .then((response) => {
+        const object = {
+          apply_id: response.data.result[0].apply_id,
+          status: {
+            status_id: 4,
+          },
         };
-
-        console.log(interview)
-        localStorage.getItem("role") === "TA" ||
-            localStorage.getItem("role") === "Trainer"
-            ? dataInterviewRow.push({
-                job_name: interview.interview?.career?.title,
-                interview_date: interview.interview_date.split("T")[0],
-                interview_time: formatTime(interview.interview_date),
-                applicant_name: interview.applicant.cv?.name,
-                ta_name: interview.ta?.cv?.name,
-                trainer_name: interview.trainer?.cv?.name,
-                link: interview.link,
-                action: <Button
-                    id="btn-cv"
-                    variant="primary"
-                    onClick={() => handleMakeCV(interview.applicant.user_id)}
-                >
-                    <AiOutlineFile />
-                </Button>
-            })
-            : dataInterviewRow.push({
-                job_name: interview.interview?.career?.title,
-                interview_date: interview.interview_date.split("T")[0],
-                interview_time: formatTime(interview.interview_date),
-
-                link: interview.link,
-            });
-    });
-
-    const getApplicantData = () => {
+        console.log(object);
+        
         axios({
-            url: url + localStorage.getItem("userId"),
-            method: "GET",
-        })
-            .then((response) => {
-                setInterview(response.data.result);
-            })
+        url: "http://localhost:8088/api/apply/" + response.data.result[0].apply_id,
+        method: "POST",
+        data: JSON.stringify(object),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Application status has been updated",
+            showConfirmButton: false,
+          })
+            .then(() => {})
             .catch((error) => {
-                console.log(error);
+              console.log(error);
             });
-    };
+          // show();
+          setRefresh(true);
+          // navigate("/apply_job")
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+    }
 
-    const getTAData = () => {
+    const handleRejectApplicant=(apply)=>{
+      console.log(apply);
+      axios
+      .get("http://localhost:8088/api/apply/" + apply.applicant.user_id+"/"+apply.interview.career.job_id)
+      .then((response) => {
+        const object = {
+          apply_id: response.data.result[0].apply_id,
+          status: {
+            status_id: 6,
+          },
+        };
+        console.log(object);
+        
         axios({
-            url: url+"ta",
-            method: "GET",
-        })
-            .then((response) => {
-                console.log(response.data.result);
-                setInterview(response.data.result);
-            })
+        url: "http://localhost:8088/api/apply/" + response.data.result[0].apply_id,
+        method: "POST",
+        data: JSON.stringify(object),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Application status has been updated",
+            showConfirmButton: false,
+          })
+            .then(() => {})
             .catch((error) => {
-                console.log(error);
+              console.log(error);
             });
-    };
-
-    const getTrainerData = () => {
-        axios({
-            url:
-                "http://localhost:8088/api/interviewsTrainer/" +
-                localStorage.getItem("userId"),
-            method: "GET",
+          // show();
+          setRefresh(true);
+          // navigate("/apply_job")
         })
-            .then((response) => {
-                console.log(response.data.result);
-                setInterview(response.data.result);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-    const handleMakeCV = (id) => {
-        localStorage.setItem("userId", id);
-        navigate("/cv");
-    };
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Handle any errors
+      });
+    }
 
     return (
-        <div id="apply-div">
-            <p id="apply-title">Interview List</p>
-            <div id="data-tb-apply">
-                <DataTable
-                    className="rdt_Table"
-                    columns={
-                        localStorage.getItem("role") === "TA" ? columnsTA :
-                        localStorage.getItem("role") === "Trainer" ? columnsTrainer :
-                        columns
-                    }
-                    data={dataInterviewRow}
-                    customStyles={customStyle}
-                    pagination
-                    fixedHeader
-                />
-            </div>
+      <div style={{ margin: "20px", fontSize: "12px" }}>
+        {
+        dataScores.length>0 && !scoreUpdate
+        ?
+        <div style={{display:"flex",flexDirection:'column' }}>
+        <h1>Result: {scoreSum/dataScores.length<70 ? <b style={{color:'#D62F40'}}>Not Recommended</b> : <b style={{color:'#93C953'}} >Recommended</b>} </h1>
+        <DataTable
+        className="rdt_Table"
+        columns={columnsScore}
+        data={dataScores}
+        customStyles={customStyle}
+        freezeWhenExpanded={true}
+        pagination
+        fixedHeader
+          />
+          <h1>Description</h1>
+          <p style={{marginTop:"-10px",fontSize:'16px'}}>{dataScores[0].description!=null ? dataScores[0].description : "No Description"}</p>
+          <div
+          style={{
+            margin: "10px 10px",
+            display: "flex",
+            width: "750px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <button
+            onClick={()=>updateScore(data.interview_user_id)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft: "10px",
+            }}
+          >
+            UPDATE
+          </button>
+
+          <button
+          onClick={()=>handleAcceptApplicant(data)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft: "10px",
+            }}
+          >
+            ACCEPT
+          </button>
+
+          <button
+          onClick={()=>handleRejectApplicant(data)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft: "10px",
+            }}
+          >
+            REJECT
+          </button>
         </div>
+        </div>
+        :
+        <div>
+          <h1 style={{marginLeft:'40px'}}>Skill Evaluation</h1>
+          {
+          dataQualificationJobId.map((QJ, index) => {
+            // console.log(selectedScores[index].score);
+            // console.log(selectedScores[index]==undefined);
+            if(selectedScores[index]!=undefined){
+              $(`#qualification_job_${index}`).val(selectedScores[index].score)
+              $(`#score_des`).val(selectedScores[index].description)
+            }
+            else{
+              $(`#qualification_job_${index}`).val("")
+            }
+            
+          return (
+            <div
+              style={{
+                margin: "10px 10px 10px 40px",
+                display: "flex",
+                flexDirection: "column",
+                width: "800px",
+              }}
+            >
+              <label>{QJ.qualification.name}</label>
+              <div hidden>
+                <input
+                  id={`qualification_job_id_${index}`}
+                  name={`qualification_job_id_${index}`}
+                  value={QJ.qualification_job_id}
+                  type="text"
+                />
+              </div>
+              <input
+                id={`qualification_job_${index}`}
+                name={`qualification_job_${index}`}
+                type="text"
+              />
+            </div>
+          );
+        })}
+
+        <div
+          style={{
+            margin: "10px 10px 10px 40px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <label>Description</label>
+          <textarea id="score_des" type="text" style={{ width: "635px", marginLeft: "0px" }} />
+        </div>
+
+        <div
+          style={{
+            margin: "10px 10px 10px 10px",
+            display: "flex",
+            width: "750px",
+            justifyContent: "flex-end",
+          }}
+        >
+          <button
+            onClick={() => saveScore(data, dataQualificationJobId.length)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+            }}
+          >
+            SUBMIT
+          </button>
+
+            {
+              scoreUpdate && dataScores.length>0
+              ?
+              <button
+            onClick={() => setScoreUpdate(false)}
+            style={{
+              border: "#CCCCCC 2px solid",
+              borderRadius: "30px",
+              height: "40px",
+              width: "100px",
+              backgroundColor: "white",
+              color: "#93C953",
+              fontFamily: "Arial, Helvetica, sans-serif",
+              fontWeight: "600",
+              marginLeft:"10px",
+              marginRight:"80px"
+            }}
+          >
+            CANCEL
+          </button>
+              :
+              null
+            }
+        </div>
+        </div>
+        }
+      </div>
     );
+  };
+
+  return (
+    <div
+      id={
+        localStorage.getItem("role") === "Admin" ||
+        localStorage.getItem("role") === "TA" ||
+        localStorage.getItem("role") === "Trainer"
+          ? "apply-div-adm"
+          : "apply-div"
+      }
+    >
+      <p id="apply-title">
+        {localStorage.getItem("role") === "TA"
+          ? "Interview TA List"
+          : localStorage.getItem("role") === "Trainer"
+          ? "Interview Trainer List"
+          : localStorage.getItem("role") === "Applicant"
+          ? "Interview Applicant List"
+          : null}
+      </p>
+      <div id="data-tb-apply">
+        {localStorage.getItem("role") === "Trainer" ? (
+          <DataTable
+            className="rdt_Table"
+            columns={
+              localStorage.getItem("role") === "TA"
+                ? columnsTA
+                : localStorage.getItem("role") === "Trainer"
+                ? columnsTrainer
+                : columns
+            }
+            data={interviewList}
+            customStyles={customStyle}
+            expandableRows
+            expandableRowsComponent={ExpandedComponent}
+            freezeWhenExpanded={true}
+            pagination
+            fixedHeader
+          />
+        ) : (
+          <DataTable
+            className="rdt_Table"
+            columns={
+              localStorage.getItem("role") === "TA"
+                ? columnsTA
+                : localStorage.getItem("role") === "Trainer"
+                ? columnsTrainer
+                : columns
+            }
+            data={interviewList}
+            customStyles={customStyle}
+            pagination
+            fixedHeader
+          />
+        )}
+      </div>
+    </div>
+  );
 }

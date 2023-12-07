@@ -10,6 +10,7 @@ import {
 } from "victory";
 import axios from "axios";
 import "../css/home.css";
+// import "../css/mobile/home.css";
 
 export default function HomePage() {
   console.log(localStorage.getItem("role"));
@@ -145,7 +146,7 @@ export default function HomePage() {
   return (
     <>
       {
-        localStorage.getItem("role") === "Admin"
+        localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
         ?
           <div id="home-div-adm">
             <div id="dashboard-div">

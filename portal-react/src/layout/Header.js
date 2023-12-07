@@ -62,7 +62,7 @@ export default function Headers() {
     Cookies.remove("email");
     localStorage.clear();
     localStorage.setItem("role", "Guest");
-    navigate("/");
+    navigate("/login");
     
   };
 

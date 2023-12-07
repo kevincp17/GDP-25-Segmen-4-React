@@ -75,6 +75,12 @@ export default function SetInterviewTAPage() {
       status: {
         status_id: data.status.status_id,
       },
+      cv: {
+        cv_id: data.applicant.user_id,
+      },
+      cv_ta: {
+        cv_id: data.ta.user_id,
+      },
     };
 
     axios

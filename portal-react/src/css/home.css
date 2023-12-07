@@ -61,7 +61,7 @@
     z-index: 1;
 }
 
-#home-carousel-adm > p:last-child{
+#home-carousel > p:last-child{
     margin-top: -10px;
     font-size: 30px;
     font-weight: 600;

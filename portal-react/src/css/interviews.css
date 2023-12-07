@@ -4,3 +4,10 @@
     padding-left: 100px;
     padding-right: 100px;
 }
+
+#btn-link{
+    font-size: 20px;
+    color: #ff8c1a;
+    height: 27px;
+    /* padding-top: 20px; */
+}

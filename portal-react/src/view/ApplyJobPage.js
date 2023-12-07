@@ -101,22 +101,38 @@ export default function ApplyJobPage() {
       });
   };
 
-  useEffect(() => {
-    getQJ();
-  }, [expanded]);
-
   const columns = [
-    {
-      name: "No.",
-      selector: (row) => row.index,
-    },
+    // {
+    //   name: "No.",
+    //   selector: (row) => row.index,
+    // },
     {
       name: "Job Name",
       selector: (row) => row.job_name,
     },
     {
       name: "Apply Date",
-      selector: (row) => row.apply_date,
+      selector: (row) => {
+        let months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        let dateStart = new Date(row.apply_date);
+        var dayStart = dateStart.getDate();
+        var monthStart = dateStart.getMonth();
+        var yearStart = dateStart.getFullYear();
+        return dayStart + " " + months[monthStart] + " " + yearStart;
+      },
     },
     {
       name: "Status",
@@ -125,10 +141,10 @@ export default function ApplyJobPage() {
   ];
 
   const columnsTA = [
-    {
-      name: "No.",
-      selector: (row) => row.index,
-    },
+    // {
+    //   name: "No.",
+    //   selector: (row) => row.index,
+    // },
     {
       name: "Job Name",
       selector: (row) => row.job_name,
@@ -210,7 +226,8 @@ export default function ApplyJobPage() {
     const buttonStatus = apply.status.status_id >= 5 ? true : false;
     const buttonInterview =
       apply.status.name === "HR Interview" ||
-      apply.status.name === "User Interview"
+      apply.status.name === "User Interview" ||
+      apply.status.name === "Offering"
         ? false
         : true;
     dataApplyRowTA.push({
@@ -220,15 +237,53 @@ export default function ApplyJobPage() {
       applicant_name: apply.cv.name,
       status: apply.status.name,
       action: (
-        <>
-          <Button
+        <div style={{display:'flex',alignItems:"center"}}>
+          <a id="btn-cv" onClick={() => handleMakeCV(apply.applicant.user_id)}>
+            <AiOutlineFile />
+          </a>
+          <p hidden={buttonInterview} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+
+          <a
+            id="btn-itv"
+            hidden={buttonInterview}
+            onClick={() =>
+              handleSetInterview(
+                apply.status.status_id,
+                apply.career.job_id,
+                apply.career.title,
+                apply.cv.cv_id,
+                apply.cv.name
+              )
+            }
+          >
+            <AiOutlineLink />
+          </a>
+          <p hidden={buttonStatus} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+
+          <a
+            id="btn-check"
+            hidden={buttonStatus}
+            onClick={() => handleAccept(apply.apply_id, apply.status.status_id)}
+          >
+            <AiOutlineCheck />
+          </a>
+          <p hidden={buttonStatus} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+
+          <a
+            id="btn-x"
+            hidden={buttonStatus}
+            onClick={() => handleReject(apply)}
+          >
+            <AiOutlineClose />
+          </a>
+          {/* <Button
             id="btn-cv"
             variant="primary"
             onClick={() => handleMakeCV(apply.applicant.user_id)}
           >
             <AiOutlineFile />
-          </Button>{" "}
-          <Button
+          </Button>{" "} */}
+          {/* <Button
             id="btn-itv"
             variant="secondary"
             hidden={buttonInterview}
@@ -243,24 +298,25 @@ export default function ApplyJobPage() {
             }
           >
             <AiOutlineLink />
-          </Button>{" "}
-          <Button
+          </Button>{" "} */}
+
+          {/* <Button
             id="btn-check"
             variant="success"
             hidden={buttonStatus}
             onClick={() => handleAccept(apply.apply_id, apply.status.status_id)}
           >
             <AiOutlineCheck />
-          </Button>{" "}
-          <Button
+          </Button>{" "} */}
+          {/* <Button
             id="btn-x"
             variant="danger"
             hidden={buttonStatus}
             onClick={() => handleReject(apply)}
           >
             <AiOutlineClose />
-          </Button>
-        </>
+          </Button> */}
+        </div>
       ),
     });
   });
@@ -368,13 +424,12 @@ export default function ApplyJobPage() {
       },
     })
       .then((response) => {
-        // setShowToast(true)
+        console.log(response);
         Swal.fire({
           position: "center",
           icon: "success",
           title: "Application status has been updated",
           showConfirmButton: false,
-          timer: 2000,
         })
           .then(() => {})
           .catch((error) => {
@@ -406,6 +461,9 @@ export default function ApplyJobPage() {
     if (id === 3) {
       navigate("/setinterview-trainer");
     }
+    if (id === 4) {
+      navigate("/set-offering");
+    }
   };
 
   const handleMakeCV = (id) => {
@@ -425,8 +483,8 @@ export default function ApplyJobPage() {
     console.log(apply_id);
     console.log(job_id);
     console.log(dataLength);
-    
-    let scoreObject=[]
+
+    let scoreObject = [];
     for (let i = 0; i < dataLength; i++) {
       setDataScore([
         ...dataScore,
@@ -447,22 +505,6 @@ export default function ApplyJobPage() {
         },
       ]);
     }
-
-    const object = {
-      score: dataScore.score,
-      qualificationJob: {
-        qualification_job_id: 1,
-      },
-      qualification: {
-        qualification_id: 1,
-      },
-      career: {
-        job_id: job_id,
-      },
-      apply: {
-        apply_id: apply_id,
-      },
-    };
 
     // await axios({
     //   url: "http://localhost:8088/api/score/",
@@ -587,7 +629,9 @@ export default function ApplyJobPage() {
     <>
       <div
         id={
-          localStorage.getItem("role") === "Admin"
+          localStorage.getItem("role") === "Admin" ||
+          localStorage.getItem("role") === "TA" ||
+          localStorage.getItem("role") === "Trainer"
             ? "apply-div-adm"
             : "apply-div"
         }
@@ -619,9 +663,9 @@ export default function ApplyJobPage() {
                     ? dataApplyRowTA
                     : dataApplyRow
                 }
-                expandableRows
-                expandableRowsComponent={ExpandedComponent}
-                freezeWhenExpanded={true}
+                // expandableRows
+                // expandableRowsComponent={ExpandedComponent}
+                // freezeWhenExpanded={true}
                 customStyles={customStyle}
                 pagination
                 fixedHeader

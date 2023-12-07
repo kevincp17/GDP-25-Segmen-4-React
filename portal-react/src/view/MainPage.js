@@ -10,14 +10,14 @@ export default function MainPage() {
   return (
     <div
       style={
-        localStorage.getItem("role") === "Admin"
+        localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA"|| localStorage.getItem("role") === "Trainer"
           ? { display: "flex", width: "100%" }
           : null
       }
     >
       <Headers />
       {
-      localStorage.getItem("role") === "Admin" && localStorage.getItem("token")!=null ? (
+      localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer" && localStorage.getItem("token")!=null ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Outlet />
