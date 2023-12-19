@@ -15,8 +15,11 @@ import Swal from "sweetalert2";
 export default function InterviewPage() {
   let dataInterviewRow = [];
   const [interviewList, setInterview] = useState([]);
+  const [interviewTrainer, setInterviewTrainer] = useState([]);
+  const [accepted, setAccepted] = useState([]);
   const [qualificationJobID, setQualificationJobID] = useState([]);
   const [dataScore, setDataScore] = useState([]);
+  const [averageScore, setAverageScore] = useState([]);
   const [inputForm, setInputForm] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [scoreUpdate, setScoreUpdate] = useState(false);
@@ -24,7 +27,33 @@ export default function InterviewPage() {
 
   const url = useSelector((state) => state.interview.url);
   const navigate = useNavigate();
-  console.log(selectedScores[0]);
+
+  let interviewUserAccept=[]
+  let interviewUserAllScore=[]
+  
+  for(let i=0;i<accepted.length;i++){
+    for(let j=0;j<interviewTrainer.length;j++){
+      if(accepted[i].applicant.user_id==interviewTrainer[j].applicant.user_id && accepted[i].career.job_id==interviewTrainer[j].interview.career.job_id){
+        interviewUserAccept.push(interviewTrainer[j])
+      }
+    }
+  }
+
+  console.log(interviewUserAccept);
+  for(let i=0;i<interviewUserAccept.length;i++){
+    for(let j=0;j<dataScore.length;j++){
+      if(dataScore[j].interviewUser.interview_user_id == interviewUserAccept[i].interview_user_id){
+        interviewUserAllScore.push(dataScore[j])
+      }
+    }
+  }
+
+  let sumAllScores=0
+  interviewUserAllScore.map(as=>{
+    sumAllScores+=as.score
+  })
+
+
   useEffect(() => {
     if (localStorage.getItem("role") === "TA") {
       getTAData();
@@ -54,6 +83,37 @@ export default function InterviewPage() {
       .catch((error) => {
         console.log(error);
       });
+
+      axios
+      .get("http://localhost:8088/api/interviews/trainer")
+      .then((response) => {
+        setInterviewTrainer(response.data.result)
+        console.log(response.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      axios
+      .get("http://localhost:8088/api/applyaccept")
+      .then((response) => {
+        console.log(response.data.result);
+        setAccepted(response.data.result)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      axios
+      .get("http://localhost:8088/api/interviewsTrainer/average")
+      .then((response) => {
+        console.log(response.data.result);
+        setAverageScore(response.data.result)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      
       setRefresh(false)
   }, [refresh]);
 
@@ -419,6 +479,11 @@ export default function InterviewPage() {
     let dataScores = dataScore.filter(
       (q) => q.interviewUser.interview_user_id == data.interview_user_id
     );
+
+    let averageJobScore = averageScore.filter(
+      (a) => a[0] == data.interview.career.job_id
+    );
+    console.log(averageJobScore.length);
     console.log(dataQualificationJobId);
     console.log(dataScores);
   
@@ -460,7 +525,7 @@ export default function InterviewPage() {
             });
           // show();
           setRefresh(true);
-          // navigate("/apply_job")
+          // navigate("expand/apply_job")
         })
         .catch((error) => {
           console.log(error);
@@ -523,77 +588,74 @@ export default function InterviewPage() {
         dataScores.length>0 && !scoreUpdate
         ?
         <div style={{display:"flex",flexDirection:'column' }}>
-        <h1>Result: {scoreSum/dataScores.length<70 ? <b style={{color:'#D62F40'}}>Not Recommended</b> : <b style={{color:'#93C953'}} >Recommended</b>} </h1>
         <DataTable
         className="rdt_Table"
         columns={columnsScore}
         data={dataScores}
         customStyles={customStyle}
-        freezeWhenExpanded={true}
-        pagination
-        fixedHeader
           />
-          <h1>Description</h1>
+          <div style={{display:'flex'}}>
+            <h1 style={{flexBasis:'50%'}}>Description</h1>
+            <p style={{fontSize:'16px',display:'flex',alignItems:'flex-end',marginLeft:'170px'}}>Result: 
+            {
+            averageJobScore.length==0 
+            ? 
+            scoreSum/dataScores.length<70 
+            ? <b style={{color:'#D62F40'}}> Not Recommended</b> : <b style={{color:'#93C953'}} > Recommended</b>
+            : 
+            scoreSum/dataScores.length<averageJobScore[0][1] ? <b style={{color:'#D62F40'}}> Not Recommended</b> : <b style={{color:'#93C953'}} > Recommended</b>} </p>
+          </div>
           <p style={{marginTop:"-10px",fontSize:'16px'}}>{dataScores[0].description!=null ? dataScores[0].description : "No Description"}</p>
-          <div
-          style={{
-            margin: "10px 10px",
-            display: "flex",
-            width: "750px",
-            justifyContent: "flex-end",
-          }}
-        >
-          <button
-            onClick={()=>updateScore(data.interview_user_id)}
-            style={{
-              border: "#CCCCCC 2px solid",
-              borderRadius: "30px",
-              height: "40px",
-              width: "100px",
-              backgroundColor: "white",
-              color: "#93C953",
-              fontFamily: "Arial, Helvetica, sans-serif",
-              fontWeight: "600",
-              marginLeft: "10px",
-            }}
-          >
-            UPDATE
-          </button>
 
-          <button
-          onClick={()=>handleAcceptApplicant(data)}
+          {
+            data.apply.status.status_id==3
+            ?
+            <div
             style={{
-              border: "#CCCCCC 2px solid",
-              borderRadius: "30px",
-              height: "40px",
-              width: "100px",
-              backgroundColor: "white",
-              color: "#93C953",
-              fontFamily: "Arial, Helvetica, sans-serif",
-              fontWeight: "600",
-              marginLeft: "10px",
+              margin: "10px 10px",
+              display: "flex",
+              width: "750px",
+              justifyContent: "flex-end",
             }}
           >
-            ACCEPT
-          </button>
-
-          <button
-          onClick={()=>handleRejectApplicant(data)}
-            style={{
-              border: "#CCCCCC 2px solid",
-              borderRadius: "30px",
-              height: "40px",
-              width: "100px",
-              backgroundColor: "white",
-              color: "#93C953",
-              fontFamily: "Arial, Helvetica, sans-serif",
-              fontWeight: "600",
-              marginLeft: "10px",
-            }}
-          >
-            REJECT
-          </button>
-        </div>
+            <button
+            onClick={()=>handleAcceptApplicant(data)}
+              style={{
+                border: "#CCCCCC 2px solid",
+                borderRadius: "30px",
+                height: "40px",
+                width: "100px",
+                backgroundColor: "white",
+                color: "#93C953",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "600",
+                marginLeft: "10px",
+              }}
+            >
+              ACCEPT
+            </button>
+  
+            <button
+            onClick={()=>handleRejectApplicant(data)}
+              style={{
+                border: "#CCCCCC 2px solid",
+                borderRadius: "30px",
+                height: "40px",
+                width: "100px",
+                backgroundColor: "white",
+                color: "#D62F40",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontWeight: "600",
+                marginLeft: "10px",
+              }}
+            >
+              REJECT
+            </button>
+          </div>
+          :
+          null
+          }
+          
         </div>
         :
         <div>

@@ -35,6 +35,9 @@ export default function SetInterviewTrainerPage() {
         cv_id: localStorage.getItem("applicantId"),
       },
     },
+    apply:{
+      apply_id:localStorage.getItem("applyId"),
+    }
   });
 
   useEffect(() => {
@@ -85,6 +88,9 @@ export default function SetInterviewTrainerPage() {
       cv_trainer: {
         cv_id: data.trainer.user_id,
       },
+      apply:{
+        apply_id:data.apply.apply_id
+      }
     };
 
     axios({

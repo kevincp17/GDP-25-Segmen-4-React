@@ -148,6 +148,7 @@ export default function HomePage() {
       {
         localStorage.getItem("role") === "Admin" || localStorage.getItem("role") === "TA" || localStorage.getItem("role") === "Trainer"
         ?
+        (
           <div id="home-div-adm">
             <div id="dashboard-div">
             <h1>Dashboard</h1>

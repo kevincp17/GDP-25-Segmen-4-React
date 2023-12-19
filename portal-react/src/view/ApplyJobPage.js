@@ -248,6 +248,7 @@ export default function ApplyJobPage() {
             hidden={buttonInterview}
             onClick={() =>
               handleSetInterview(
+                apply.apply_id,
                 apply.status.status_id,
                 apply.career.job_id,
                 apply.career.title,
@@ -258,20 +259,20 @@ export default function ApplyJobPage() {
           >
             <AiOutlineLink />
           </a>
-          <p hidden={buttonStatus} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+          <p hidden={apply.status.name=="User Interview" || apply.status.name=="Accepted" || apply.status.name=="Rejected" ? true :false} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
 
           <a
             id="btn-check"
-            hidden={buttonStatus}
+            hidden={apply.status.name=="User Interview" || apply.status.name=="Accepted" || apply.status.name=="Rejected"}
             onClick={() => handleAccept(apply.apply_id, apply.status.status_id)}
           >
             <AiOutlineCheck />
           </a>
-          <p hidden={buttonStatus} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
+          <p hidden={apply.status.name=="User Interview" || apply.status.name=="Accepted" || apply.status.name=="Rejected"} style={{ paddingBottom: "5px", margin: "0px 5px" }}>|</p>
 
           <a
             id="btn-x"
-            hidden={buttonStatus}
+            hidden={apply.status.name=="User Interview" || apply.status.name=="Accepted" || apply.status.name=="Rejected"}
             onClick={() => handleReject(apply)}
           >
             <AiOutlineClose />
@@ -444,12 +445,14 @@ export default function ApplyJobPage() {
   };
 
   const handleSetInterview = (
+    apply_id,
     id,
     careerId,
     careerName,
     applicantId,
     applicantName
   ) => {
+    localStorage.setItem("applyId", apply_id);
     localStorage.setItem("careerId", careerId);
     localStorage.setItem("careerName", careerName);
     localStorage.setItem("applicantId", applicantId);
